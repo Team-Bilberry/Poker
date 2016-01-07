@@ -1,1 +1,11 @@
 C:\Users\alstoyanov\Desktop\razni\High-Quality-Code-Teamwork-Project-Poker\Poker\bin\Debug\Poker.exe.config
+D:\Programirane\Poker\Poker\bin\Debug\Poker.exe.config
+D:\Programirane\Poker\Poker\bin\Debug\Poker.exe
+D:\Programirane\Poker\Poker\bin\Debug\Poker.pdb
+D:\Programirane\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache
+D:\Programirane\Poker\Poker\obj\Debug\Poker.AddChips.resources
+D:\Programirane\Poker\Poker\obj\Debug\Poker.Form1.resources
+D:\Programirane\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
+D:\Programirane\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
+D:\Programirane\Poker\Poker\obj\Debug\Poker.exe
+D:\Programirane\Poker\Poker\obj\Debug\Poker.pdb

@@ -1,41 +1,107 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-
-namespace Poker
+﻿namespace Poker
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Data;
+    using System.Drawing;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using System.Runtime.InteropServices;
 
     public partial class Form1 : Form
     {
         #region Variables
         ProgressBar asd = new ProgressBar();
         public int Nm;
-        Panel pPanel = new Panel(); Panel b1Panel = new Panel(); Panel b2Panel = new Panel(); Panel b3Panel = new Panel();
-        Panel b4Panel = new Panel(); Panel b5Panel = new Panel();
-        int call = 500, foldedPlayers = 5;
-        public int Chips = 10000, bot1Chips = 10000, bot2Chips = 10000, bot3Chips = 10000, bot4Chips = 10000, bot5Chips = 10000;
-        double type, rounds = 0, b1Power, b2Power, b3Power, b4Power, b5Power, pPower = 0, pType = -1, Raise = 0,
-        b1Type = -1, b2Type = -1, b3Type = -1, b4Type = -1, b5Type = -1;
-        bool B1turn = false, B2turn = false, B3turn = false, B4turn = false, B5turn = false;
-        bool B1Fturn = false, B2Fturn = false, B3Fturn = false, B4Fturn = false, B5Fturn = false;
-        bool pFolded, b1Folded, b2Folded, b3Folded, b4Folded, b5Folded, intsadded, changed;
-        int pCall = 0, b1Call = 0, b2Call = 0, b3Call = 0, b4Call = 0, b5Call = 0, pRaise = 0, b1Raise = 0, b2Raise = 0, b3Raise = 0, b4Raise = 0, b5Raise = 0;
-        int height, width, winners = 0, Flop = 1, Turn = 2, River = 3, End = 4, maxLeft = 6;
-        int last = 123, raisedTurn = 1;
+        Panel pPanel = new Panel();
+        Panel b1Panel = new Panel();
+        Panel b2Panel = new Panel();
+        Panel b3Panel = new Panel();
+        Panel b4Panel = new Panel();
+        Panel b5Panel = new Panel();
+        private int call = 500;
+        private int foldedPlayers = 5;
+        public int Chips = 10000;
+        private int bot1Chips = 10000;
+        private int bot2Chips = 10000;
+        private int bot3Chips = 10000;
+        private int bot4Chips = 10000;
+        private int bot5Chips = 10000;
+        private double type;
+        private double rounds = 0;
+        private double b1Power;
+        private double b2Power;
+        private double b3Power;
+        private double b4Power;
+        private double b5Power;
+        private double pPower = 0;
+        private double pType = -1;
+        private double Raise = 0;
+        private double b1Type = -1;
+        private double b2Type = -1;
+        private double b3Type = -1;
+        private double b4Type = -1;
+        private double b5Type = -1;
+
+        private bool B1turn = false;
+        private bool B2turn = false;
+        private bool B3turn = false;
+        private bool B4turn = false;
+        private bool B5turn = false;
+
+        private bool B1Fturn = false;
+        private bool B2Fturn = false;
+        private bool B3Fturn = false;
+        private bool B4Fturn = false;
+        private bool B5Fturn = false;
+
+        private bool pFolded;
+        private bool b1Folded;
+        private bool b2Folded;
+        private bool b3Folded;
+        private bool b4Folded;
+        private bool b5Folded;
+        private bool intsadded;
+        private bool changed;
+
+        private int pCall = 0;
+        private int b1Call = 0;
+        private int b2Call = 0;
+        private int b3Call = 0;
+        private int b4Call = 0;
+        private int b5Call = 0;
+        private int pRaise = 0;
+        private int b1Raise = 0;
+        private int b2Raise = 0;
+        private int b3Raise = 0;
+        private int b4Raise = 0;
+        private int b5Raise = 0;
+
+        int height;
+        int width;
+        private int winners = 0;
+        private int Flop = 1;
+        private int Turn = 2;
+        private int River = 3;
+        private int End = 4;
+        private int maxLeft = 6;
+        int last = 123;
+        private int raisedTurn = 1;
+
         List<bool?> bools = new List<bool?>();
         List<Type> Win = new List<Type>();
         List<string> CheckWinners = new List<string>();
         List<int> ints = new List<int>();
-        bool PFturn = false, Pturn = true, restart = false, raising = false;
+        private bool PFturn = false;
+        private bool Pturn = true;
+        private bool restart = false;
+        private bool raising = false;
+
         Poker.Type sorted;
         string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
         /*string[] ImgLocation ={
@@ -100,7 +166,12 @@ namespace Poker
         }
         async Task Shuffle()
         {
-            bools.Add(PFturn); bools.Add(B1Fturn); bools.Add(B2Fturn); bools.Add(B3Fturn); bools.Add(B4Fturn); bools.Add(B5Fturn);
+            bools.Add(PFturn);
+            bools.Add(B1Fturn);
+            bools.Add(B2Fturn);
+            bools.Add(B3Fturn);
+            bools.Add(B4Fturn);
+            bools.Add(B5Fturn);
             bCall.Enabled = false;
             bRaise.Enabled = false;
             bFold.Enabled = false;
@@ -530,7 +601,7 @@ namespace Poker
                         FixCall(b1Status, ref b1Call, ref b1Raise, 2);
                         Rules(2, 3, "Bot 1", ref b1Type, ref b1Power, B1Fturn);
                         MessageBox.Show("Bot 1's Turn");
-                        AI(2, 3, ref bot1Chips, ref B1turn, ref  B1Fturn, b1Status, 0, b1Power, b1Type);
+                        AI(2, 3, ref bot1Chips, ref B1turn, ref B1Fturn, b1Status, 0, b1Power, b1Type);
                         turnCount++;
                         last = 1;
                         B1turn = false;
@@ -557,7 +628,7 @@ namespace Poker
                         FixCall(b2Status, ref b2Call, ref b2Raise, 2);
                         Rules(4, 5, "Bot 2", ref b2Type, ref b2Power, B2Fturn);
                         MessageBox.Show("Bot 2's Turn");
-                        AI(4, 5, ref bot2Chips, ref B2turn, ref  B2Fturn, b2Status, 1, b2Power, b2Type);
+                        AI(4, 5, ref bot2Chips, ref B2turn, ref B2Fturn, b2Status, 1, b2Power, b2Type);
                         turnCount++;
                         last = 2;
                         B2turn = false;
@@ -584,7 +655,7 @@ namespace Poker
                         FixCall(b3Status, ref b3Call, ref b3Raise, 2);
                         Rules(6, 7, "Bot 3", ref b3Type, ref b3Power, B3Fturn);
                         MessageBox.Show("Bot 3's Turn");
-                        AI(6, 7, ref bot3Chips, ref B3turn, ref  B3Fturn, b3Status, 2, b3Power, b3Type);
+                        AI(6, 7, ref bot3Chips, ref B3turn, ref B3Fturn, b3Status, 2, b3Power, b3Type);
                         turnCount++;
                         last = 3;
                         B3turn = false;
@@ -611,7 +682,7 @@ namespace Poker
                         FixCall(b4Status, ref b4Call, ref b4Raise, 2);
                         Rules(8, 9, "Bot 4", ref b4Type, ref b4Power, B4Fturn);
                         MessageBox.Show("Bot 4's Turn");
-                        AI(8, 9, ref bot4Chips, ref B4turn, ref  B4Fturn, b4Status, 3, b4Power, b4Type);
+                        AI(8, 9, ref bot4Chips, ref B4turn, ref B4Fturn, b4Status, 3, b4Power, b4Type);
                         turnCount++;
                         last = 4;
                         B4turn = false;
@@ -638,7 +709,7 @@ namespace Poker
                         FixCall(b5Status, ref b5Call, ref b5Raise, 2);
                         Rules(10, 11, "Bot 5", ref b5Type, ref b5Power, B5Fturn);
                         MessageBox.Show("Bot 5's Turn");
-                        AI(10, 11, ref bot5Chips, ref B5turn, ref  B5Fturn, b5Status, 4, b5Power, b5Type);
+                        AI(10, 11, ref bot5Chips, ref B5turn, ref B5Fturn, b5Status, 4, b5Power, b5Type);
                         turnCount++;
                         last = 5;
                         B5turn = false;
@@ -666,7 +737,7 @@ namespace Poker
                         pFolded = true;
                     }
                 }
-            #endregion
+                #endregion
                 await AllIn();
                 if (!restart)
                 {
