@@ -12,6 +12,7 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using System.Runtime.InteropServices;
+    using Properties;
 
     public partial class Form1 : Form
     {
@@ -120,12 +121,17 @@
         PictureBox[] Holder = new PictureBox[52];
         Timer timer = new Timer();
         Timer Updates = new Timer();
-        int t = 60, i, bb = 500, sb = 250, up = 10000000, turnCount = 0;
+        private int t = 60;
+        private int i;
+        private int bigBlind = 500;
+        private int smallBlind = 250;
+        private int up = 10000000;
+        int turnCount = 0;
         #endregion
         public Form1()
         {
             //bools.Add(PFturn); bools.Add(B1Fturn); bools.Add(B2Fturn); bools.Add(B3Fturn); bools.Add(B4Fturn); bools.Add(B5Fturn);
-            call = bb;
+            call = this.bigBlind;
             MaximizeBox = false;
             MinimizeBox = false;
             Updates.Start();
@@ -162,7 +168,7 @@
             tbSB.Visible = false;
             bBB.Visible = false;
             bSB.Visible = false;
-            tbRaise.Text = (bb * 2).ToString();
+            tbRaise.Text = (this.bigBlind * 2).ToString();
         }
         async Task Shuffle()
         {
@@ -2066,7 +2072,7 @@
                 b4Call = 0; b4Raise = 0;
                 b5Call = 0; b5Raise = 0;
                 last = 0;
-                call = bb;
+                call = this.bigBlind;
                 Raise = 0;
                 ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
                 bools.Clear();
@@ -2277,7 +2283,7 @@
                 FixWinners();
             }
             pPanel.Visible = false; b1Panel.Visible = false; b2Panel.Visible = false; b3Panel.Visible = false; b4Panel.Visible = false; b5Panel.Visible = false;
-            call = bb; Raise = 0;
+            call = this.bigBlind; Raise = 0;
             foldedPlayers = 5;
             type = 0; rounds = 0; b1Power = 0; b2Power = 0; b3Power = 0; b4Power = 0; b5Power = 0; pPower = 0; pType = -1; Raise = 0;
             b1Type = -1; b2Type = -1; b3Type = -1; b4Type = -1; b5Type = -1;
@@ -3007,8 +3013,8 @@
         }
         private void bOptions_Click(object sender, EventArgs e)
         {
-            tbBB.Text = bb.ToString();
-            tbSB.Text = sb.ToString();
+            tbBB.Text = this.bigBlind.ToString();
+            tbSB.Text = this.smallBlind.ToString();
             if (tbBB.Visible == false)
             {
                 tbBB.Visible = true;
@@ -3030,19 +3036,19 @@
             if (tbSB.Text.Contains(",") || tbSB.Text.Contains("."))
             {
                 MessageBox.Show("The Small Blind can be only round number !");
-                tbSB.Text = sb.ToString();
+                tbSB.Text = this.smallBlind.ToString();
                 return;
             }
             if (!int.TryParse(tbSB.Text, out parsedValue))
             {
                 MessageBox.Show("This is a number only field");
-                tbSB.Text = sb.ToString();
+                tbSB.Text = this.smallBlind.ToString();
                 return;
             }
             if (int.Parse(tbSB.Text) > 100000)
             {
                 MessageBox.Show("The maximum of the Small Blind is 100 000 $");
-                tbSB.Text = sb.ToString();
+                tbSB.Text = this.smallBlind.ToString();
             }
             if (int.Parse(tbSB.Text) < 250)
             {
@@ -3050,8 +3056,8 @@
             }
             if (int.Parse(tbSB.Text) >= 250 && int.Parse(tbSB.Text) <= 100000)
             {
-                sb = int.Parse(tbSB.Text);
-                MessageBox.Show("The changes have been saved ! They will become available the next hand you play. ");
+                this.smallBlind = int.Parse(tbSB.Text);
+                MessageBox.Show(Resources.SuccessifullChangeBigBlind);
             }
         }
         private void bBB_Click(object sender, EventArgs e)
@@ -3060,19 +3066,19 @@
             if (tbBB.Text.Contains(",") || tbBB.Text.Contains("."))
             {
                 MessageBox.Show("The Big Blind can be only round number !");
-                tbBB.Text = bb.ToString();
+                tbBB.Text = this.bigBlind.ToString();
                 return;
             }
             if (!int.TryParse(tbSB.Text, out parsedValue))
             {
                 MessageBox.Show("This is a number only field");
-                tbSB.Text = bb.ToString();
+                tbSB.Text = this.bigBlind.ToString();
                 return;
             }
             if (int.Parse(tbBB.Text) > 200000)
             {
                 MessageBox.Show("The maximum of the Big Blind is 200 000");
-                tbBB.Text = bb.ToString();
+                tbBB.Text = this.bigBlind.ToString();
             }
             if (int.Parse(tbBB.Text) < 500)
             {
@@ -3080,10 +3086,11 @@
             }
             if (int.Parse(tbBB.Text) >= 500 && int.Parse(tbBB.Text) <= 200000)
             {
-                bb = int.Parse(tbBB.Text);
-                MessageBox.Show("The changes have been saved ! They will become available the next hand you play. ");
+                this.bigBlind = int.Parse(tbBB.Text);
+                MessageBox.Show(Resources.SuccessifullChangeBigBlind);
             }
         }
+
         private void Layout_Change(object sender, LayoutEventArgs e)
         {
             width = this.Width;

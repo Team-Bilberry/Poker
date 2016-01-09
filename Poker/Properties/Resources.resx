@@ -121,4 +121,7 @@
   <data name="poker-table - Copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\poker-table - Copy.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SuccessifullChangeBigBlind" xml:space="preserve">
+    <value>The changes have been saved ! They will become available the next hand you play. </value>
+  </data>
 </root>
