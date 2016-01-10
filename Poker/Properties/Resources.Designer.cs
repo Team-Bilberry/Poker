@@ -63,19 +63,10 @@ namespace Poker.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap poker_table___Copy {
+        internal static System.Drawing.Bitmap pokerTable {
             get {
-                object obj = ResourceManager.GetObject("poker-table - Copy", resourceCulture);
+                object obj = ResourceManager.GetObject("pokerTable", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The changes have been saved ! They will become available the next hand you play. .
-        /// </summary>
-        internal static string SuccessifullChangeBlind {
-            get {
-                return ResourceManager.GetString("SuccessifullChangeBigBlind", resourceCulture);
             }
         }
     }

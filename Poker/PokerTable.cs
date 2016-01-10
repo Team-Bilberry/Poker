@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-    using Properties;
 
     public partial class PokerTable : Form
     {
@@ -99,7 +98,7 @@
         private bool raising = false;
 
         Poker.Type sorted;
-        string[] ImgLocation = Directory.GetFiles("Assets\\Cards", "*.png", SearchOption.TopDirectoryOnly);
+        string[] ImgLocation = Directory.GetFiles("..\\..\\Resources\\Assets\\Cards", "*.png", SearchOption.AllDirectories);
         /*string[] ImgLocation ={
                    "Assets\\Cards\\33.png","Assets\\Cards\\22.png",
                     "Assets\\Cards\\29.png","Assets\\Cards\\21.png",
@@ -120,9 +119,9 @@
         private int i;
         private int bigBlind = 500;
         private int smallBlind = 250;
-        private int up = 10000000;
         int turnCount = 0;
         #endregion
+
         public PokerTable()
         {
             //bools.Add(PlayerFoldTurn); bools.Add(B1Fturn); bools.Add(B2Fturn); bools.Add(B3Fturn); bools.Add(B4Fturn); bools.Add(B5Fturn);
@@ -165,6 +164,7 @@
             //this.bSmallBlind.Visible = false;
             tbRaise.Text = (this.bigBlind * 2).ToString();
         }
+
         async Task Shuffle()
         {
             bools.Add(this.PlayerFoldTurn);
@@ -549,6 +549,7 @@
                 bFold.Enabled = true;
             }
         }
+
         async Task Turns()
         {
             #region Rotating
@@ -820,6 +821,7 @@
                 }
             }
         }
+
         private void rStraightFlush(ref double current, ref double Power, int[] st1, int[] st2, int[] st3, int[] st4)
         {
             if (current >= -1)
@@ -894,6 +896,7 @@
                 }
             }
         }
+
         private void rFourOfAKind(ref double current, ref double Power, int[] Straight)
         {
             if (current >= -1)
@@ -918,6 +921,7 @@
                 }
             }
         }
+
         private void rFullHouse(ref double current, ref double Power, ref bool done, int[] Straight)
         {
             if (current >= -1)
@@ -970,6 +974,7 @@
                 }
             }
         }
+
         private void rFlush(ref double current, ref double Power, ref bool vf, int[] Straight1)
         {
             if (current >= -1)
@@ -1444,6 +1449,7 @@
                 }
             }
         }
+
         private void rStraight(ref double current, ref double Power, int[] Straight)
         {
             if (current >= -1)
@@ -1478,6 +1484,7 @@
                 }
             }
         }
+
         private void rThreeOfAKind(ref double current, ref double Power, int[] Straight)
         {
             if (current >= -1)
@@ -1505,6 +1512,7 @@
                 }
             }
         }
+
         private void rTwoPair(ref double current, ref double Power)
         {
             if (current >= -1)
@@ -1558,6 +1566,7 @@
                 }
             }
         }
+
         private void rPairTwoPair(ref double current, ref double Power)
         {
             if (current >= -1)
@@ -1659,6 +1668,7 @@
                 }
             }
         }
+
         private void rPairFromHand(ref double current, ref double Power)
         {
             if (current >= -1)
@@ -1732,6 +1742,7 @@
                 }
             }
         }
+
         private void rHighCard(ref double current, ref double Power)
         {
             if (current == -1)
@@ -2093,6 +2104,7 @@
                 await Turns();
             }
         }
+
         void FixCall(Label status, ref int cCall, ref int cRaise, int options)
         {
             if (rounds != 4)
@@ -2134,6 +2146,7 @@
                 }
             }
         }
+
         async Task AllIn()
         {
             #region All in
@@ -2271,6 +2284,7 @@
 
 
         }
+
         async Task Finish(int n)
         {
             if (n == 2)
@@ -2335,6 +2349,7 @@
             await Shuffle();
             //await Turns();
         }
+
         void FixWinners()
         {
             Win.Clear();
@@ -2378,6 +2393,7 @@
             Winner(b4Type, b4Power, "Bot 4", bot4Chips, fixedLast);
             Winner(b5Type, b5Power, "Bot 5", bot5Chips, fixedLast);
         }
+
         void AI(int c1, int c2, ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower, double botCurrent)
         {
             if (!sFTurn)
@@ -2429,14 +2445,17 @@
                 Holder[c2].Visible = false;
             }
         }
+
         private void HighCard(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 20, 25);
         }
+
         private void PairTable(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             HP(ref sChips, ref sTurn, ref sFTurn, sStatus, botPower, 16, 25);
         }
+
         private void PairHand(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             Random rPair = new Random();
@@ -2455,6 +2474,7 @@
                 PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 9, rRaise);
             }
         }
+
         private void TwoPair(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower)
         {
             Random rPair = new Random();
@@ -2473,6 +2493,7 @@
                 PH(ref sChips, ref sTurn, ref sFTurn, sStatus, rCall, 4, rRaise);
             }
         }
+
         private void ThreeOfAKind(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random tk = new Random();
@@ -2491,6 +2512,7 @@
                 Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, tCall, tRaise);
             }
         }
+
         private void Straight(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random str = new Random();
@@ -2509,6 +2531,7 @@
                 Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, sCall, sRaise);
             }
         }
+
         private void Flush(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random fsh = new Random();
@@ -2516,6 +2539,7 @@
             int fRaise = fsh.Next(3, 7);
             Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fCall, fRaise);
         }
+
         private void FullHouse(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random flh = new Random();
@@ -2530,6 +2554,7 @@
                 Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fhCall, fhRaise);
             }
         }
+
         private void FourOfAKind(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random fk = new Random();
@@ -2540,6 +2565,7 @@
                 Smooth(ref sChips, ref sTurn, ref sFTurn, sStatus, name, fkCall, fkRaise);
             }
         }
+
         private void StraightFlush(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int name, double botPower)
         {
             Random sf = new Random();
@@ -2558,12 +2584,14 @@
             sTurn = false;
             sFTurn = true;
         }
+
         private void Check(ref bool cTurn, Label cStatus)
         {
             cStatus.Text = "Check";
             cTurn = false;
             raising = false;
         }
+
         private void Call(ref int sChips, ref bool sTurn, Label sStatus)
         {
             raising = false;
@@ -2572,6 +2600,7 @@
             sStatus.Text = "Call " + call;
             tbPot.Text = (int.Parse(tbPot.Text) + call).ToString();
         }
+
         private void Raised(ref int sChips, ref bool sTurn, Label sStatus)
         {
             sChips -= Convert.ToInt32(Raise);
@@ -2581,11 +2610,13 @@
             raising = true;
             sTurn = false;
         }
+
         private static double RoundN(int sChips, int n)
         {
             double a = Math.Round((sChips / n) / 100d, 0) * 100;
             return a;
         }
+
         private void HP(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, double botPower, int n, int n1)
         {
             Random rand = new Random();
@@ -2644,6 +2675,7 @@
                 sFTurn = true;
             }
         }
+
         private void PH(ref int sChips, ref bool sTurn, ref bool sFTurn, Label sStatus, int n, int n1, int r)
         {
             Random rand = new Random();
@@ -3077,7 +3109,7 @@
             if (int.Parse(this.tbSmallBlind.Text) >= 250 && int.Parse(this.tbSmallBlind.Text) <= 100000)
             {
                 this.smallBlind = int.Parse(this.tbSmallBlind.Text);
-                MessageBox.Show(Resources.SuccessifullChangeBlind);
+                MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
             }
         }
 
@@ -3086,7 +3118,7 @@
             int parsedValue;
             if (this.tbBigBlind.Text.Contains(",") || this.tbBigBlind.Text.Contains("."))
             {
-                MessageBox.Show("The Big Blind can be only round number !");
+                MessageBox.Show("The Big Blind can be only round number!");
                 this.tbBigBlind.Text = this.bigBlind.ToString();
                 return;
             }
@@ -3103,12 +3135,12 @@
             }
             if (int.Parse(this.tbBigBlind.Text) < 500)
             {
-                MessageBox.Show("The minimum of the Big Blind is 500 $");
+                MessageBox.Show("The minimum of the Big Blind is 500");
             }
             if (int.Parse(this.tbBigBlind.Text) >= 500 && int.Parse(this.tbBigBlind.Text) <= 200000)
             {
                 this.bigBlind = int.Parse(this.tbBigBlind.Text);
-                MessageBox.Show(Resources.SuccessifullChangeBlind);
+                MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
             }
         }
 
