@@ -50,6 +50,8 @@
     <Compile Include="AddChips.Designer.cs">
       <DependentUpon>AddChips.cs</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\IPokerPlayer.cs" />
+    <Compile Include="Models\PokerPlayer.cs" />
     <Compile Include="PokerTable.cs">
       <SubType>Form</SubType>
     </Compile>

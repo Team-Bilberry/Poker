@@ -11,7 +11,7 @@
 
         public AddChips()
         {
-            FontFamily fontFamily = new FontFamily("Comics sun");
+            FontFamily fontFamily = new FontFamily("Arial");
             this.InitializeComponent();
             this.ControlBox = false;
             this.lblOutOfChips.BorderStyle = BorderStyle.FixedSingle;

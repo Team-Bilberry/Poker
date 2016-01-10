@@ -26,7 +26,7 @@
         private Label b5Status;
         private Label b4Status;
         private Label b3Status;
-        private Label b1Status;
+        private Label bot1Status;
         private Label playerStatus;
         private Label b2Status;
         private Label label1;
@@ -79,7 +79,7 @@
             this.b5Status = new Label();
             this.b4Status = new Label();
             this.b3Status = new Label();
-            this.b1Status = new Label();
+            this.bot1Status = new Label();
             this.playerStatus = new Label();
             this.b2Status = new Label();
             this.label1 = new Label();
@@ -304,13 +304,13 @@
             this.b3Status.Size = new System.Drawing.Size(125, 32);
             this.b3Status.TabIndex = 28;
             // 
-            // b1Status
+            // bot1Status
             // 
-            this.b1Status.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.None;
-            this.b1Status.Location = new System.Drawing.Point(181, 579);
-            this.b1Status.Name = "b1Status";
-            this.b1Status.Size = new System.Drawing.Size(142, 32);
-            this.b1Status.TabIndex = 29;
+            this.bot1Status.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.None;
+            this.bot1Status.Location = new System.Drawing.Point(181, 579);
+            this.bot1Status.Name = "bot1Status";
+            this.bot1Status.Size = new System.Drawing.Size(142, 32);
+            this.bot1Status.TabIndex = 29;
             // 
             // playerStatus
             // 
@@ -356,7 +356,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.b2Status);
             this.Controls.Add(this.playerStatus);
-            this.Controls.Add(this.b1Status);
+            this.Controls.Add(this.bot1Status);
             this.Controls.Add(this.b3Status);
             this.Controls.Add(this.b4Status);
             this.Controls.Add(this.b5Status);
