@@ -73,7 +73,7 @@ namespace Poker.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The changes have been saved ! They will become available the next hand you play. .
         /// </summary>
-        internal static string SuccessifullChangeBigBlind {
+        internal static string SuccessifullChangeBlind {
             get {
                 return ResourceManager.GetString("SuccessifullChangeBigBlind", resourceCulture);
             }

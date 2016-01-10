@@ -35,7 +35,7 @@
             this.pbTimer = new System.Windows.Forms.ProgressBar();
             this.tbChips = new System.Windows.Forms.TextBox();
             this.bAdd = new System.Windows.Forms.Button();
-            this.tbAdd = new System.Windows.Forms.TextBox();
+            this.tbAddChips = new System.Windows.Forms.TextBox();
             this.tbBotChips5 = new System.Windows.Forms.TextBox();
             this.tbBotChips4 = new System.Windows.Forms.TextBox();
             this.tbBotChips3 = new System.Windows.Forms.TextBox();
@@ -43,10 +43,10 @@
             this.tbBotChips1 = new System.Windows.Forms.TextBox();
             this.tbPot = new System.Windows.Forms.TextBox();
             this.bOptions = new System.Windows.Forms.Button();
-            this.bBB = new System.Windows.Forms.Button();
-            this.tbSB = new System.Windows.Forms.TextBox();
-            this.bSB = new System.Windows.Forms.Button();
-            this.tbBB = new System.Windows.Forms.TextBox();
+            this.bBigBlind = new System.Windows.Forms.Button();
+            this.tbSmallBlind = new System.Windows.Forms.TextBox();
+            this.bSmallBlind = new System.Windows.Forms.Button();
+            this.tbBigBlind = new System.Windows.Forms.TextBox();
             this.b5Status = new System.Windows.Forms.Label();
             this.b4Status = new System.Windows.Forms.Label();
             this.b3Status = new System.Windows.Forms.Label();
@@ -135,15 +135,15 @@
             this.bAdd.TabIndex = 7;
             this.bAdd.Text = "AddChips";
             this.bAdd.UseVisualStyleBackColor = true;
-            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
+            this.bAdd.Click += new System.EventHandler(this.bAddChips_Click);
             // 
-            // tbAdd
+            // tbAddChips
             // 
-            this.tbAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbAdd.Location = new System.Drawing.Point(93, 700);
-            this.tbAdd.Name = "tbAdd";
-            this.tbAdd.Size = new System.Drawing.Size(125, 20);
-            this.tbAdd.TabIndex = 8;
+            this.tbAddChips.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.tbAddChips.Location = new System.Drawing.Point(93, 700);
+            this.tbAddChips.Name = "tbAddChips";
+            this.tbAddChips.Size = new System.Drawing.Size(125, 20);
+            this.tbAddChips.TabIndex = 8;
             // 
             // tbBotChips5
             // 
@@ -215,41 +215,41 @@
             this.bOptions.UseVisualStyleBackColor = true;
             this.bOptions.Click += new System.EventHandler(this.bOptions_Click);
             // 
-            // bBB
+            // bBigBlind
             // 
-            this.bBB.Location = new System.Drawing.Point(12, 254);
-            this.bBB.Name = "bBB";
-            this.bBB.Size = new System.Drawing.Size(75, 23);
-            this.bBB.TabIndex = 16;
-            this.bBB.Text = "Big Blind";
-            this.bBB.UseVisualStyleBackColor = true;
-            this.bBB.Click += new System.EventHandler(this.bBB_Click);
+            this.bBigBlind.Location = new System.Drawing.Point(12, 254);
+            this.bBigBlind.Name = "bBigBlind";
+            this.bBigBlind.Size = new System.Drawing.Size(75, 23);
+            this.bBigBlind.TabIndex = 16;
+            this.bBigBlind.Text = "Big Blind";
+            this.bBigBlind.UseVisualStyleBackColor = true;
+            this.bBigBlind.Click += new System.EventHandler(this.bBigBlind_Click);
             // 
-            // tbSB
+            // tbSmallBlind
             // 
-            this.tbSB.Location = new System.Drawing.Point(12, 228);
-            this.tbSB.Name = "tbSB";
-            this.tbSB.Size = new System.Drawing.Size(75, 20);
-            this.tbSB.TabIndex = 17;
-            this.tbSB.Text = "250";
+            this.tbSmallBlind.Location = new System.Drawing.Point(12, 228);
+            this.tbSmallBlind.Name = "tbSmallBlind";
+            this.tbSmallBlind.Size = new System.Drawing.Size(75, 20);
+            this.tbSmallBlind.TabIndex = 17;
+            this.tbSmallBlind.Text = "250";
             // 
-            // bSB
+            // bSmallBlind
             // 
-            this.bSB.Location = new System.Drawing.Point(12, 199);
-            this.bSB.Name = "bSB";
-            this.bSB.Size = new System.Drawing.Size(75, 23);
-            this.bSB.TabIndex = 18;
-            this.bSB.Text = "Small Blind";
-            this.bSB.UseVisualStyleBackColor = true;
-            this.bSB.Click += new System.EventHandler(this.bSB_Click);
+            this.bSmallBlind.Location = new System.Drawing.Point(12, 199);
+            this.bSmallBlind.Name = "bSmallBlind";
+            this.bSmallBlind.Size = new System.Drawing.Size(75, 23);
+            this.bSmallBlind.TabIndex = 18;
+            this.bSmallBlind.Text = "Small Blind";
+            this.bSmallBlind.UseVisualStyleBackColor = true;
+            this.bSmallBlind.Click += new System.EventHandler(this.bSmallBlind_Click);
             // 
-            // tbBB
+            // tbBigBlind
             // 
-            this.tbBB.Location = new System.Drawing.Point(12, 283);
-            this.tbBB.Name = "tbBB";
-            this.tbBB.Size = new System.Drawing.Size(75, 20);
-            this.tbBB.TabIndex = 19;
-            this.tbBB.Text = "500";
+            this.tbBigBlind.Location = new System.Drawing.Point(12, 283);
+            this.tbBigBlind.Name = "tbBigBlind";
+            this.tbBigBlind.Size = new System.Drawing.Size(75, 20);
+            this.tbBigBlind.TabIndex = 19;
+            this.tbBigBlind.Text = "500";
             // 
             // b5Status
             // 
@@ -331,10 +331,10 @@
             this.Controls.Add(this.b3Status);
             this.Controls.Add(this.b4Status);
             this.Controls.Add(this.b5Status);
-            this.Controls.Add(this.tbBB);
-            this.Controls.Add(this.bSB);
-            this.Controls.Add(this.tbSB);
-            this.Controls.Add(this.bBB);
+            this.Controls.Add(this.tbBigBlind);
+            this.Controls.Add(this.bSmallBlind);
+            this.Controls.Add(this.tbSmallBlind);
+            this.Controls.Add(this.bBigBlind);
             this.Controls.Add(this.bOptions);
             this.Controls.Add(this.tbPot);
             this.Controls.Add(this.tbBotChips1);
@@ -342,7 +342,7 @@
             this.Controls.Add(this.tbBotChips3);
             this.Controls.Add(this.tbBotChips4);
             this.Controls.Add(this.tbBotChips5);
-            this.Controls.Add(this.tbAdd);
+            this.Controls.Add(this.tbAddChips);
             this.Controls.Add(this.bAdd);
             this.Controls.Add(this.tbChips);
             this.Controls.Add(this.pbTimer);
@@ -368,7 +368,7 @@
         private System.Windows.Forms.ProgressBar pbTimer;
         private System.Windows.Forms.TextBox tbChips;
         private System.Windows.Forms.Button bAdd;
-        private System.Windows.Forms.TextBox tbAdd;
+        private System.Windows.Forms.TextBox tbAddChips;
         private System.Windows.Forms.TextBox tbBotChips5;
         private System.Windows.Forms.TextBox tbBotChips4;
         private System.Windows.Forms.TextBox tbBotChips3;
@@ -376,10 +376,10 @@
         private System.Windows.Forms.TextBox tbBotChips1;
         private System.Windows.Forms.TextBox tbPot;
         private System.Windows.Forms.Button bOptions;
-        private System.Windows.Forms.Button bBB;
-        private System.Windows.Forms.TextBox tbSB;
-        private System.Windows.Forms.Button bSB;
-        private System.Windows.Forms.TextBox tbBB;
+        private System.Windows.Forms.Button bBigBlind;
+        private System.Windows.Forms.TextBox tbSmallBlind;
+        private System.Windows.Forms.Button bSmallBlind;
+        private System.Windows.Forms.TextBox tbBigBlind;
         private System.Windows.Forms.Label b5Status;
         private System.Windows.Forms.Label b4Status;
         private System.Windows.Forms.Label b3Status;

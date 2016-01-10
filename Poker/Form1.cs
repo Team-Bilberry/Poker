@@ -156,18 +156,18 @@
             timer.Tick += timer_Tick;
             Updates.Interval = (1 * 1 * 100);
             Updates.Tick += Update_Tick;
-            tbBB.Visible = true;
-            tbSB.Visible = true;
-            bBB.Visible = true;
-            bSB.Visible = true;
-            tbBB.Visible = true;
-            tbSB.Visible = true;
-            bBB.Visible = true;
-            bSB.Visible = true;
-            tbBB.Visible = false;
-            tbSB.Visible = false;
-            bBB.Visible = false;
-            bSB.Visible = false;
+            this.tbBigBlind.Visible = true;
+            this.tbSmallBlind.Visible = true;
+            this.bBigBlind.Visible = true;
+            this.bSmallBlind.Visible = true;
+            this.tbBigBlind.Visible = true;
+            this.tbSmallBlind.Visible = true;
+            this.bBigBlind.Visible = true;
+            this.bSmallBlind.Visible = true;
+            this.tbBigBlind.Visible = false;
+            this.tbSmallBlind.Visible = false;
+            this.bBigBlind.Visible = false;
+            this.bSmallBlind.Visible = false;
             tbRaise.Text = (this.bigBlind * 2).ToString();
         }
         async Task Shuffle()
@@ -2997,102 +2997,123 @@
             Pturn = false;
             await Turns();
         }
-        private void bAdd_Click(object sender, EventArgs e)
+
+        /// <summary>
+        /// Add chips to all players on table.
+        /// </summary>
+        private void bAddChips_Click(object sender, EventArgs e)
         {
-            if (tbAdd.Text == "") { }
+            int addedChips = 0;
+            bool isValidNumber = false;
+            if (this.tbAddChips.Text != string.Empty)
+            {
+                isValidNumber = int.TryParse(this.tbAddChips.Text, out addedChips);
+            }
+
+            if (isValidNumber && addedChips > 0)
+            {
+                Chips += int.Parse(this.tbAddChips.Text);
+                bot1Chips += int.Parse(this.tbAddChips.Text);
+                bot2Chips += int.Parse(this.tbAddChips.Text);
+                bot3Chips += int.Parse(this.tbAddChips.Text);
+                bot4Chips += int.Parse(this.tbAddChips.Text);
+                bot5Chips += int.Parse(this.tbAddChips.Text);
+                tbChips.Text = "Chips : " + Chips.ToString();
+            }
             else
             {
-                Chips += int.Parse(tbAdd.Text);
-                bot1Chips += int.Parse(tbAdd.Text);
-                bot2Chips += int.Parse(tbAdd.Text);
-                bot3Chips += int.Parse(tbAdd.Text);
-                bot4Chips += int.Parse(tbAdd.Text);
-                bot5Chips += int.Parse(tbAdd.Text);
+                MessageBox.Show("Chips should be positive round number!");
             }
-            tbChips.Text = "Chips : " + Chips.ToString();
         }
+
+        /// <summary>
+        /// Hide or show blind boxes on screen.
+        /// </summary>
         private void bOptions_Click(object sender, EventArgs e)
         {
-            tbBB.Text = this.bigBlind.ToString();
-            tbSB.Text = this.smallBlind.ToString();
-            if (tbBB.Visible == false)
+            this.tbBigBlind.Text = this.bigBlind.ToString();
+            this.tbSmallBlind.Text = this.smallBlind.ToString();
+            if (this.tbBigBlind.Visible == false)
             {
-                tbBB.Visible = true;
-                tbSB.Visible = true;
-                bBB.Visible = true;
-                bSB.Visible = true;
+                this.tbBigBlind.Visible = true;
+                this.tbSmallBlind.Visible = true;
+                this.bBigBlind.Visible = true;
+                this.bSmallBlind.Visible = true;
             }
             else
             {
-                tbBB.Visible = false;
-                tbSB.Visible = false;
-                bBB.Visible = false;
-                bSB.Visible = false;
+                this.tbBigBlind.Visible = false;
+                this.tbSmallBlind.Visible = false;
+                this.bBigBlind.Visible = false;
+                this.bSmallBlind.Visible = false;
             }
         }
-        private void bSB_Click(object sender, EventArgs e)
+
+        private void bSmallBlind_Click(object sender, EventArgs e)
         {
             int parsedValue;
-            if (tbSB.Text.Contains(",") || tbSB.Text.Contains("."))
+            if (this.tbSmallBlind.Text.Contains(",") || this.tbSmallBlind.Text.Contains("."))
             {
                 MessageBox.Show("The Small Blind can be only round number !");
-                tbSB.Text = this.smallBlind.ToString();
+                this.tbSmallBlind.Text = this.smallBlind.ToString();
                 return;
             }
-            if (!int.TryParse(tbSB.Text, out parsedValue))
+            if (!int.TryParse(this.tbSmallBlind.Text, out parsedValue))
             {
                 MessageBox.Show("This is a number only field");
-                tbSB.Text = this.smallBlind.ToString();
+                this.tbSmallBlind.Text = this.smallBlind.ToString();
                 return;
             }
-            if (int.Parse(tbSB.Text) > 100000)
+            if (int.Parse(this.tbSmallBlind.Text) > 100000)
             {
                 MessageBox.Show("The maximum of the Small Blind is 100 000 $");
-                tbSB.Text = this.smallBlind.ToString();
+                this.tbSmallBlind.Text = this.smallBlind.ToString();
             }
-            if (int.Parse(tbSB.Text) < 250)
+            if (int.Parse(this.tbSmallBlind.Text) < 250)
             {
                 MessageBox.Show("The minimum of the Small Blind is 250 $");
             }
-            if (int.Parse(tbSB.Text) >= 250 && int.Parse(tbSB.Text) <= 100000)
+            if (int.Parse(this.tbSmallBlind.Text) >= 250 && int.Parse(this.tbSmallBlind.Text) <= 100000)
             {
-                this.smallBlind = int.Parse(tbSB.Text);
-                MessageBox.Show(Resources.SuccessifullChangeBigBlind);
+                this.smallBlind = int.Parse(this.tbSmallBlind.Text);
+                MessageBox.Show(Resources.SuccessifullChangeBlind);
             }
         }
-        private void bBB_Click(object sender, EventArgs e)
+
+        private void bBigBlind_Click(object sender, EventArgs e)
         {
             int parsedValue;
-            if (tbBB.Text.Contains(",") || tbBB.Text.Contains("."))
+            if (this.tbBigBlind.Text.Contains(",") || this.tbBigBlind.Text.Contains("."))
             {
                 MessageBox.Show("The Big Blind can be only round number !");
-                tbBB.Text = this.bigBlind.ToString();
+                this.tbBigBlind.Text = this.bigBlind.ToString();
                 return;
             }
-            if (!int.TryParse(tbSB.Text, out parsedValue))
+            if (!int.TryParse(this.tbSmallBlind.Text, out parsedValue))
             {
                 MessageBox.Show("This is a number only field");
-                tbSB.Text = this.bigBlind.ToString();
+                this.tbSmallBlind.Text = this.bigBlind.ToString();
                 return;
             }
-            if (int.Parse(tbBB.Text) > 200000)
+            if (int.Parse(this.tbBigBlind.Text) > 200000)
             {
                 MessageBox.Show("The maximum of the Big Blind is 200 000");
-                tbBB.Text = this.bigBlind.ToString();
+                this.tbBigBlind.Text = this.bigBlind.ToString();
             }
-            if (int.Parse(tbBB.Text) < 500)
+            if (int.Parse(this.tbBigBlind.Text) < 500)
             {
                 MessageBox.Show("The minimum of the Big Blind is 500 $");
             }
-            if (int.Parse(tbBB.Text) >= 500 && int.Parse(tbBB.Text) <= 200000)
+            if (int.Parse(this.tbBigBlind.Text) >= 500 && int.Parse(this.tbBigBlind.Text) <= 200000)
             {
-                this.bigBlind = int.Parse(tbBB.Text);
-                MessageBox.Show(Resources.SuccessifullChangeBigBlind);
+                this.bigBlind = int.Parse(this.tbBigBlind.Text);
+                MessageBox.Show(Resources.SuccessifullChangeBlind);
             }
         }
 
         private void Layout_Change(object sender, LayoutEventArgs e)
         {
+            // TODO : Too many invokes.
             width = this.Width;
             height = this.Height;
         }
