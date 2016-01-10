@@ -349,7 +349,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackgroundImage = Properties.Resources.pokerTable;
+            this.BackgroundImage = global::Poker.Properties.Resources.pokerTable;
             this.BackgroundImageLayout = ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1350, 729);
             this.Controls.Add(this.tbRaise);
