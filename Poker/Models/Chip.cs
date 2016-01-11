@@ -2,7 +2,7 @@
 {
     using Contracts;
 
-    public class Chip :IChip
+    public class Chip : IChip
     {
         private int amount;
 

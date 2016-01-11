@@ -55,6 +55,7 @@
 
         Poker.Type sorted;
         string[] ImgLocation = Directory.GetFiles(@"..\..\Resources\Assets\Cards", "*.png", SearchOption.TopDirectoryOnly);
+
         /*string[] ImgLocation ={
                    "Assets\\Cards\\33.png","Assets\\Cards\\22.png",
                     "Assets\\Cards\\29.png","Assets\\Cards\\21.png",
@@ -72,6 +73,7 @@
         Timer timer = new Timer();
         Timer Updates = new Timer();
         private int t = 60;
+
         // private int i;
         private int bigBlind = 500;
         private int smallBlind = 250;
@@ -93,6 +95,7 @@
             MinimizeBox = false;
             Updates.Start();
             InitializeComponent();
+
             // width = this.Width;
             // height = this.Height;
             Shuffle();
@@ -210,6 +213,7 @@
                             horizontal = 15;
                             vertical = 420;
                         }
+
                         check = true;
                         if (index == 3)
                         {
@@ -270,6 +274,7 @@
                             horizontal = 590;
                             vertical = 25;
                         }
+
                         check = true;
                         if (index == 7)
                         {
@@ -287,6 +292,7 @@
                         this.bot3.InizializePanel(bot3PanelLocation);
                     }
                 }
+
                 if (bot4.Chips > 0)
                 {
                     foldedPlayers--;
@@ -316,6 +322,7 @@
                         this.bot4.InizializePanel(bot4PanelLocation);
                     }
                 }
+
                 if (bot5.Chips > 0)
                 {
                     foldedPlayers--;
@@ -328,6 +335,7 @@
                             horizontal = 1160;
                             vertical = 420;
                         }
+
                         check = true;
                         if (index == 11)
                         {
@@ -355,6 +363,7 @@
                         horizontal = 410;
                         vertical = 265;
                     }
+
                     check = true;
 
                     Holder[index].Anchor = AnchorStyles.None;
@@ -466,6 +475,7 @@
                         MaximizeBox = true;
                         MinimizeBox = true;
                     }
+
                     timer.Start();
                 }
             }
@@ -557,6 +567,7 @@
                         this.bot2.Turn = true;
                     }
                 }
+
                 if (this.bot1.FoldedTurn && !this.bot1.Folded)
                 {
                     bools.RemoveAt(1);
@@ -564,11 +575,13 @@
                     maxLeft--;
                     this.bot1.Folded = true;
                 }
+
                 if (this.bot1.FoldedTurn || !this.bot1.Turn)
                 {
                     await CheckRaise(1, 1);
                     this.bot2.Turn = true;
                 }
+
                 if (!this.bot2.FoldedTurn)
                 {
                     if (this.bot2.Turn)
@@ -583,6 +596,7 @@
                         this.bot3.Turn = true;
                     }
                 }
+
                 if (this.bot2.FoldedTurn && !this.bot2.Folded)
                 {
                     bools.RemoveAt(2);
@@ -590,11 +604,13 @@
                     maxLeft--;
                     this.bot2.Folded = true;
                 }
+
                 if (this.bot2.FoldedTurn || !this.bot2.Turn)
                 {
                     await CheckRaise(2, 2);
                     this.bot3.Turn = true;
                 }
+
                 if (!this.bot3.FoldedTurn)
                 {
                     if (this.bot3.Turn)
@@ -610,6 +626,7 @@
                         this.bot4.Turn = true;
                     }
                 }
+
                 if (this.bot3.FoldedTurn && !this.bot3.Folded)
                 {
                     bools.RemoveAt(3);
@@ -617,11 +634,13 @@
                     maxLeft--;
                     this.bot3.Folded = true;
                 }
+
                 if (this.bot3.FoldedTurn || !this.bot3.Turn)
                 {
                     await CheckRaise(3, 3);
                     this.bot4.Turn = true;
                 }
+
                 if (!this.bot4.FoldedTurn)
                 {
                     if (this.bot4.Turn)
@@ -636,6 +655,7 @@
                         this.bot5.Turn = true;
                     }
                 }
+
                 if (this.bot4.FoldedTurn && !this.bot4.Folded)
                 {
                     bools.RemoveAt(4);
@@ -643,11 +663,13 @@
                     maxLeft--;
                     this.bot4.Folded = true;
                 }
+
                 if (this.bot4.FoldedTurn || !this.bot4.Turn)
                 {
                     await CheckRaise(4, 4);
                     this.bot5.Turn = true;
                 }
+
                 if (!this.bot5.FoldedTurn)
                 {
                     if (this.bot5.Turn)
@@ -661,6 +683,7 @@
                         this.bot5.Turn = false;
                     }
                 }
+
                 if (this.bot5.FoldedTurn && !this.bot5.Folded)
                 {
                     bools.RemoveAt(5);
@@ -668,11 +691,13 @@
                     maxLeft--;
                     this.bot5.Folded = true;
                 }
+
                 if (this.bot5.FoldedTurn || !this.bot5.Turn)
                 {
                     await CheckRaise(5, 5);
                     this.PlayerTurn = true;
                 }
+
                 if (this.PlayerFoldTurn && !this.player.Folded)
                 {
                     if (bCall.Text.Contains("All in") == false || bRaise.Text.Contains("All in") == false)
@@ -683,12 +708,14 @@
                         this.player.Folded = true;
                     }
                 }
+
                 #endregion
                 await AllIn();
                 if (!restart)
                 {
                     await Turns();
                 }
+
                 restart = false;
             }
         }
@@ -729,41 +756,23 @@
 
                         rPairFromHand(pokerPlayer, index);
 
-                        #region Pair or Two Pair from Table current = 2 || 0
                         rPairTwoPair(pokerPlayer, index);
-                        #endregion
 
-                        #region Two Pair current = 2
                         rTwoPair(pokerPlayer, index);
-                        #endregion
-
-                        #region Three of a kind current = 3
+                        
                         rThreeOfAKind(pokerPlayer, Straight, index);
-                        #endregion
 
-                        #region Straight current = 4
-                        rStraight(pokerPlayer, Straight, index);
-                        #endregion
+                        RStraight(pokerPlayer, Straight, index);
+                        
+                        RFlush(pokerPlayer, ref vf, Straight1, index);
 
-                        #region Flush current = 5 || 5.5
-                        rFlush(pokerPlayer, ref vf, Straight1, index);
-                        #endregion
-
-                        #region Full House current = 6
                         rFullHouse(pokerPlayer, ref done, Straight);
-                        #endregion
 
-                        #region Four of a Kind current = 7
                         rFourOfAKind(pokerPlayer, Straight);
-                        #endregion
-
-                        #region Straight Flush current = 8 || 9
+                        
                         rStraightFlush(pokerPlayer, st1, st2, st3, st4);
-                        #endregion
 
-                        #region High Card current = -1
                         rHighCard(pokerPlayer, index);
-                        #endregion
                     }
                 }
             }
@@ -782,6 +791,7 @@
                         Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
                         sorted = Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
+
                     if (st1[0] == 0 && st1[1] == 9 && st1[2] == 10 && st1[3] == 11 && st1[0] + 12 == st1[4])
                     {
                         pokerPlayer.Type = 9;
@@ -922,14 +932,14 @@
             }
         }
 
-        private void rFlush(IPokerPlayer pokerPlayer, ref bool vf, int[] Straight1, int index)
+        private void RFlush(IPokerPlayer pokerPlayer, ref bool vf, int[] straight1, int index)
         {
             if (pokerPlayer.Type >= -1)
             {
-                var f1 = Straight1.Where(o => o % 4 == 0).ToArray();
-                var f2 = Straight1.Where(o => o % 4 == 1).ToArray();
-                var f3 = Straight1.Where(o => o % 4 == 2).ToArray();
-                var f4 = Straight1.Where(o => o % 4 == 3).ToArray();
+                var f1 = straight1.Where(o => o % 4 == 0).ToArray();
+                var f2 = straight1.Where(o => o % 4 == 1).ToArray();
+                var f3 = straight1.Where(o => o % 4 == 2).ToArray();
+                var f4 = straight1.Where(o => o % 4 == 3).ToArray();
                 if (f1.Length == 3 || f1.Length == 4)
                 {
                     if (Reserve[index] % 4 == Reserve[index + 1] % 4 && Reserve[index] % 4 == f1[0] % 4)
@@ -1397,7 +1407,7 @@
             }
         }
 
-        private void rStraight(IPokerPlayer pokerPlayer, int[] Straight, int index)
+        private void RStraight(IPokerPlayer pokerPlayer, int[] Straight, int index)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -1728,7 +1738,9 @@
             {
                 //await Task.Delay(5);
                 if (Holder[j].Visible)
+                {
                     Holder[j].Image = Deck[j];
+                }
             }
             if (current == sorted.Current)
             {
@@ -1789,36 +1801,42 @@
                         //player.Panel.Visible = true;
 
                     }
+
                     if (CheckWinners.Contains("Bot 1"))
                     {
                         bot1.Chips += int.Parse(tbPot.Text) / winners;
                         tbBotChips1.Text = bot1.Chips.ToString();
                         //bot1.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 2"))
                     {
                         bot2.Chips += int.Parse(tbPot.Text) / winners;
                         tbBotChips2.Text = bot2.Chips.ToString();
                         //bot2.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 3"))
                     {
                         bot3.Chips += int.Parse(tbPot.Text) / winners;
                         tbBotChips3.Text = bot3.Chips.ToString();
                         //bot3.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 4"))
                     {
                         bot4.Chips += int.Parse(tbPot.Text) / winners;
                         tbBotChips4.Text = bot4.Chips.ToString();
                         //bot4.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 5"))
                     {
                         bot5.Chips += int.Parse(tbPot.Text) / winners;
                         tbBotChips5.Text = bot5.Chips.ToString();
                         //bot5.Panel.Visible = true;
                     }
+
                     //await Finish(1);
                 }
                 if (winners == 1)
@@ -1829,31 +1847,35 @@
                         //await Finish(1);
                         //player.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 1"))
                     {
                         bot1.Chips += int.Parse(tbPot.Text);
                         //await Finish(1);
                         //bot1.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 2"))
                     {
                         bot2.Chips += int.Parse(tbPot.Text);
                         //await Finish(1);
                         //bot2.Panel.Visible = true;
-
                     }
+
                     if (CheckWinners.Contains("Bot 3"))
                     {
                         bot3.Chips += int.Parse(tbPot.Text);
                         //await Finish(1);
                         //bot3.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 4"))
                     {
                         bot4.Chips += int.Parse(tbPot.Text);
                         //await Finish(1);
                         //bot4.Panel.Visible = true;
                     }
+
                     if (CheckWinners.Contains("Bot 5"))
                     {
                         bot5.Chips += int.Parse(tbPot.Text);
@@ -1886,17 +1908,34 @@
                         raisedTurn = 123;
                         rounds++;
                         if (!this.PlayerFoldTurn)
-                            this.playerStatus.Text = "";
+                        {
+                            this.playerStatus.Text = string.Empty;
+                        }
+
                         if (!this.bot1.FoldedTurn)
-                            this.bot1Status.Text = "";
+                        {
+                            this.bot1Status.Text = string.Empty;
+                        }
+
                         if (!this.bot2.FoldedTurn)
-                            b2Status.Text = "";
+                        {
+                            b2Status.Text = string.Empty;
+                        }
+
                         if (!this.bot3.FoldedTurn)
-                            b3Status.Text = "";
+                        {
+                            b3Status.Text = string.Empty;
+                        }
+
                         if (!this.bot4.FoldedTurn)
-                            b4Status.Text = "";
+                        {
+                            b4Status.Text = string.Empty;
+                        }
+
                         if (!this.bot5.FoldedTurn)
-                            b5Status.Text = "";
+                        {
+                            b5Status.Text = string.Empty;
+                        }
                     }
                 }
             }
@@ -2050,7 +2089,7 @@
                     Holder[os].Visible = false;
                 }
                 tbPot.Text = "0";
-                this.playerStatus.Text = "";
+                this.playerStatus.Text = string.Empty;
                 await Shuffle();
                 await Turns();
             }
@@ -2288,12 +2327,12 @@
             sorted.Power = 0;
             tbPot.Text = "0";
             t = 60; turnCount = 0;
-            this.playerStatus.Text = "";
-            this.bot1Status.Text = "";
-            b2Status.Text = "";
-            b3Status.Text = "";
-            b4Status.Text = "";
-            b5Status.Text = "";
+            this.playerStatus.Text = string.Empty;
+            this.bot1Status.Text = string.Empty;
+            b2Status.Text = string.Empty;
+            b3Status.Text = string.Empty;
+            b4Status.Text = string.Empty;
+            b5Status.Text = string.Empty;
 
             // TODO: Here add chips, duplicate.
             if (player.Chips <= 0)
@@ -2886,7 +2925,7 @@
             }
 
             int parsedValue;
-            if (tbRaise.Text != "" && int.TryParse(tbRaise.Text, out parsedValue))
+            if (tbRaise.Text != string.Empty && int.TryParse(tbRaise.Text, out parsedValue))
             {
                 if (player.Chips <= parsedValue)
                 {
@@ -2936,7 +2975,7 @@
             {
                 player.Chips -= call;
                 tbChips.Text = "Chips : " + player.Chips.ToString();
-                if (tbPot.Text != "")
+                if (tbPot.Text != string.Empty)
                 {
                     tbPot.Text = (int.Parse(tbPot.Text) + call).ToString();
                 }

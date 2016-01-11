@@ -9,3 +9,11 @@ D:\Programirane\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
 D:\Programirane\Poker\Poker\obj\Debug\Poker.exe
 D:\Programirane\Poker\Poker\obj\Debug\Poker.pdb
 D:\Programirane\Poker\Poker\obj\Debug\Poker.PokerTable.resources
+D:\Git\Poker\Poker\bin\Debug\Poker.exe.config
+D:\Git\Poker\Poker\obj\Debug\Poker.exe
+D:\Git\Poker\Poker\obj\Debug\Poker.pdb
+D:\Git\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache
+D:\Git\Poker\Poker\obj\Debug\Poker.AddChips.resources
+D:\Git\Poker\Poker\obj\Debug\Poker.PokerTable.resources
+D:\Git\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
+D:\Git\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
