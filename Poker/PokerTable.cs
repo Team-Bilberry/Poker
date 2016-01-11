@@ -30,8 +30,8 @@
         private bool intsadded;
         private bool changed;
 
-        //int height;
-        //int width;
+        int height;
+        int width;
 
         // TODO: Convert to enum
         private int winners = 0;
@@ -350,8 +350,12 @@
                 {
                     Holder[index].Tag = Reserve[index];
 
-                    horizontal = 410;
-                    vertical = 265;
+                    if (!check)
+                    {
+                        horizontal = 410;
+                        vertical = 265;
+                    }
+                    check = true;
 
                     Holder[index].Anchor = AnchorStyles.None;
                     Holder[index].Image = backImage;
@@ -369,6 +373,14 @@
                 else
                 {
                     this.bot1.FoldedTurn = false;
+                    if (index == 3)
+                    {
+                        if (Holder[3] != null)
+                        {
+                            Holder[2].Visible = true;
+                            Holder[3].Visible = true;
+                        }
+                    }
                 }
 
                 if (bot2.Chips <= 0)
@@ -380,6 +392,14 @@
                 else
                 {
                     this.bot2.FoldedTurn = false;
+                    if (index == 5)
+                    {
+                        if (Holder[5] != null)
+                        {
+                            Holder[4].Visible = true;
+                            Holder[5].Visible = true;
+                        }
+                    }
                 }
 
                 if (bot3.Chips <= 0)
@@ -391,6 +411,14 @@
                 else
                 {
                     this.bot3.FoldedTurn = false;
+                    if (index == 7)
+                    {
+                        if (Holder[7] != null)
+                        {
+                            Holder[6].Visible = true;
+                            Holder[7].Visible = true;
+                        }
+                    }
                 }
 
                 if (bot4.Chips <= 0)
@@ -402,6 +430,14 @@
                 else
                 {
                     this.bot4.FoldedTurn = false;
+                    if (index == 9)
+                    {
+                        if (Holder[9] != null)
+                        {
+                            Holder[8].Visible = true;
+                            Holder[9].Visible = true;
+                        }
+                    }
                 }
 
                 if (bot5.Chips <= 0)
@@ -413,6 +449,14 @@
                 else
                 {
                     this.bot5.FoldedTurn = false;
+                    if (index == 11)
+                    {
+                        if (Holder[11] != null)
+                        {
+                            Holder[10].Visible = true;
+                            Holder[11].Visible = true;
+                        }
+                    }
                 }
 
                 if (index == 16)
@@ -3083,8 +3127,8 @@
         // TODO : Too many invokes.
         private void Layout_Change(object sender, LayoutEventArgs e)
         {
-            //width = this.Width;
-            //height = this.Height;
+            width = this.Width;
+            height = this.Height;
         }
         #endregion
     }
