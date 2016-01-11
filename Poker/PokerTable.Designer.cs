@@ -380,7 +380,7 @@
             this.Controls.Add(this.bCheck);
             this.Controls.Add(this.bFold);
             this.DoubleBuffered = true;
-            this.Name = "Form1";
+            this.Name = "PokerTable";
             this.Text = "GLS Texas Poker";
             this.Layout += new LayoutEventHandler(this.Layout_Change);
             this.ResumeLayout(false);
