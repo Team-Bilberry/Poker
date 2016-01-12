@@ -1,12 +1,13 @@
 ﻿namespace Poker.Contracts
 {
     using System.Drawing;
+    using Enums;
 
     public interface ICard
     {
         int Value { get; }
 
-        string Suit { get; }
+        Suit Suit { get; }
 
         Image Image { get; }
     }

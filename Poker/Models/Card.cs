@@ -2,10 +2,11 @@
 {
     using System.Drawing;
     using Contracts;
+    using Enums;
 
     public class Card : ICard
     {
-        public Card(int value, string suit, Image image)
+        public Card(int value, Suit suit, Image image)
         {
             this.Value = value;
             this.Suit = suit;
@@ -14,7 +15,7 @@
 
         public int Value { get; }
 
-        public string Suit { get; }
+        public Suit Suit { get; }
 
         public Image Image { get; }
     }
