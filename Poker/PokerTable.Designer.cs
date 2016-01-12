@@ -96,7 +96,7 @@
             this.bFold.TabIndex = 0;
             this.bFold.Text = "Fold";
             this.bFold.UseVisualStyleBackColor = true;
-            this.bFold.Click += new System.EventHandler(this.bFold_Click);
+            this.bFold.Click += new System.EventHandler(this.FoldClick);
             // 
             // bCheck
             // 
@@ -132,7 +132,7 @@
             this.bRaise.TabIndex = 4;
             this.bRaise.Text = "Raise";
             this.bRaise.UseVisualStyleBackColor = true;
-            this.bRaise.Click += new System.EventHandler(this.bRaise_Click);
+            this.bRaise.Click += new System.EventHandler(this.RaiseClick);
             // 
             // pbTimer
             // 
@@ -164,7 +164,7 @@
             this.bAdd.TabIndex = 7;
             this.bAdd.Text = "AddChips";
             this.bAdd.UseVisualStyleBackColor = true;
-            this.bAdd.Click += new System.EventHandler(this.bAddChips_Click);
+            this.bAdd.Click += new System.EventHandler(this.AddChipsClick);
             // 
             // tbAddChips
             // 
@@ -242,7 +242,7 @@
             this.bOptions.TabIndex = 15;
             this.bOptions.Text = "BB/SB";
             this.bOptions.UseVisualStyleBackColor = true;
-            this.bOptions.Click += new System.EventHandler(this.bOptions_Click);
+            this.bOptions.Click += new System.EventHandler(this.OptionsClick);
             // 
             // bBigBlind
             // 
@@ -270,7 +270,7 @@
             this.bSmallBlind.TabIndex = 18;
             this.bSmallBlind.Text = "Small Blind";
             this.bSmallBlind.UseVisualStyleBackColor = true;
-            this.bSmallBlind.Click += new System.EventHandler(this.bSmallBlind_Click);
+            this.bSmallBlind.Click += new System.EventHandler(this.SmallBlindClick);
             // 
             // tbBigBlind
             // 
