@@ -5,7 +5,7 @@
 
     public interface ICard
     {
-        int Value { get; }
+        Rank Rank { get; }
 
         Suit Suit { get; }
 

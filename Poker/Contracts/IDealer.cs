@@ -1,6 +1,9 @@
 ﻿namespace Poker.Contracts
 {
-    public class IDealer
+    public interface IDealer
     {
+        void ShufleDeck(ICardCollection deck);
+
+        void DealCards(ICardCollection deck);
     }
 }

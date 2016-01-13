@@ -1,6 +1,10 @@
 ﻿namespace Poker.Models
 {
-    public class Deck
+    using System.Collections.Generic;
+    using Contracts;
+
+    public class Deck : ICardCollection
     {
+        public IEnumerable<ICard> Cards { get; }
     }
 }

@@ -760,17 +760,17 @@
                         rPairTwoPair(pokerPlayer, index);
 
                         rTwoPair(pokerPlayer, index);
-                        
+
                         rThreeOfAKind(pokerPlayer, Straight, index);
 
                         RStraight(pokerPlayer, Straight, index);
-                        
+
                         RFlush(pokerPlayer, ref vf, Straight1, index);
 
                         rFullHouse(pokerPlayer, ref done, Straight);
 
                         rFourOfAKind(pokerPlayer, Straight);
-                        
+
                         rStraightFlush(pokerPlayer, st1, st2, st3, st4);
 
                         rHighCard(pokerPlayer, index);
@@ -808,7 +808,7 @@
                     {
                         pokerPlayer.Type = 8;
                         pokerPlayer.Power = (st2.Max()) / 4 + pokerPlayer.Type * 100;
-                        Win.Add(new Type() {Power = pokerPlayer.Power, Current = 8});
+                        Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
                         sorted = Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                     }
 
@@ -1019,7 +1019,7 @@
                         {
                             pokerPlayer.Type = 5;
                             pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
-                            Win.Add(new Type() {Power = pokerPlayer.Power, Current = 5});
+                            Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
                             sorted = Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                             vf = true;
                         }
@@ -1528,16 +1528,16 @@
                             }
                             if (tc - k >= 12)
                             {
-                                if (reserve[index]/4 == reserve[tc]/4 && reserve[index + 1]/4 == reserve[tc - k]/4 ||
-                                    reserve[index + 1]/4 == reserve[tc]/4 && reserve[index]/4 == reserve[tc - k]/4)
+                                if (reserve[index] / 4 == reserve[tc] / 4 && reserve[index + 1] / 4 == reserve[tc - k] / 4 ||
+                                    reserve[index + 1] / 4 == reserve[tc] / 4 && reserve[index] / 4 == reserve[tc - k] / 4)
                                 {
                                     if (!msgbox)
                                     {
                                         if (reserve[index] / 4 == 0)
                                         {
                                             pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = 13*4 + (reserve[index + 1]/4)*2 + pokerPlayer.Type*100;
-                                            Win.Add(new Type() {Power = pokerPlayer.Power, Current = 2});
+                                            pokerPlayer.Power = 13 * 4 + (reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
+                                            Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
                                             sorted =
                                                 Win.OrderByDescending(op => op.Current)
                                                     .ThenByDescending(op => op.Power)
@@ -3195,31 +3195,38 @@
 
         private void bBigBlind_Click(object sender, EventArgs e)
         {
+            const int maxBigBlind = 200000;
+            const int minBigBlind = 500;
             int parsedValue;
+            bool isParsed = int.TryParse(this.tbBigBlind.Text, out parsedValue);
+
             if (this.tbBigBlind.Text.Contains(",") || this.tbBigBlind.Text.Contains("."))
             {
                 MessageBox.Show("The Big Blind can be only round number!");
                 this.tbBigBlind.Text = this.bigBlind.ToString();
                 return;
             }
-            if (!int.TryParse(this.tbSmallBlind.Text, out parsedValue))
+
+            if (!isParsed)
             {
                 MessageBox.Show("This is a number only field");
-                this.tbSmallBlind.Text = this.bigBlind.ToString();
+                this.tbBigBlind.Text = this.bigBlind.ToString();
                 return;
             }
-            if (int.Parse(this.tbBigBlind.Text) > 200000)
+
+            if (parsedValue > maxBigBlind)
             {
-                MessageBox.Show("The maximum of the Big Blind is 200 000");
+                MessageBox.Show("The maximum of the Big Blind is " + maxBigBlind);
                 this.tbBigBlind.Text = this.bigBlind.ToString();
             }
-            if (int.Parse(this.tbBigBlind.Text) < 500)
+            else if (parsedValue < minBigBlind)
             {
-                MessageBox.Show("The minimum of the Big Blind is 500");
+                MessageBox.Show("The minimum of the Big Blind is " + minBigBlind);
             }
-            if (int.Parse(this.tbBigBlind.Text) >= 500 && int.Parse(this.tbBigBlind.Text) <= 200000)
+
+            if (parsedValue >= minBigBlind && parsedValue <= minBigBlind)
             {
-                this.bigBlind = int.Parse(this.tbBigBlind.Text);
+                this.bigBlind = parsedValue;
                 MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
             }
         }

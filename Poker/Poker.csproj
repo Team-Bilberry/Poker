@@ -53,10 +53,15 @@
     <Compile Include="Contracts\ICard.cs" />
     <Compile Include="Contracts\ICardCollection.cs" />
     <Compile Include="Contracts\IChip.cs" />
+    <Compile Include="Contracts\IDealer.cs" />
     <Compile Include="Contracts\IPokerPlayer.cs" />
+    <Compile Include="Enums\Rank.cs" />
     <Compile Include="Enums\Suit.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\Chip.cs" />
+    <Compile Include="Models\Dealer.cs" />
+    <Compile Include="Models\Deck.cs" />
+    <Compile Include="Models\Hand.cs" />
     <Compile Include="Models\PokerPlayer.cs" />
     <Compile Include="PokerTable.cs">
       <SubType>Form</SubType>

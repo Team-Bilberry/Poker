@@ -1,6 +1,10 @@
 ﻿namespace Poker.Models
 {
-    public class Hand
+    using System.Collections.Generic;
+    using Contracts;
+
+    public class Hand : ICardCollection
     {
+        public IEnumerable<ICard> Cards { get; }
     }
 }

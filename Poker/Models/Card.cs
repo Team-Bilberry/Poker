@@ -6,14 +6,14 @@
 
     public class Card : ICard
     {
-        public Card(int value, Suit suit, Image image)
+        public Card(Rank rank, Suit suit, Image image)
         {
-            this.Value = value;
+            this.Rank = rank;
             this.Suit = suit;
             this.Image = image;
         }
 
-        public int Value { get; }
+        public Rank Rank { get; }
 
         public Suit Suit { get; }
 
