@@ -38,7 +38,7 @@
         private void bAddChips_Click(object sender, EventArgs e)
         {
             int parsedValue;
-            bool isValidNumber = int.TryParse(this.tbAddChips.Text, out parsedValue);
+            bool isValidNumber = int.TryParse(this.addMoreChipsAmount.Text, out parsedValue);
 
             if (parsedValue < 0 || MaxChipsToAdd < parsedValue)
             {

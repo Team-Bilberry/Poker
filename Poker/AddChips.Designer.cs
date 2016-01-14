@@ -3,9 +3,9 @@
     partial class AddChips
     {
         private System.Windows.Forms.Label outOfChipsLabel;
-        private System.Windows.Forms.Button addChipsButton;
-        private System.Windows.Forms.Button exitButton;
-        private System.Windows.Forms.TextBox tbAddChips;
+        private System.Windows.Forms.Button addMoreChipsButton;
+        private System.Windows.Forms.Button exitAddChipsMenuButton;
+        private System.Windows.Forms.TextBox addMoreChipsAmount;
 
         /// <summary>
         /// Required designer variable.
@@ -35,9 +35,9 @@
         private void InitializeComponent()
         {
             this.outOfChipsLabel = new System.Windows.Forms.Label();
-            this.addChipsButton = new System.Windows.Forms.Button();
-            this.exitButton = new System.Windows.Forms.Button();
-            this.tbAddChips = new System.Windows.Forms.TextBox();
+            this.addMoreChipsButton = new System.Windows.Forms.Button();
+            this.exitAddChipsMenuButton = new System.Windows.Forms.Button();
+            this.addMoreChipsAmount = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // outOfChipsLabel
@@ -52,41 +52,41 @@
             // 
             // addChipsButton
             // 
-            this.addChipsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.addChipsButton.Location = new System.Drawing.Point(12, 226);
-            this.addChipsButton.Name = "addChipsButton";
-            this.addChipsButton.Size = new System.Drawing.Size(75, 23);
-            this.addChipsButton.TabIndex = 1;
-            this.addChipsButton.Text = "Add Chips";
-            this.addChipsButton.UseVisualStyleBackColor = true;
-            this.addChipsButton.Click += new System.EventHandler(this.bAddChips_Click);
+            this.addMoreChipsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.addMoreChipsButton.Location = new System.Drawing.Point(12, 226);
+            this.addMoreChipsButton.Name = "addChipsButton";
+            this.addMoreChipsButton.Size = new System.Drawing.Size(75, 23);
+            this.addMoreChipsButton.TabIndex = 1;
+            this.addMoreChipsButton.Text = "Add Chips";
+            this.addMoreChipsButton.UseVisualStyleBackColor = true;
+            this.addMoreChipsButton.Click += new System.EventHandler(this.bAddChips_Click);
             // 
             // exitButton
             // 
-            this.exitButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.exitButton.Location = new System.Drawing.Point(197, 226);
-            this.exitButton.Name = "exitButton";
-            this.exitButton.Size = new System.Drawing.Size(75, 23);
-            this.exitButton.TabIndex = 2;
-            this.exitButton.Text = "Exit";
-            this.exitButton.UseVisualStyleBackColor = true;
-            this.exitButton.Click += new System.EventHandler(this.bExit_Click);
+            this.exitAddChipsMenuButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.exitAddChipsMenuButton.Location = new System.Drawing.Point(197, 226);
+            this.exitAddChipsMenuButton.Name = "exitButton";
+            this.exitAddChipsMenuButton.Size = new System.Drawing.Size(75, 23);
+            this.exitAddChipsMenuButton.TabIndex = 2;
+            this.exitAddChipsMenuButton.Text = "Exit";
+            this.exitAddChipsMenuButton.UseVisualStyleBackColor = true;
+            this.exitAddChipsMenuButton.Click += new System.EventHandler(this.bExit_Click);
             // 
             // tbAddChips
             // 
-            this.tbAddChips.Location = new System.Drawing.Point(91, 229);
-            this.tbAddChips.Name = "tbAddChips";
-            this.tbAddChips.Size = new System.Drawing.Size(100, 20);
-            this.tbAddChips.TabIndex = 3;
+            this.addMoreChipsAmount.Location = new System.Drawing.Point(91, 229);
+            this.addMoreChipsAmount.Name = "tbAddChips";
+            this.addMoreChipsAmount.Size = new System.Drawing.Size(100, 20);
+            this.addMoreChipsAmount.TabIndex = 3;
             // 
             // AddChips
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.tbAddChips);
-            this.Controls.Add(this.exitButton);
-            this.Controls.Add(this.addChipsButton);
+            this.Controls.Add(this.addMoreChipsAmount);
+            this.Controls.Add(this.exitAddChipsMenuButton);
+            this.Controls.Add(this.addMoreChipsButton);
             this.Controls.Add(this.outOfChipsLabel);
             this.Name = "AddChips";
             this.Text = "You Ran Out Of Chips";
