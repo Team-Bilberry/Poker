@@ -89,6 +89,8 @@
             this.fourthBot = new PokerPlayer(new Panel());
             this.fifthBoth = new PokerPlayer(new Panel());
 
+            Deck teste = new Deck();
+
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.FoldedTurn); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             call = this.bigBlind;
             MaximizeBox = false;
@@ -153,6 +155,8 @@
             int vertical = 480;
 
             Random rnd = new Random();
+
+            // This is shuffle method
             for (int currentIndex = ImgLocation.Length; currentIndex > 0; currentIndex--)
             {
                 int swapCardIndex = rnd.Next(currentIndex);

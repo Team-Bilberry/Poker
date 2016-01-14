@@ -181,10 +181,10 @@
     <Content Include="Resources\Cards\13-of_diamonds.png" />
     <Content Include="Resources\Cards\13-of_hearts.png" />
     <Content Include="Resources\Cards\13-of_spades.png" />
-    <Content Include="Resources\Cards\1_of_clubs.png" />
-    <Content Include="Resources\Cards\1_of_diamonds.png" />
-    <Content Include="Resources\Cards\1_of_hearts.png" />
-    <Content Include="Resources\Cards\1_of_spades.png" />
+    <Content Include="Resources\Cards\Ace_of_Clubs.png" />
+    <Content Include="Resources\Cards\Ace_of_Diamonds.png" />
+    <Content Include="Resources\Cards\Ace_of_Hearts.png" />
+    <Content Include="Resources\Cards\Ace_of_Spades.png" />
     <Content Include="Resources\Cards\2_of_clubs.png" />
     <Content Include="Resources\Cards\2_of_diamonds.png" />
     <Content Include="Resources\Cards\2_of_hearts.png" />

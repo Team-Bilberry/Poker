@@ -6,17 +6,21 @@
 
     public class Card : ICard
     {
-        public Card(Rank rank, Suit suit, Image image)
+        private static Image cardBack = new Bitmap(@"..\..\Resources\Assets\Back\Back.png");
+
+        public Card(Rank rank, Suit suit, Image cardFront)
         {
             this.Rank = rank;
             this.Suit = suit;
-            this.Image = image;
+            this.CardFront = cardFront;
         }
 
         public Rank Rank { get; }
 
         public Suit Suit { get; }
 
-        public Image Image { get; }
+        public Image CardFront { get; }
+
+        public Image CardBack => cardBack;
     }
 }
