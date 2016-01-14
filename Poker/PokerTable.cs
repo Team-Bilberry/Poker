@@ -3119,11 +3119,12 @@
         /// </summary>
         private void AddChipsClick(object sender, EventArgs e)
         {
+            const int maxChipsToAdd = 100000000;
             int addedChips = 0;
             bool isValidNumber = false;
             isValidNumber = int.TryParse(this.tbAddChips.Text, out addedChips);
 
-            if (isValidNumber && addedChips > 0)
+            if (isValidNumber && addedChips > 0 && addedChips < maxChipsToAdd)
             {
                 player.Chips += addedChips;
                 firstBot.Chips += addedChips;
@@ -3164,31 +3165,39 @@
 
         private void SmallBlindClick(object sender, EventArgs e)
         {
+            const int maxSmallBlind = 100000;
+            const int minSmallBlind = 250;
             int parsedValue;
+            bool isParsed = int.TryParse(this.tbSmallBlind.Text, out parsedValue);
+
             if (this.tbSmallBlind.Text.Contains(",") || this.tbSmallBlind.Text.Contains("."))
             {
                 MessageBox.Show("The Small Blind can be only round number !");
                 this.tbSmallBlind.Text = this.smallBlind.ToString();
                 return;
             }
-            if (!int.TryParse(this.tbSmallBlind.Text, out parsedValue))
+
+            if (!isParsed)
             {
                 MessageBox.Show("This is a number only field");
                 this.tbSmallBlind.Text = this.smallBlind.ToString();
                 return;
             }
-            if (int.Parse(this.tbSmallBlind.Text) > 100000)
+
+            if (parsedValue > maxSmallBlind)
             {
-                MessageBox.Show("The maximum of the Small Blind is 100 000 $");
+                MessageBox.Show("The maximum of the Small Blind is " + maxSmallBlind);
                 this.tbSmallBlind.Text = this.smallBlind.ToString();
             }
-            if (int.Parse(this.tbSmallBlind.Text) < 250)
+
+            if (parsedValue < minSmallBlind)
             {
-                MessageBox.Show("The minimum of the Small Blind is 250 $");
+                MessageBox.Show("The minimum of the Small Blind is " + minSmallBlind);
             }
-            if (int.Parse(this.tbSmallBlind.Text) >= 250 && int.Parse(this.tbSmallBlind.Text) <= 100000)
+
+            if (parsedValue >= minSmallBlind && parsedValue <= maxSmallBlind)
             {
-                this.smallBlind = int.Parse(this.tbSmallBlind.Text);
+                this.smallBlind = parsedValue;
                 MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
             }
         }
