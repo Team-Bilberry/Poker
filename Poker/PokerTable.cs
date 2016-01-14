@@ -21,8 +21,6 @@
         private readonly IPokerPlayer forthBot;
         private readonly IPokerPlayer fifthBoth;
 
-        private Deck deck;
-
         private int call = 500;
         private int foldedPlayers = 5;
         private double type;
@@ -90,6 +88,8 @@
             this.thirdBot = new PokerPlayer(new Panel());
             this.forthBot = new PokerPlayer(new Panel());
             this.fifthBoth = new PokerPlayer(new Panel());
+
+            Deck teste = new Deck();
 
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.FoldedTurn); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             call = this.bigBlind;
@@ -725,20 +725,21 @@
             }
         }
 
-        void Rules(int c1, int c2, string currentText, IPokerPlayer pokerPlayer)
+        void Rules(int card1, int card2, string currentText, IPokerPlayer pokerPlayer)
         {
-            if (c1 == 0 && c2 == 1)
+            if (card1 == 0 && card2 == 1)
             {
             }
 
-            if (!pokerPlayer.FoldedTurn || c1 == 0 && c2 == 1 && this.playerStatus.Text.Contains("Fold") == false)
+            if (!pokerPlayer.FoldedTurn || card1 == 0 && card2 == 1 && this.playerStatus.Text.Contains("Fold") == false)
             {
                 #region Variables
-                bool done = false, vf = false;
+                bool done = false;
+                bool vf = false;
                 int[] Straight1 = new int[5];
                 int[] Straight = new int[7];
-                Straight[0] = reserve[c1];
-                Straight[1] = reserve[c2];
+                Straight[0] = reserve[card1];
+                Straight[1] = reserve[card2];
                 Straight1[0] = Straight[2] = reserve[12];
                 Straight1[1] = Straight[3] = reserve[13];
                 Straight1[2] = Straight[4] = reserve[14];
@@ -756,7 +757,7 @@
                 #endregion
                 for (int index = 0; index < 16; index++)
                 {
-                    if (reserve[index] == int.Parse(holder[c1].Tag.ToString()) && reserve[index + 1] == int.Parse(holder[c2].Tag.ToString()))
+                    if (reserve[index] == int.Parse(holder[card1].Tag.ToString()) && reserve[index + 1] == int.Parse(holder[card2].Tag.ToString()))
                     {
                         //Pair from Hand current = 1
                         rPairFromHand(pokerPlayer, index);
@@ -1706,8 +1707,10 @@
                             sorted = Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                         }
                     }
+
                     msgbox = true;
                 }
+
                 for (int tc = 16; tc >= 12; tc--)
                 {
                     if (reserve[index + 1] / 4 == reserve[tc] / 4)
@@ -1729,8 +1732,10 @@
                                 sorted = Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
                             }
                         }
+
                         msgbox = true;
                     }
+
                     if (reserve[index] / 4 == reserve[tc] / 4)
                     {
                         if (!msgbox)
@@ -1774,6 +1779,7 @@
                     Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
                     sorted = Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
                 }
+
                 if (reserve[index] / 4 == 0 || reserve[index + 1] / 4 == 0)
                 {
                     pokerPlayer.Type = -1;
@@ -1808,38 +1814,47 @@
                     {
                         MessageBox.Show(currentText + " High Card ");
                     }
+
                     if (current == 1 || current == 0)
                     {
                         MessageBox.Show(currentText + " Pair ");
                     }
+
                     if (current == 2)
                     {
                         MessageBox.Show(currentText + " Two Pair ");
                     }
+
                     if (current == 3)
                     {
                         MessageBox.Show(currentText + " Three of a Kind ");
                     }
+
                     if (current == 4)
                     {
                         MessageBox.Show(currentText + " Straight ");
                     }
+
                     if (current == 5 || current == 5.5)
                     {
                         MessageBox.Show(currentText + " Flush ");
                     }
+
                     if (current == 6)
                     {
                         MessageBox.Show(currentText + " Full House ");
                     }
+
                     if (current == 7)
                     {
                         MessageBox.Show(currentText + " Four of a Kind ");
                     }
+
                     if (current == 8)
                     {
                         MessageBox.Show(currentText + " Straight Flush ");
                     }
+
                     if (current == 9)
                     {
                         MessageBox.Show(currentText + " Royal Flush ! ");

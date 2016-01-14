@@ -14,7 +14,7 @@
             FontFamily fontFamily = new FontFamily("Arial");
             this.InitializeComponent();
             this.ControlBox = false;
-            this.lblOutOfChips.BorderStyle = BorderStyle.FixedSingle;
+            this.outOfChipsLabel.BorderStyle = BorderStyle.FixedSingle;
         }
 
         public int AddedChips

@@ -9,6 +9,8 @@
 
         Suit Suit { get; }
 
-        Image Image { get; }
+        Image CardFront { get; }
+
+        Image CardBack { get; }
     }
 }
