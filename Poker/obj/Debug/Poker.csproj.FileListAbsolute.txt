@@ -17,3 +17,13 @@ D:\Git\Poker\Poker\obj\Debug\Poker.AddChips.resources
 D:\Git\Poker\Poker\obj\Debug\Poker.PokerTable.resources
 D:\Git\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
 D:\Git\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.exe.config
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.exe
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.pdb
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.exe
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.pdb
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.AddChips.resources
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.PokerTable.resources
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
