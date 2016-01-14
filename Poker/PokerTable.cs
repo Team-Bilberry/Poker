@@ -21,6 +21,8 @@
         private readonly IPokerPlayer forthBot;
         private readonly IPokerPlayer fifthBoth;
 
+        private Deck deck;
+
         private int call = 500;
         private int foldedPlayers = 5;
         private double type;
@@ -152,6 +154,8 @@
             int horizontal = 580;
             int vertical = 480;
             Random rnd = new Random();
+
+            // This is shuffle method
             for (int currentIndex = ImgLocation.Length; currentIndex > 0; currentIndex--)
             {
                 int swapCardIndex = rnd.Next(currentIndex);
