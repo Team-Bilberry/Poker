@@ -1,0 +1,23 @@
+
+•	Renamed variables:
+  •	In class PokerTable: t ➔ secondsLeft.
+  •	In class PokerTable: holder➔ cardPicture.
+  •	In class PokerTable: maxLeft ➔ playersLeft.
+  •	In class PokerTable: call ➔ neededChipsToCall.
+  •	In class PokerTable: foldedPlayers ➔ botsWithoutChips.
+  •	In async Task Shuffle: index ➔ currentCardIndex.
+  •	In class PokerPlayer: FoldedTurn ➔ OutOfChips.
+  •	In class PokerPlayer: Turn ➔ AbleToTurn.
+  •	In class PokerPlayer: bools ➔ arePlayersEliminated
+•	Removed variables:
+  •	In class PokerTable in region Variables: playerFoldTurn; Replaced with player.OutOfChips
+  •	In class PokerTable in region Variables: last;
+  •	In class PokerTable in region Variables: i ; Rerplaced with currentCardIndex
+  •	In class PokerTable in region Variables: playerTurn; Replaced with player.AbleToMakeTurn
+•	Extracted methods:
+  •	ShuffleCards
+
+
+
+
+
