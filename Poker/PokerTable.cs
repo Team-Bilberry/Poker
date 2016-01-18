@@ -89,8 +89,6 @@
             this.fourthBot = new PokerPlayer(new Panel());
             this.fifthBot = new PokerPlayer(new Panel());
 
-            Deck deck = new Deck();
-
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.OutOfChips); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             this.neededChipsToCall = this.bigBlind;
             this.MaximizeBox = false;
@@ -159,11 +157,11 @@
                 this.deck[currentCardIndex] = Image.FromFile(ImgLocation[currentCardIndex]);
 
                 // take card name, too slow i think
-                var charsToRemove = new string[] { @"..\..\Resources\Assets\Cards\", ".png" };
-                foreach (var c in charsToRemove)
-                {
-                    this.ImgLocation[currentCardIndex] = this.ImgLocation[currentCardIndex].Replace(c, string.Empty);
-                }
+                //var charsToRemove = new string[] { @"..\..\Resources\Assets\Cards\", ".png" };
+                //foreach (var c in charsToRemove)
+                //{
+                //    this.ImgLocation[currentCardIndex] = this.ImgLocation[currentCardIndex].Replace(c, string.Empty);
+                //}
                 int lastSlashIndex = this.ImgLocation[currentCardIndex].LastIndexOf("\\");
                 int lastDotIndex = this.ImgLocation[currentCardIndex].LastIndexOf(".");
                 this.ImgLocation[currentCardIndex] = this.ImgLocation[currentCardIndex]
@@ -246,7 +244,7 @@
 
                         this.cardPicture[currentCardIndex].Anchor = (AnchorStyles.Top | AnchorStyles.Left);
                         this.cardPicture[currentCardIndex].Image = backImage;
-                        this.cardPicture[currentCardIndex].Image = Deck[currentCardIndex];
+                        this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                         this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                         horizontal += this.cardPicture[currentCardIndex].Width;
                         this.cardPicture[currentCardIndex].Visible = true;
@@ -277,7 +275,7 @@
 
                         this.cardPicture[currentCardIndex].Anchor = (AnchorStyles.Top);
                         this.cardPicture[currentCardIndex].Image = backImage;
-                        this.cardPicture[currentCardIndex].Image = Deck[currentCardIndex];
+                        this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                         this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                         horizontal += cardPicture[currentCardIndex].Width;
                         this.cardPicture[currentCardIndex].Visible = true;
@@ -307,7 +305,7 @@
 
                         this.cardPicture[currentCardIndex].Anchor = (AnchorStyles.Top | AnchorStyles.Right);
                         this.cardPicture[currentCardIndex].Image = backImage;
-                        this.cardPicture[currentCardIndex].Image = Deck[currentCardIndex];
+                        this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                         this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                         horizontal += cardPicture[currentCardIndex].Width;
                         this.cardPicture[currentCardIndex].Visible = true;
@@ -338,7 +336,7 @@
 
                         this.cardPicture[currentCardIndex].Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
                         this.cardPicture[currentCardIndex].Image = backImage;
-                        this.cardPicture[currentCardIndex].Image = Deck[currentCardIndex];
+                        this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                         this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                         horizontal += cardPicture[currentCardIndex].Width;
                         this.cardPicture[currentCardIndex].Visible = true;
@@ -362,7 +360,7 @@
 
                     this.cardPicture[currentCardIndex].Anchor = AnchorStyles.None;
                     this.cardPicture[currentCardIndex].Image = backImage;
-                    this.cardPicture[currentCardIndex].Image = Deck[currentCardIndex];
+                    this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                     this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                     horizontal += 110;
                 }
