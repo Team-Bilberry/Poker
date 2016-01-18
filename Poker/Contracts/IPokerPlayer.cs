@@ -17,9 +17,9 @@
 
          int Raise { get; set; }
 
-         bool Turn { get; set; }
+         bool AbleToMakeTurn { get; set; }
 
-         bool FoldedTurn { get; set; }
+         bool OutOfChips { get; set; }
 
          bool Folded { get; set; }
 

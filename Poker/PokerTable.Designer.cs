@@ -11,6 +11,7 @@
         private ProgressBar pbTimer;
         private TextBox playerChips;
         private Button addChipsToAllButton;
+        //isn't it better bot's chips to be Labels 
         private TextBox addChipsToAllAmount;
         private TextBox botFiveChips;
         private TextBox botFourChips;
@@ -19,10 +20,10 @@
         private TextBox botOneChips;
         private TextBox potStatus;
         private Button toggleShowBlindButton;
-        private Button changeBigBlindButton;
-        private TextBox changeSmallBlindField;
-        private Button changeSmallBlindButton;
-        private TextBox changeBigBlindField;
+        private Button bigBlindButton;
+        private TextBox smallBlindField;
+        private Button smallBlindButton;
+        private TextBox bigBlindField;
         private Label botFiveStatus;
         private Label botFourStatus;
         private Label botThreeStatus;
@@ -72,10 +73,10 @@
             this.botOneChips = new TextBox();
             this.potStatus = new TextBox();
             this.toggleShowBlindButton = new Button();
-            this.changeBigBlindButton = new Button();
-            this.changeSmallBlindField = new TextBox();
-            this.changeSmallBlindButton = new Button();
-            this.changeBigBlindField = new TextBox();
+            this.bigBlindButton = new Button();
+            this.smallBlindField = new TextBox();
+            this.smallBlindButton = new Button();
+            this.bigBlindField = new TextBox();
             this.botFiveStatus = new Label();
             this.botFourStatus = new Label();
             this.botThreeStatus = new Label();
@@ -246,39 +247,39 @@
             // 
             // bBigBlind
             // 
-            this.changeBigBlindButton.Location = new System.Drawing.Point(12, 254);
-            this.changeBigBlindButton.Name = "bBigBlind";
-            this.changeBigBlindButton.Size = new System.Drawing.Size(75, 23);
-            this.changeBigBlindButton.TabIndex = 16;
-            this.changeBigBlindButton.Text = "Big Blind";
-            this.changeBigBlindButton.UseVisualStyleBackColor = true;
-            this.changeBigBlindButton.Click += new System.EventHandler(this.bBigBlind_Click);
+            this.bigBlindButton.Location = new System.Drawing.Point(12, 254);
+            this.bigBlindButton.Name = "bBigBlind";
+            this.bigBlindButton.Size = new System.Drawing.Size(75, 23);
+            this.bigBlindButton.TabIndex = 16;
+            this.bigBlindButton.Text = "Big Blind";
+            this.bigBlindButton.UseVisualStyleBackColor = true;
+            this.bigBlindButton.Click += new System.EventHandler(this.bBigBlind_Click);
             // 
             // tbSmallBlind
             // 
-            this.changeSmallBlindField.Location = new System.Drawing.Point(12, 228);
-            this.changeSmallBlindField.Name = "tbSmallBlind";
-            this.changeSmallBlindField.Size = new System.Drawing.Size(75, 20);
-            this.changeSmallBlindField.TabIndex = 17;
-            this.changeSmallBlindField.Text = "250";
+            this.smallBlindField.Location = new System.Drawing.Point(12, 228);
+            this.smallBlindField.Name = "tbSmallBlind";
+            this.smallBlindField.Size = new System.Drawing.Size(75, 20);
+            this.smallBlindField.TabIndex = 17;
+            this.smallBlindField.Text = "250";
             // 
             // bSmallBlind
             // 
-            this.changeSmallBlindButton.Location = new System.Drawing.Point(12, 199);
-            this.changeSmallBlindButton.Name = "bSmallBlind";
-            this.changeSmallBlindButton.Size = new System.Drawing.Size(75, 23);
-            this.changeSmallBlindButton.TabIndex = 18;
-            this.changeSmallBlindButton.Text = "Small Blind";
-            this.changeSmallBlindButton.UseVisualStyleBackColor = true;
-            this.changeSmallBlindButton.Click += new System.EventHandler(this.SmallBlindClick);
+            this.smallBlindButton.Location = new System.Drawing.Point(12, 199);
+            this.smallBlindButton.Name = "bSmallBlind";
+            this.smallBlindButton.Size = new System.Drawing.Size(75, 23);
+            this.smallBlindButton.TabIndex = 18;
+            this.smallBlindButton.Text = "Small Blind";
+            this.smallBlindButton.UseVisualStyleBackColor = true;
+            this.smallBlindButton.Click += new System.EventHandler(this.SmallBlindClick);
             // 
             // tbBigBlind
             // 
-            this.changeBigBlindField.Location = new System.Drawing.Point(12, 283);
-            this.changeBigBlindField.Name = "tbBigBlind";
-            this.changeBigBlindField.Size = new System.Drawing.Size(75, 20);
-            this.changeBigBlindField.TabIndex = 19;
-            this.changeBigBlindField.Text = "500";
+            this.bigBlindField.Location = new System.Drawing.Point(12, 283);
+            this.bigBlindField.Name = "tbBigBlind";
+            this.bigBlindField.Size = new System.Drawing.Size(75, 20);
+            this.bigBlindField.TabIndex = 19;
+            this.bigBlindField.Text = "500";
             // 
             // b5Status
             // 
@@ -360,10 +361,10 @@
             this.Controls.Add(this.botThreeStatus);
             this.Controls.Add(this.botFourStatus);
             this.Controls.Add(this.botFiveStatus);
-            this.Controls.Add(this.changeBigBlindField);
-            this.Controls.Add(this.changeSmallBlindButton);
-            this.Controls.Add(this.changeSmallBlindField);
-            this.Controls.Add(this.changeBigBlindButton);
+            this.Controls.Add(this.bigBlindField);
+            this.Controls.Add(this.smallBlindButton);
+            this.Controls.Add(this.smallBlindField);
+            this.Controls.Add(this.bigBlindButton);
             this.Controls.Add(this.toggleShowBlindButton);
             this.Controls.Add(this.potStatus);
             this.Controls.Add(this.botOneChips);

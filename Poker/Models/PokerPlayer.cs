@@ -18,8 +18,8 @@
             this.Chips = DefaultChips;
             this.Call = 0;
             this.Raise = 0;
-            this.Turn = false;
-            this.FoldedTurn = false;
+            this.AbleToMakeTurn = false;
+            this.OutOfChips = false;
             this.Folded = false;
         }
 
@@ -35,9 +35,9 @@
 
         public int Raise { get; set; }
 
-        public bool Turn { get; set; }
+        public bool AbleToMakeTurn { get; set; }
 
-        public bool FoldedTurn { get; set; }
+        public bool OutOfChips { get; set; }
 
         public bool Folded { get; set; }
 
