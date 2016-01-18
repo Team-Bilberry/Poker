@@ -42,7 +42,7 @@
                     holder[number].Height = 130;
                     holder[number].Width = 80;
                     // Add this in table
-                    // this.table.Controls.Add(holder[number]);
+                    this.table.Controls.Add(holder[number]);
                     holder[number].Name = "pb" + number;
                     number++;
                 }
