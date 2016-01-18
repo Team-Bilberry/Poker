@@ -89,8 +89,6 @@
             this.fourthBot = new PokerPlayer(new Panel());
             this.fifthBoth = new PokerPlayer(new Panel());
 
-            Deck teste = new Deck();
-
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.FoldedTurn); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             call = this.bigBlind;
             MaximizeBox = false;
@@ -191,7 +189,7 @@
                 holder[index].Name = "pb" + index.ToString();
 
                 // investigate why these delay is needed
-                //await Task.Delay(200);
+                await Task.Delay(200);
                 #region Throwing Cards
                 if (index < 2)
                 {
