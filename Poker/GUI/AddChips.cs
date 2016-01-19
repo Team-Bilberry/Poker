@@ -1,7 +1,6 @@
 ﻿namespace Poker.GUI
 {
     using System;
-    using System.Drawing;
     using System.Windows.Forms;
 
     public partial class AddChips : Form
@@ -11,7 +10,6 @@
 
         public AddChips()
         {
-            FontFamily fontFamily = new FontFamily("Arial");
             this.InitializeComponent();
             this.ControlBox = false;
             this.outOfChipsLabel.BorderStyle = BorderStyle.FixedSingle;
@@ -42,14 +40,15 @@
 
             if (parsedValue < 0 || MaxChipsToAdd < parsedValue)
             {
-                string msg = $"The chips you can add should be in range {0}..{MaxChipsToAdd}";
-                MessageBox.Show(msg);
+                string message = $"The chips you can add should be in range {0}..{MaxChipsToAdd}";
+                MessageBox.Show(message);
                 return;
             }
 
             if (!isValidNumber)
             {
-                MessageBox.Show(@"This is a number only field");
+                const string message = "This is a number only field";
+                MessageBox.Show(message);
             }
             else
             {

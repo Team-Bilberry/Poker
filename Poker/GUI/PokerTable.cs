@@ -23,9 +23,9 @@
         private readonly IPokerPlayer fourthBot;
         private readonly IPokerPlayer fifthBot;
 
-        private IDealer dealer;
+        private readonly IDealer dealer;
 
-        private int neededChipsToCall = 500;
+        private int neededChipsToCall;
         private int botsWithoutChips = 5;
         private double type;
         private int rounds = 0;
@@ -36,15 +36,15 @@
         private bool intsadded;
         private bool changed;
 
-        private int height;
-        private int width;
+        //private int height;
+        //private int width;
 
         // TODO: Convert to enum
-        
-        private int Flop = 1;
-        private int Turn = 2;
-        private int River = 3;
-        private int End = 4;
+
+        //private int Flop = 1;
+        //private int Turn = 2;
+        //private int River = 3;
+        //private int End = 4;
 
 
         //int last = 123;
@@ -311,7 +311,7 @@
 
                         this.cardPicture[currentCardIndex].Anchor = (AnchorStyles.Top | AnchorStyles.Right);
                         this.cardPicture[currentCardIndex].Image = backImage;
-                       // this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
+                        // this.cardPicture[currentCardIndex].Image = this.deck[currentCardIndex];
                         this.cardPicture[currentCardIndex].Location = new Point(horizontal, vertical);
                         horizontal += this.cardPicture[currentCardIndex].Width;
                         this.cardPicture[currentCardIndex].Visible = true;
@@ -540,7 +540,7 @@
 
                 if (this.player.OutOfChips && !this.player.Folded)
                 {
-                    if (this.callButton.Text.Contains("All in") == false 
+                    if (this.callButton.Text.Contains("All in") == false
                         || this.raiseButton.Text.Contains("All in") == false)
                     {
                         //bools.RemoveAt(0);
@@ -2020,7 +2020,7 @@
                 }
             }
 
-            if (this.rounds == (int) RoundStage.Flop)
+            if (this.rounds == (int)RoundStage.Flop)
             {
                 for (int j = 12; j <= 14; j++)
                 {
@@ -2049,7 +2049,7 @@
                 }
             }
 
-            if (this.rounds == (int) RoundStage.Turn)
+            if (this.rounds == (int)RoundStage.Turn)
             {
                 for (int j = 14; j <= 15; j++)
                 {
@@ -2078,7 +2078,7 @@
                 }
             }
 
-            if (this.rounds == (int) RoundStage.River)
+            if (this.rounds == (int)RoundStage.River)
             {
                 for (int j = 15; j <= 16; j++)
                 {
@@ -2106,7 +2106,7 @@
                 }
             }
 
-            if (this.rounds ==(int) RoundStage.End && this.playersLeft == 6)
+            if (this.rounds == (int)RoundStage.End && this.playersLeft == 6)
             {
                 string fixedLast = string.Empty;
 
@@ -2406,7 +2406,7 @@
             #endregion
 
             #region FiveOrLessLeft
-            if (abc < 6 && abc > 1 && this.rounds >= this.End)
+            if (abc < 6 && abc > 1 && this.rounds >= (int)RoundStage.End)
             {
                 await this.Finish(2);
             }
@@ -2488,10 +2488,10 @@
             // width = 0;
             this.winners = 0;
 
-            this.Flop = 1;
-            this.Turn = 2;
-            this.River = 3;
-            this.End = 4;
+            //this.Flop = 1;
+            //this.Turn = 2;
+            //this.River = 3;
+            //this.End = 4;
             this.playersLeft = 6;
             this.raisedTurn = 1;
 
@@ -3335,7 +3335,7 @@
 
         private void SmallBlindClick(object sender, EventArgs e)
         {
-            
+
             int parsedValue;
             bool isParsed = int.TryParse(this.smallBlindField.Text, out parsedValue);
 
@@ -3373,7 +3373,7 @@
 
         private void bBigBlind_Click(object sender, EventArgs e)
         {
-            
+
             int parsedValue;
             bool isParsed = int.TryParse(this.bigBlindField.Text, out parsedValue);
 
@@ -3410,11 +3410,11 @@
 
 
         // TODO : Too many invokes.
-        private void Layout_Change(object sender, LayoutEventArgs e)
-        {
-            this.width = this.Width;
-            this.height = this.Height;
-        }
+        //private void Layout_Change(object sender, LayoutEventArgs e)
+        //{
+        //    this.width = this.Width;
+        //    this.height = this.Height;
+        //}
         #endregion
     }
 }

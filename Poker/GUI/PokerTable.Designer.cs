@@ -383,7 +383,7 @@
             this.DoubleBuffered = true;
             this.Name = "PokerTable";
             this.Text = "GLS Texas Poker";
-            this.Layout += new LayoutEventHandler(this.Layout_Change);
+            //this.Layout += new LayoutEventHandler(this.Layout_Change);
             this.ResumeLayout(false);
             this.PerformLayout();
 
