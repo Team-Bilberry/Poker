@@ -23,6 +23,6 @@
 
          bool Folded { get; set; }
 
-         void InizializePanel(Point location);
+         void InitializePanel(Point location);
     }
 }

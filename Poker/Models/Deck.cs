@@ -6,6 +6,7 @@
     using System.Windows.Forms;
     using Contracts;
     using Enums;
+    using GUI;
 
     public class Deck : ICardCollection
     {

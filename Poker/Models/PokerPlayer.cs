@@ -41,7 +41,7 @@
 
         public bool Folded { get; set; }
 
-        public void InizializePanel(Point location)
+        public void InitializePanel(Point location)
         {
             this.Panel.Location = location;
             this.Panel.BackColor = Color.Transparent;

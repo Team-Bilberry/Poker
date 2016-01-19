@@ -2,7 +2,7 @@
 {
     public interface IDealer
     {
-        void ShufleDeck(ICardCollection deck);
+        string[] ShuffleDeck(string[] deck);
 
         void DealCards(ICardCollection deck);
     }

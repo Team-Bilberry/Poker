@@ -2,6 +2,9 @@
 {
     using System;
     using System.Windows.Forms;
+    using Contracts;
+    using GUI;
+    using Models;
 
     public static class PokerMain
     {
@@ -13,7 +16,10 @@
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PokerTable());
+
+            IDealer dealer = new Dealer();
+
+            Application.Run(new PokerTable(dealer));
         }
     }
 }
