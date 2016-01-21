@@ -10,11 +10,14 @@
     using Contracts;
     using Models;
     using PokerUtilities;
+    using PokerUtilities.CardsCombinationMethods;
     using Type = Poker.Type;
 
     public partial class PokerTable : Form
     {
         #region Variables
+        private CheckHandType checkHand = new CheckHandType();
+        private HandTypes handType = new HandTypes();
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -76,8 +79,8 @@
         PictureBox[] cardPicture = new PictureBox[52];
         Timer timer = new Timer();
         Timer updates = new Timer();
-        private int secondsLeft = 60;
 
+        private int secondsLeft = 60;
         private int bigBlind = 500;
         private int smallBlind = 250;
         int turnCount = 0;
@@ -183,7 +186,7 @@
                 this.cardPicture[currentCardIndex].Name = "pb" + currentCardIndex.ToString();
 
                 // investigate why these delay is needed
-                //await Task.Delay(200);
+                await Task.Delay(150);
                 #region Throwing Cards
                 if (currentCardIndex < 2)
                 {
@@ -731,9 +734,7 @@
                 this.restart = false;
             }
         }
-        // TODO: extract the methods below in PokerUtilities 
-        // (WARNING: very high coupling. Win List and sorted Type may brake if extracted without fixing first.
-        // I think with ref it can be fixed but not sure.
+        // TODO: extract the method below in PokerUtilities
         void Rules(int card1, int card2, string currentText, IPokerPlayer pokerPlayer)
         {
             if (card1 == 0 && card2 == 1)
@@ -768,1036 +769,1056 @@
                 {
                     if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) && this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
                     {
-                        //Pair from Hand current = 1
-                        this.rPairFromHand(pokerPlayer, index);
+                        ////Pair from Hand current = 1
+                        //this.rPairFromHand(pokerPlayer, index);
 
-                        this.rPairTwoPair(pokerPlayer, index);
+                        //this.rPairTwoPair(pokerPlayer, index);
 
-                        this.rTwoPair(pokerPlayer, index);
+                        //this.rTwoPair(pokerPlayer, index);
 
-                        this.rThreeOfAKind(pokerPlayer, Straight, index);
+                        //this.rThreeOfAKind(pokerPlayer, Straight, index);
 
-                        this.RStraight(pokerPlayer, Straight, index);
+                        //this.RStraight(pokerPlayer, Straight, index);
 
-                        this.RFlush(pokerPlayer, ref vf, Straight1, index);
+                        //this.RFlush(pokerPlayer, ref vf, Straight1, index);
 
-                        this.rFullHouse(pokerPlayer, ref done, Straight);
+                        //this.rFullHouse(pokerPlayer, ref done, Straight);
 
-                        this.rFourOfAKind(pokerPlayer, Straight);
+                        //this.rFourOfAKind(pokerPlayer, Straight);
 
-                        this.rStraightFlush(pokerPlayer, st1, st2, st3, st4);
+                        //this.rStraightFlush(pokerPlayer, st1, st2, st3, st4);
 
-                        this.rHighCard(pokerPlayer, index);
+                        //this.rHighCard(pokerPlayer, index);
+
+                        this.checkHand.rPairFromHand(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+
+                        this.checkHand.rPairTwoPair(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+
+                        this.checkHand.rTwoPair(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+
+                        this.checkHand.rThreeOfAKind(ref pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+
+                        this.checkHand.rStraight(ref pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+
+                        this.checkHand.rFlush(ref pokerPlayer, ref vf, Straight1, ref index, ref this.Win, ref this.sorted, ref this.reserve);
+
+                        this.checkHand.rFullHouse(ref pokerPlayer, ref done, Straight, ref this.Win, ref this.sorted, ref this.type);
+
+                        this.checkHand.rFourOfAKind(ref pokerPlayer, Straight, ref this.Win, ref this.sorted);
+
+                        this.checkHand.rStraightFlush(ref pokerPlayer, st1, st2, st3, st4, ref this.Win, ref this.sorted);
+
+                        this.checkHand.rHighCard(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
                     }
                 }
             }
         }
 
-        private void rStraightFlush(IPokerPlayer pokerPlayer, int[] st1, int[] st2, int[] st3, int[] st4)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                if (st1.Length >= 5)
-                {
-                    if (st1[0] + 4 == st1[4])
-                    {
-                        pokerPlayer.Type = 8;
-                        pokerPlayer.Power = (st1.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (st1[0] == 0 && st1[1] == 9 && st1[2] == 10 && st1[3] == 11 && st1[0] + 12 == st1[4])
-                    {
-                        pokerPlayer.Type = 9;
-                        pokerPlayer.Power = (st1.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (st2.Length >= 5)
-                {
-                    if (st2[0] + 4 == st2[4])
-                    {
-                        pokerPlayer.Type = 8;
-                        pokerPlayer.Power = (st2.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (st2[0] == 0 && st2[1] == 9 && st2[2] == 10 && st2[3] == 11 && st2[0] + 12 == st2[4])
-                    {
-                        pokerPlayer.Type = 9;
-                        pokerPlayer.Power = (st2.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (st3.Length >= 5)
-                {
-                    if (st3[0] + 4 == st3[4])
-                    {
-                        pokerPlayer.Type = 8;
-                        pokerPlayer.Power = (st3.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (st3[0] == 0 && st3[1] == 9 && st3[2] == 10 && st3[3] == 11 && st3[0] + 12 == st3[4])
-                    {
-                        pokerPlayer.Type = 9;
-                        pokerPlayer.Power = (st3.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (st4.Length >= 5)
-                {
-                    if (st4[0] + 4 == st4[4])
-                    {
-                        pokerPlayer.Type = 8;
-                        pokerPlayer.Power = (st4.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (st4[0] == 0 && st4[1] == 9 && st4[2] == 10 && st4[3] == 11 && st4[0] + 12 == st4[4])
-                    {
-                        pokerPlayer.Type = 9;
-                        pokerPlayer.Power = (st4.Max()) / 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-            }
-        }
-
-        private void rFourOfAKind(IPokerPlayer pokerPlayer, int[] Straight)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                for (int j = 0; j <= 3; j++)
-                {
-                    if (Straight[j] / 4 == Straight[j + 1] / 4 && Straight[j] / 4 == Straight[j + 2] / 4 &&
-                        Straight[j] / 4 == Straight[j + 3] / 4)
-                    {
-                        pokerPlayer.Type = 7;
-                        pokerPlayer.Power = (Straight[j] / 4) * 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 7 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (Straight[j] / 4 == 0 && Straight[j + 1] / 4 == 0 && Straight[j + 2] / 4 == 0 && Straight[j + 3] / 4 == 0)
-                    {
-                        pokerPlayer.Type = 7;
-                        pokerPlayer.Power = 13 * 4 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 7 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-            }
-        }
-
-        private void rFullHouse(IPokerPlayer pokerPlayer, ref bool done, int[] Straight)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                this.type = pokerPlayer.Power;
-                for (int j = 0; j <= 12; j++)
-                {
-                    var fh = Straight.Where(o => o / 4 == j).ToArray();
-                    if (fh.Length == 3 || done)
-                    {
-                        if (fh.Length == 2)
-                        {
-                            if (fh.Max() / 4 == 0)
-                            {
-                                pokerPlayer.Type = 6;
-                                pokerPlayer.Power = 13 * 2 + pokerPlayer.Type * 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 6 });
-                                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                                break;
-                            }
-
-                            if (fh.Max() / 4 > 0)
-                            {
-                                pokerPlayer.Type = 6;
-                                pokerPlayer.Power = fh.Max() / 4 * 2 + pokerPlayer.Type * 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 6 });
-                                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                                break;
-                            }
-                        }
-
-                        if (!done)
-                        {
-                            if (fh.Max() / 4 == 0)
-                            {
-                                pokerPlayer.Power = 13;
-                                done = true;
-                                j = -1;
-                            }
-                            else
-                            {
-                                pokerPlayer.Power = fh.Max() / 4;
-                                done = true;
-                                j = -1;
-                            }
-                        }
-                    }
-                }
-
-                if (pokerPlayer.Type != 6)
-                {
-                    pokerPlayer.Power = this.type;
-                }
-            }
-        }
-
-        private void RFlush(IPokerPlayer pokerPlayer, ref bool vf, int[] straight1, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                var f1 = straight1.Where(o => o % 4 == 0).ToArray();
-                var f2 = straight1.Where(o => o % 4 == 1).ToArray();
-                var f3 = straight1.Where(o => o % 4 == 2).ToArray();
-                var f4 = straight1.Where(o => o % 4 == 3).ToArray();
-                if (f1.Length == 3 || f1.Length == 4)
-                {
-                    if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f1[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f1.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-
-                        if (this.reserve[index + 1] / 4 > f1.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else if (this.reserve[index] / 4 < f1.Max() / 4 && this.reserve[index + 1] / 4 < f1.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f1.Length == 4)//different cards in hand
-                {
-                    if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f1[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f1.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-
-                    if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f1[0] % 4)
-                    {
-                        if (this.reserve[index + 1] / 4 > f1.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f1.Length == 5)
-                {
-                    if (this.reserve[index] % 4 == f1[0] % 4 && this.reserve[index] / 4 > f1.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-
-                    if (this.reserve[index + 1] % 4 == f1[0] % 4 && this.reserve[index + 1] / 4 > f1.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                    else if (this.reserve[index] / 4 < f1.Min() / 4 && this.reserve[index + 1] / 4 < f1.Min())
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                }
-
-                if (f2.Length == 3 || f2.Length == 4)
-                {
-                    if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f2[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f2.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-
-                        if (this.reserve[index + 1] / 4 > f2.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else if (this.reserve[index] / 4 < f2.Max() / 4 && this.reserve[index + 1] / 4 < f2.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f2.Length == 4)//different cards in hand
-                {
-                    if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f2[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f2.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-
-                    if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f2[0] % 4)
-                    {
-                        if (this.reserve[index + 1] / 4 > f2.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f2.Length == 5)
-                {
-                    if (this.reserve[index] % 4 == f2[0] % 4 && this.reserve[index] / 4 > f2.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-
-                    if (this.reserve[index + 1] % 4 == f2[0] % 4 && this.reserve[index + 1] / 4 > f2.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                    else if (this.reserve[index] / 4 < f2.Min() / 4 && this.reserve[index + 1] / 4 < f2.Min())
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                }
-
-                if (f3.Length == 3 || f3.Length == 4)
-                {
-                    if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f3[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f3.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-
-                        if (this.reserve[index + 1] / 4 > f3.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else if (this.reserve[index] / 4 < f3.Max() / 4 && this.reserve[index + 1] / 4 < f3.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f3.Length == 4)//different cards in hand
-                {
-                    if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f3[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f3.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-
-                    if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f3[0] % 4)
-                    {
-                        if (this.reserve[index + 1] / 4 > f3.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f3.Length == 5)
-                {
-                    if (this.reserve[index] % 4 == f3[0] % 4 && this.reserve[index] / 4 > f3.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-
-                    if (this.reserve[index + 1] % 4 == f3[0] % 4 && this.reserve[index + 1] / 4 > f3.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                    else if (this.reserve[index] / 4 < f3.Min() / 4 && this.reserve[index + 1] / 4 < f3.Min())
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                }
-
-                if (f4.Length == 3 || f4.Length == 4)
-                {
-                    if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f4[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f4.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-
-                        if (this.reserve[index + 1] / 4 > f4.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else if (this.reserve[index] / 4 < f4.Max() / 4 && this.reserve[index + 1] / 4 < f4.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f4.Length == 4)//different cards in hand
-                {
-                    if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f4[0] % 4)
-                    {
-                        if (this.reserve[index] / 4 > f4.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-
-                    if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f4[0] % 4)
-                    {
-                        if (this.reserve[index + 1] / 4 > f4.Max() / 4)
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 5;
-                            pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                            vf = true;
-                        }
-                    }
-                }
-
-                if (f4.Length == 5)
-                {
-                    if (this.reserve[index] % 4 == f4[0] % 4 && this.reserve[index] / 4 > f4.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-
-                    if (this.reserve[index + 1] % 4 == f4[0] % 4 && this.reserve[index + 1] / 4 > f4.Min() / 4)
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                    else if (this.reserve[index] / 4 < f4.Min() / 4 && this.reserve[index + 1] / 4 < f4.Min())
-                    {
-                        pokerPlayer.Type = 5;
-                        pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        vf = true;
-                    }
-                }
-
-                //ace
-                if (f1.Length > 0)
-                {
-                    if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f1[0] % 4 && vf && f1.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f1[0] % 4 && vf && f1.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (f2.Length > 0)
-                {
-                    if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f2[0] % 4 && vf && f2.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f2[0] % 4 && vf && f2.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (f3.Length > 0)
-                {
-                    if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f3[0] % 4 && vf && f3.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f3[0] % 4 && vf && f3.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-
-                if (f4.Length > 0)
-                {
-                    if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f4[0] % 4 && vf && f4.Length > 0)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-
-                    if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f4[0] % 4 && vf)
-                    {
-                        pokerPlayer.Type = 5.5;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-            }
-        }
-
-        private void RStraight(IPokerPlayer pokerPlayer, int[] Straight, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                var op = Straight.Select(o => o / 4).Distinct().ToArray();
-                for (int j = 0; j < op.Length - 4; j++)
-                {
-                    if (op[j] + 4 == op[j + 4])
-                    {
-                        if (op.Max() - 4 == op[j])
-                        {
-                            pokerPlayer.Type = 4;
-                            pokerPlayer.Power = op.Max() + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 4;
-                            pokerPlayer.Power = op[j + 4] + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
-                            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                        }
-                    }
-
-                    if (op[j] == 0 && op[j + 1] == 9 && op[j + 2] == 10 && op[j + 3] == 11 && op[j + 4] == 12)
-                    {
-                        pokerPlayer.Type = 4;
-                        pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
-                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
-                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                    }
-                }
-            }
-        }
-
-        private void rThreeOfAKind(IPokerPlayer pokerPlayer, int[] Straight, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                for (int j = 0; j <= 12; j++)
-                {
-                    var fh = Straight.Where(o => o / 4 == j).ToArray();
-                    if (fh.Length == 3)
-                    {
-                        if (fh.Max() / 4 == 0)
-                        {
-                            pokerPlayer.Type = 3;
-                            pokerPlayer.Power = 13 * 3 + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 3 });
-                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 3;
-                            pokerPlayer.Power = fh[0] / 4 + fh[1] / 4 + fh[2] / 4 + pokerPlayer.Type * 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 3 });
-                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void rTwoPair(IPokerPlayer pokerPlayer, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                bool msgbox = false;
-                for (int tc = 16; tc >= 12; tc--)
-                {
-                    int max = tc - 12;
-                    if (this.reserve[index] / 4 != this.reserve[index + 1] / 4)
-                    {
-                        for (int k = 1; k <= max; k++)
-                        {
-                            if (tc - k < 12)
-                            {
-                                max--;
-                            }
-                            if (tc - k >= 12)
-                            {
-                                if (this.reserve[index] / 4 == this.reserve[tc] / 4 && this.reserve[index + 1] / 4 == this.reserve[tc - k] / 4 ||
-                                    this.reserve[index + 1] / 4 == this.reserve[tc] / 4 && this.reserve[index] / 4 == this.reserve[tc - k] / 4)
-                                {
-                                    if (!msgbox)
-                                    {
-                                        if (this.reserve[index] / 4 == 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = 13 * 4 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted =
-                                                this.Win.OrderByDescending(op => op.Current)
-                                                    .ThenByDescending(op => op.Power)
-                                                    .First();
-                                        }
-
-                                        if (this.reserve[index + 1] / 4 == 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = 13 * 4 + (this.reserve[index] / 4) * 2 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-
-                                        if (this.reserve[index + 1] / 4 != 0 && this.reserve[index] / 4 != 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = (this.reserve[index] / 4) * 2 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-                                    }
-                                    msgbox = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void rPairTwoPair(IPokerPlayer pokerPlayer, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                bool msgbox = false;
-                bool msgbox1 = false;
-                for (int tc = 16; tc >= 12; tc--)
-                {
-                    int max = tc - 12;
-                    for (int k = 1; k <= max; k++)
-                    {
-                        if (tc - k < 12)
-                        {
-                            max--;
-                        }
-
-                        if (tc - k >= 12)
-                        {
-                            if (this.reserve[tc] / 4 == this.reserve[tc - k] / 4)
-                            {
-                                if (this.reserve[tc] / 4 != this.reserve[index] / 4 && this.reserve[tc] / 4 != this.reserve[index + 1] / 4 && pokerPlayer.Type == 1)
-                                {
-                                    if (!msgbox)
-                                    {
-                                        if (this.reserve[index + 1] / 4 == 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = (this.reserve[index] / 4) * 2 + 13 * 4 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-
-                                        if (this.reserve[index] / 4 == 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = (this.reserve[index + 1] / 4) * 2 + 13 * 4 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-
-                                        if (this.reserve[index + 1] / 4 != 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = (this.reserve[tc] / 4) * 2 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-
-                                        if (this.reserve[index] / 4 != 0)
-                                        {
-                                            pokerPlayer.Type = 2;
-                                            pokerPlayer.Power = (this.reserve[tc] / 4) * 2 + (this.reserve[index] / 4) * 2 + pokerPlayer.Type * 100;
-                                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
-                                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                        }
-                                    }
-
-                                    msgbox = true;
-                                }
-
-                                if (pokerPlayer.Type == -1)
-                                {
-                                    if (!msgbox1)
-                                    {
-                                        if (this.reserve[index] / 4 > this.reserve[index + 1] / 4)
-                                        {
-                                            if (this.reserve[tc] / 4 == 0)
-                                            {
-                                                pokerPlayer.Type = 0;
-                                                pokerPlayer.Power = 13 + this.reserve[index] / 4 + pokerPlayer.Type * 100;
-                                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                            }
-                                            else
-                                            {
-                                                pokerPlayer.Type = 0;
-                                                pokerPlayer.Power = this.reserve[tc] / 4 + this.reserve[index] / 4 + pokerPlayer.Type * 100;
-                                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (this.reserve[tc] / 4 == 0)
-                                            {
-                                                pokerPlayer.Type = 0;
-                                                pokerPlayer.Power = 13 + this.reserve[index + 1] + pokerPlayer.Type * 100;
-                                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                            }
-                                            else
-                                            {
-                                                pokerPlayer.Type = 0;
-                                                pokerPlayer.Power = this.reserve[tc] / 4 + this.reserve[index + 1] / 4 + pokerPlayer.Type * 100;
-                                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                                            }
-                                        }
-                                    }
-
-                                    msgbox1 = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void rPairFromHand(IPokerPlayer pokerPlayer, int index)
-        {
-            if (pokerPlayer.Type >= -1)
-            {
-                bool msgbox = false;
-                if (this.reserve[index] / 4 == this.reserve[index + 1] / 4)
-                {
-                    if (!msgbox)
-                    {
-                        if (this.reserve[index] / 4 == 0)
-                        {
-                            pokerPlayer.Type = 1;
-                            pokerPlayer.Power = 13 * 4 + 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                        }
-                        else
-                        {
-                            pokerPlayer.Type = 1;
-                            pokerPlayer.Power = (this.reserve[index + 1] / 4) * 4 + 100;
-                            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                            this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                        }
-                    }
-
-                    msgbox = true;
-                }
-
-                for (int tc = 16; tc >= 12; tc--)
-                {
-                    if (this.reserve[index + 1] / 4 == this.reserve[tc] / 4)
-                    {
-                        if (!msgbox)
-                        {
-                            if (this.reserve[index + 1] / 4 == 0)
-                            {
-                                pokerPlayer.Type = 1;
-                                pokerPlayer.Power = 13 * 4 + this.reserve[index] / 4 + 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                            }
-                            else
-                            {
-                                pokerPlayer.Type = 1;
-                                pokerPlayer.Power = (this.reserve[index + 1] / 4) * 4 + this.reserve[index] / 4 + 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                            }
-                        }
-
-                        msgbox = true;
-                    }
-
-                    if (this.reserve[index] / 4 == this.reserve[tc] / 4)
-                    {
-                        if (!msgbox)
-                        {
-                            if (this.reserve[index] / 4 == 0)
-                            {
-                                pokerPlayer.Type = 1;
-                                pokerPlayer.Power = 13 * 4 + this.reserve[index + 1] / 4 + 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                            }
-                            else
-                            {
-                                pokerPlayer.Type = 1;
-                                pokerPlayer.Power = (this.reserve[tc] / 4) * 4 + this.reserve[index + 1] / 4 + 100;
-                                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
-                                this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
-                            }
-                        }
-                        msgbox = true;
-                    }
-                }
-            }
-        }
-
-        private void rHighCard(IPokerPlayer pokerPlayer, int index)
-        {
-            if (pokerPlayer.Type == -1)
-            {
-                if (this.reserve[index] / 4 > this.reserve[index + 1] / 4)
-                {
-                    pokerPlayer.Type = -1;
-                    pokerPlayer.Power = this.reserve[index] / 4;
-                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
-                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                }
-                else
-                {
-                    pokerPlayer.Type = -1;
-                    pokerPlayer.Power = this.reserve[index + 1] / 4;
-                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
-                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                }
-
-                if (this.reserve[index] / 4 == 0 || this.reserve[index + 1] / 4 == 0)
-                {
-                    pokerPlayer.Type = -1;
-                    pokerPlayer.Power = 13;
-                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
-                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
-                }
-            }
-        }
+        //private void rStraightFlush(IPokerPlayer pokerPlayer, int[] st1, int[] st2, int[] st3, int[] st4)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        if (st1.Length >= 5)
+        //        {
+        //            if (st1[0] + 4 == st1[4])
+        //            {
+        //                pokerPlayer.Type = 8;
+        //                pokerPlayer.Power = (st1.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (st1[0] == 0 && st1[1] == 9 && st1[2] == 10 && st1[3] == 11 && st1[0] + 12 == st1[4])
+        //            {
+        //                pokerPlayer.Type = 9;
+        //                pokerPlayer.Power = (st1.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (st2.Length >= 5)
+        //        {
+        //            if (st2[0] + 4 == st2[4])
+        //            {
+        //                pokerPlayer.Type = 8;
+        //                pokerPlayer.Power = (st2.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (st2[0] == 0 && st2[1] == 9 && st2[2] == 10 && st2[3] == 11 && st2[0] + 12 == st2[4])
+        //            {
+        //                pokerPlayer.Type = 9;
+        //                pokerPlayer.Power = (st2.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (st3.Length >= 5)
+        //        {
+        //            if (st3[0] + 4 == st3[4])
+        //            {
+        //                pokerPlayer.Type = 8;
+        //                pokerPlayer.Power = (st3.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (st3[0] == 0 && st3[1] == 9 && st3[2] == 10 && st3[3] == 11 && st3[0] + 12 == st3[4])
+        //            {
+        //                pokerPlayer.Type = 9;
+        //                pokerPlayer.Power = (st3.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (st4.Length >= 5)
+        //        {
+        //            if (st4[0] + 4 == st4[4])
+        //            {
+        //                pokerPlayer.Type = 8;
+        //                pokerPlayer.Power = (st4.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 8 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (st4[0] == 0 && st4[1] == 9 && st4[2] == 10 && st4[3] == 11 && st4[0] + 12 == st4[4])
+        //            {
+        //                pokerPlayer.Type = 9;
+        //                pokerPlayer.Power = (st4.Max()) / 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 9 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rFourOfAKind(IPokerPlayer pokerPlayer, int[] straight)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        for (int j = 0; j <= 3; j++)
+        //        {
+        //            if (straight[j] / 4 == straight[j + 1] / 4 && straight[j] / 4 == straight[j + 2] / 4 &&
+        //                straight[j] / 4 == straight[j + 3] / 4)
+        //            {
+        //                pokerPlayer.Type = 7;
+        //                pokerPlayer.Power = (straight[j] / 4) * 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 7 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (straight[j] / 4 == 0 && straight[j + 1] / 4 == 0 && straight[j + 2] / 4 == 0 && straight[j + 3] / 4 == 0)
+        //            {
+        //                pokerPlayer.Type = 7;
+        //                pokerPlayer.Power = 13 * 4 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 7 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rFullHouse(IPokerPlayer pokerPlayer, ref bool done, int[] straight)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        this.type = pokerPlayer.Power;
+        //        for (int j = 0; j <= 12; j++)
+        //        {
+        //            var fh = straight.Where(o => o / 4 == j).ToArray();
+        //            if (fh.Length == 3 || done)
+        //            {
+        //                if (fh.Length == 2)
+        //                {
+        //                    if (fh.Max() / 4 == 0)
+        //                    {
+        //                        pokerPlayer.Type = 6;
+        //                        pokerPlayer.Power = 13 * 2 + pokerPlayer.Type * 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 6 });
+        //                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                        break;
+        //                    }
+
+        //                    if (fh.Max() / 4 > 0)
+        //                    {
+        //                        pokerPlayer.Type = 6;
+        //                        pokerPlayer.Power = fh.Max() / 4 * 2 + pokerPlayer.Type * 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 6 });
+        //                        this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                        break;
+        //                    }
+        //                }
+
+        //                if (!done)
+        //                {
+        //                    if (fh.Max() / 4 == 0)
+        //                    {
+        //                        pokerPlayer.Power = 13;
+        //                        done = true;
+        //                        j = -1;
+        //                    }
+        //                    else
+        //                    {
+        //                        pokerPlayer.Power = fh.Max() / 4;
+        //                        done = true;
+        //                        j = -1;
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        if (pokerPlayer.Type != 6)
+        //        {
+        //            pokerPlayer.Power = this.type;
+        //        }
+        //    }
+        //}
+
+        //private void RFlush(IPokerPlayer pokerPlayer, ref bool vf, int[] straight1, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        var f1 = straight1.Where(o => o % 4 == 0).ToArray();
+        //        var f2 = straight1.Where(o => o % 4 == 1).ToArray();
+        //        var f3 = straight1.Where(o => o % 4 == 2).ToArray();
+        //        var f4 = straight1.Where(o => o % 4 == 3).ToArray();
+        //        if (f1.Length == 3 || f1.Length == 4)
+        //        {
+        //            if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f1[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f1.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+
+        //                if (this.reserve[index + 1] / 4 > f1.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else if (this.reserve[index] / 4 < f1.Max() / 4 && this.reserve[index + 1] / 4 < f1.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f1.Length == 4)//different cards in hand
+        //        {
+        //            if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f1[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f1.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f1[0] % 4)
+        //            {
+        //                if (this.reserve[index + 1] / 4 > f1.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f1.Length == 5)
+        //        {
+        //            if (this.reserve[index] % 4 == f1[0] % 4 && this.reserve[index] / 4 > f1.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 == f1[0] % 4 && this.reserve[index + 1] / 4 > f1.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //            else if (this.reserve[index] / 4 < f1.Min() / 4 && this.reserve[index + 1] / 4 < f1.Min())
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = f1.Max() + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //        }
+
+        //        if (f2.Length == 3 || f2.Length == 4)
+        //        {
+        //            if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f2[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f2.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+
+        //                if (this.reserve[index + 1] / 4 > f2.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else if (this.reserve[index] / 4 < f2.Max() / 4 && this.reserve[index + 1] / 4 < f2.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f2.Length == 4)//different cards in hand
+        //        {
+        //            if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f2[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f2.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f2[0] % 4)
+        //            {
+        //                if (this.reserve[index + 1] / 4 > f2.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f2.Length == 5)
+        //        {
+        //            if (this.reserve[index] % 4 == f2[0] % 4 && this.reserve[index] / 4 > f2.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 == f2[0] % 4 && this.reserve[index + 1] / 4 > f2.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //            else if (this.reserve[index] / 4 < f2.Min() / 4 && this.reserve[index + 1] / 4 < f2.Min())
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = f2.Max() + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //        }
+
+        //        if (f3.Length == 3 || f3.Length == 4)
+        //        {
+        //            if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f3[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f3.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+
+        //                if (this.reserve[index + 1] / 4 > f3.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else if (this.reserve[index] / 4 < f3.Max() / 4 && this.reserve[index + 1] / 4 < f3.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f3.Length == 4)//different cards in hand
+        //        {
+        //            if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f3[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f3.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f3[0] % 4)
+        //            {
+        //                if (this.reserve[index + 1] / 4 > f3.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f3.Length == 5)
+        //        {
+        //            if (this.reserve[index] % 4 == f3[0] % 4 && this.reserve[index] / 4 > f3.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 == f3[0] % 4 && this.reserve[index + 1] / 4 > f3.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //            else if (this.reserve[index] / 4 < f3.Min() / 4 && this.reserve[index + 1] / 4 < f3.Min())
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = f3.Max() + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //        }
+
+        //        if (f4.Length == 3 || f4.Length == 4)
+        //        {
+        //            if (this.reserve[index] % 4 == this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f4[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f4.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+
+        //                if (this.reserve[index + 1] / 4 > f4.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else if (this.reserve[index] / 4 < f4.Max() / 4 && this.reserve[index + 1] / 4 < f4.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f4.Length == 4)//different cards in hand
+        //        {
+        //            if (this.reserve[index] % 4 != this.reserve[index + 1] % 4 && this.reserve[index] % 4 == f4[0] % 4)
+        //            {
+        //                if (this.reserve[index] / 4 > f4.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 != this.reserve[index] % 4 && this.reserve[index + 1] % 4 == f4[0] % 4)
+        //            {
+        //                if (this.reserve[index + 1] / 4 > f4.Max() / 4)
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 5;
+        //                    pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                    vf = true;
+        //                }
+        //            }
+        //        }
+
+        //        if (f4.Length == 5)
+        //        {
+        //            if (this.reserve[index] % 4 == f4[0] % 4 && this.reserve[index] / 4 > f4.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+
+        //            if (this.reserve[index + 1] % 4 == f4[0] % 4 && this.reserve[index + 1] / 4 > f4.Min() / 4)
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //            else if (this.reserve[index] / 4 < f4.Min() / 4 && this.reserve[index + 1] / 4 < f4.Min())
+        //            {
+        //                pokerPlayer.Type = 5;
+        //                pokerPlayer.Power = f4.Max() + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                vf = true;
+        //            }
+        //        }
+
+        //        //ace
+        //        if (f1.Length > 0)
+        //        {
+        //            if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f1[0] % 4 && vf && f1.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f1[0] % 4 && vf && f1.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (f2.Length > 0)
+        //        {
+        //            if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f2[0] % 4 && vf && f2.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f2[0] % 4 && vf && f2.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (f3.Length > 0)
+        //        {
+        //            if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f3[0] % 4 && vf && f3.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f3[0] % 4 && vf && f3.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+
+        //        if (f4.Length > 0)
+        //        {
+        //            if (this.reserve[index] / 4 == 0 && this.reserve[index] % 4 == f4[0] % 4 && vf && f4.Length > 0)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+
+        //            if (this.reserve[index + 1] / 4 == 0 && this.reserve[index + 1] % 4 == f4[0] % 4 && vf)
+        //            {
+        //                pokerPlayer.Type = 5.5;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5.5 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void RStraight(IPokerPlayer pokerPlayer, int[] straight, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        var op = straight.Select(o => o / 4).Distinct().ToArray();
+        //        for (index = 0; index < op.Length - 4; index++)
+        //        {
+        //            if (op[index] + 4 == op[index + 4])
+        //            {
+        //                if (op.Max() - 4 == op[index])
+        //                {
+        //                    pokerPlayer.Type = 4;
+        //                    pokerPlayer.Power = op.Max() + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 4;
+        //                    pokerPlayer.Power = op[index + 4] + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
+        //                    this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //                }
+        //            }
+
+        //            if (op[index] == 0 && op[index + 1] == 9 && op[index + 2] == 10 && op[index + 3] == 11 && op[index + 4] == 12)
+        //            {
+        //                pokerPlayer.Type = 4;
+        //                pokerPlayer.Power = 13 + pokerPlayer.Type * 100;
+        //                this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 4 });
+        //                this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rThreeOfAKind(IPokerPlayer pokerPlayer, int[] straight, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        for (index = 0; index <= 12; index++)
+        //        {
+        //            var fh = straight.Where(o => o / 4 == index).ToArray();
+        //            if (fh.Length == 3)
+        //            {
+        //                if (fh.Max() / 4 == 0)
+        //                {
+        //                    pokerPlayer.Type = 3;
+        //                    pokerPlayer.Power = 13 * 3 + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 3 });
+        //                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 3;
+        //                    pokerPlayer.Power = fh[0] / 4 + fh[1] / 4 + fh[2] / 4 + pokerPlayer.Type * 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 3 });
+        //                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rTwoPair(IPokerPlayer pokerPlayer, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        bool msgbox = false;
+        //        for (int tc = 16; tc >= 12; tc--)
+        //        {
+        //            int max = tc - 12;
+        //            if (this.reserve[index] / 4 != this.reserve[index + 1] / 4)
+        //            {
+        //                for (int k = 1; k <= max; k++)
+        //                {
+        //                    if (tc - k < 12)
+        //                    {
+        //                        max--;
+        //                    }
+        //                    if (tc - k >= 12)
+        //                    {
+        //                        if (this.reserve[index] / 4 == this.reserve[tc] / 4 && this.reserve[index + 1] / 4 == this.reserve[tc - k] / 4 ||
+        //                            this.reserve[index + 1] / 4 == this.reserve[tc] / 4 && this.reserve[index] / 4 == this.reserve[tc - k] / 4)
+        //                        {
+        //                            if (!msgbox)
+        //                            {
+        //                                if (this.reserve[index] / 4 == 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = 13 * 4 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted =
+        //                                        this.Win.OrderByDescending(op => op.Current)
+        //                                            .ThenByDescending(op => op.Power)
+        //                                            .First();
+        //                                }
+
+        //                                if (this.reserve[index + 1] / 4 == 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = 13 * 4 + (this.reserve[index] / 4) * 2 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+
+        //                                if (this.reserve[index + 1] / 4 != 0 && this.reserve[index] / 4 != 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = (this.reserve[index] / 4) * 2 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+        //                            }
+        //                            msgbox = true;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rPairTwoPair(IPokerPlayer pokerPlayer, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        bool msgbox = false;
+        //        bool msgbox1 = false;
+        //        for (int tc = 16; tc >= 12; tc--)
+        //        {
+        //            int max = tc - 12;
+        //            for (int k = 1; k <= max; k++)
+        //            {
+        //                if (tc - k < 12)
+        //                {
+        //                    max--;
+        //                }
+
+        //                if (tc - k >= 12)
+        //                {
+        //                    if (this.reserve[tc] / 4 == this.reserve[tc - k] / 4)
+        //                    {
+        //                        if (this.reserve[tc] / 4 != this.reserve[index] / 4 && this.reserve[tc] / 4 != this.reserve[index + 1] / 4 && pokerPlayer.Type == 1)
+        //                        {
+        //                            if (!msgbox)
+        //                            {
+        //                                if (this.reserve[index + 1] / 4 == 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = (this.reserve[index] / 4) * 2 + 13 * 4 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+
+        //                                if (this.reserve[index] / 4 == 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = (this.reserve[index + 1] / 4) * 2 + 13 * 4 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+
+        //                                if (this.reserve[index + 1] / 4 != 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = (this.reserve[tc] / 4) * 2 + (this.reserve[index + 1] / 4) * 2 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+
+        //                                if (this.reserve[index] / 4 != 0)
+        //                                {
+        //                                    pokerPlayer.Type = 2;
+        //                                    pokerPlayer.Power = (this.reserve[tc] / 4) * 2 + (this.reserve[index] / 4) * 2 + pokerPlayer.Type * 100;
+        //                                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 2 });
+        //                                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                }
+        //                            }
+
+        //                            msgbox = true;
+        //                        }
+
+        //                        if (pokerPlayer.Type == -1)
+        //                        {
+        //                            if (!msgbox1)
+        //                            {
+        //                                if (this.reserve[index] / 4 > this.reserve[index + 1] / 4)
+        //                                {
+        //                                    if (this.reserve[tc] / 4 == 0)
+        //                                    {
+        //                                        pokerPlayer.Type = 0;
+        //                                        pokerPlayer.Power = 13 + this.reserve[index] / 4 + pokerPlayer.Type * 100;
+        //                                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        pokerPlayer.Type = 0;
+        //                                        pokerPlayer.Power = this.reserve[tc] / 4 + this.reserve[index] / 4 + pokerPlayer.Type * 100;
+        //                                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                    }
+        //                                }
+        //                                else
+        //                                {
+        //                                    if (this.reserve[tc] / 4 == 0)
+        //                                    {
+        //                                        pokerPlayer.Type = 0;
+        //                                        pokerPlayer.Power = 13 + this.reserve[index + 1] + pokerPlayer.Type * 100;
+        //                                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        pokerPlayer.Type = 0;
+        //                                        pokerPlayer.Power = this.reserve[tc] / 4 + this.reserve[index + 1] / 4 + pokerPlayer.Type * 100;
+        //                                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                                    }
+        //                                }
+        //                            }
+
+        //                            msgbox1 = true;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rPairFromHand(IPokerPlayer pokerPlayer, int index)
+        //{
+        //    if (pokerPlayer.Type >= -1)
+        //    {
+        //        bool msgbox = false;
+        //        if (this.reserve[index] / 4 == this.reserve[index + 1] / 4)
+        //        {
+        //            if (!msgbox)
+        //            {
+        //                if (this.reserve[index] / 4 == 0)
+        //                {
+        //                    pokerPlayer.Type = 1;
+        //                    pokerPlayer.Power = 13 * 4 + 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                }
+        //                else
+        //                {
+        //                    pokerPlayer.Type = 1;
+        //                    pokerPlayer.Power = (this.reserve[index + 1] / 4) * 4 + 100;
+        //                    this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                    this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                }
+        //            }
+
+        //            msgbox = true;
+        //        }
+
+        //        for (int tc = 16; tc >= 12; tc--)
+        //        {
+        //            if (this.reserve[index + 1] / 4 == this.reserve[tc] / 4)
+        //            {
+        //                if (!msgbox)
+        //                {
+        //                    if (this.reserve[index + 1] / 4 == 0)
+        //                    {
+        //                        pokerPlayer.Type = 1;
+        //                        pokerPlayer.Power = 13 * 4 + this.reserve[index] / 4 + 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                    }
+        //                    else
+        //                    {
+        //                        pokerPlayer.Type = 1;
+        //                        pokerPlayer.Power = (this.reserve[index + 1] / 4) * 4 + this.reserve[index] / 4 + 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                    }
+        //                }
+
+        //                msgbox = true;
+        //            }
+
+        //            if (this.reserve[index] / 4 == this.reserve[tc] / 4)
+        //            {
+        //                if (!msgbox)
+        //                {
+        //                    if (this.reserve[index] / 4 == 0)
+        //                    {
+        //                        pokerPlayer.Type = 1;
+        //                        pokerPlayer.Power = 13 * 4 + this.reserve[index + 1] / 4 + 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                    }
+        //                    else
+        //                    {
+        //                        pokerPlayer.Type = 1;
+        //                        pokerPlayer.Power = (this.reserve[tc] / 4) * 4 + this.reserve[index + 1] / 4 + 100;
+        //                        this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = 1 });
+        //                        this.sorted = this.Win.OrderByDescending(op => op.Current).ThenByDescending(op => op.Power).First();
+        //                    }
+        //                }
+        //                msgbox = true;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void rHighCard(IPokerPlayer pokerPlayer, int index)
+        //{
+        //    if (pokerPlayer.Type == -1)
+        //    {
+        //        if (this.reserve[index] / 4 > this.reserve[index + 1] / 4)
+        //        {
+        //            pokerPlayer.Type = -1;
+        //            pokerPlayer.Power = this.reserve[index] / 4;
+        //            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
+        //            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //        }
+        //        else
+        //        {
+        //            pokerPlayer.Type = -1;
+        //            pokerPlayer.Power = this.reserve[index + 1] / 4;
+        //            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
+        //            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //        }
+
+        //        if (this.reserve[index] / 4 == 0 || this.reserve[index + 1] / 4 == 0)
+        //        {
+        //            pokerPlayer.Type = -1;
+        //            pokerPlayer.Power = 13;
+        //            this.Win.Add(new Type() { Power = pokerPlayer.Power, Current = -1 });
+        //            this.sorted = this.Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
+        //        }
+        //    }
+        //}
 
         void Winner(double current, double Power, string currentText, int chips, string lastly)
         {
@@ -2603,52 +2624,72 @@
             {
                 if (pokerPlayer.Type == -1)
                 {
-                    this.HighCard(pokerPlayer, sStatus);
+                    //this.HighCard(pokerPlayer, sStatus);
+
+                    this.handType.HighCard(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
                 }
 
                 if (pokerPlayer.Type == 0)
                 {
-                    this.PairTable(pokerPlayer, sStatus);
+                    //this.PairTable(pokerPlayer, sStatus);
+
+                    this.handType.PairTable(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
                 }
 
                 if (pokerPlayer.Type == 1)
                 {
-                    this.PairHand(pokerPlayer, sStatus);
+                    //this.PairHand(pokerPlayer, sStatus);
+
+                    this.handType.PairHand(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 2)
                 {
-                    this.TwoPair(pokerPlayer, sStatus);
+                    //this.TwoPair(pokerPlayer, sStatus);
+
+                    this.handType.TwoPair(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 3)
                 {
-                    this.ThreeOfAKind(pokerPlayer, sStatus, name);
+                    //this.ThreeOfAKind(pokerPlayer, sStatus, name);
+
+                    this.handType.ThreeOfAKind(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 4)
                 {
-                    this.Straight(pokerPlayer, sStatus, name);
+                    //this.Straight(pokerPlayer, sStatus, name);
+
+                    this.handType.Straight(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 5 || pokerPlayer.Type == 5.5)
                 {
-                    this.Flush(pokerPlayer, sStatus, name);
+                    //this.Flush(pokerPlayer, sStatus, name);
+
+                    this.handType.Flush(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 6)
                 {
-                    this.FullHouse(pokerPlayer, sStatus, name);
+                    //this.FullHouse(pokerPlayer, sStatus, name);
+
+                    this.handType.FullHouse(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 7)
                 {
-                    this.FourOfAKind(pokerPlayer, sStatus, name);
+                    //this.FourOfAKind(pokerPlayer, sStatus, name);
+
+                    this.handType.FourOfAKind(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 8 || pokerPlayer.Type == 9)
                 {
-                    this.StraightFlush(pokerPlayer, sStatus, name);
+                    //this.StraightFlush(pokerPlayer, sStatus, name);
+
+                    this.handType.StraightFlush(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
             }
 
@@ -2659,409 +2700,409 @@
             }
         }
 
-        private void HighCard(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            this.HP(pokerPlayer, sStatus, 20, 25);
-        }
+        //private void HighCard(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    this.HP(pokerPlayer, sStatus, 20, 25);
+        //}
 
-        private void PairTable(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            this.HP(pokerPlayer, sStatus, 16, 25);
-        }
+        //private void PairTable(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    this.HP(pokerPlayer, sStatus, 16, 25);
+        //}
 
-        private void PairHand(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            Random rPair = new Random();
-            int rCall = rPair.Next(10, 16);
-            int rRaise = rPair.Next(10, 13);
-            if (pokerPlayer.Power <= 199 && pokerPlayer.Power >= 140)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 6, rRaise);
-            }
+        //private void PairHand(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    Random rPair = new Random();
+        //    int rCall = rPair.Next(10, 16);
+        //    int rRaise = rPair.Next(10, 13);
+        //    if (pokerPlayer.Power <= 199 && pokerPlayer.Power >= 140)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 6, rRaise);
+        //    }
 
-            if (pokerPlayer.Power <= 139 && pokerPlayer.Power >= 128)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 7, rRaise);
-            }
+        //    if (pokerPlayer.Power <= 139 && pokerPlayer.Power >= 128)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 7, rRaise);
+        //    }
 
-            if (pokerPlayer.Power < 128 && pokerPlayer.Power >= 101)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 9, rRaise);
-            }
-        }
+        //    if (pokerPlayer.Power < 128 && pokerPlayer.Power >= 101)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 9, rRaise);
+        //    }
+        //}
 
-        private void TwoPair(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            Random rPair = new Random();
-            int rCall = rPair.Next(6, 11);
-            int rRaise = rPair.Next(6, 11);
-            if (pokerPlayer.Power <= 290 && pokerPlayer.Power >= 246)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 3, rRaise);
-            }
+        //private void TwoPair(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    Random rPair = new Random();
+        //    int rCall = rPair.Next(6, 11);
+        //    int rRaise = rPair.Next(6, 11);
+        //    if (pokerPlayer.Power <= 290 && pokerPlayer.Power >= 246)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 3, rRaise);
+        //    }
 
-            if (pokerPlayer.Power <= 244 && pokerPlayer.Power >= 234)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 4, rRaise);
-            }
+        //    if (pokerPlayer.Power <= 244 && pokerPlayer.Power >= 234)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 4, rRaise);
+        //    }
 
-            if (pokerPlayer.Power < 234 && pokerPlayer.Power >= 201)
-            {
-                this.PH(pokerPlayer, sStatus, rCall, 4, rRaise);
-            }
-        }
+        //    if (pokerPlayer.Power < 234 && pokerPlayer.Power >= 201)
+        //    {
+        //        this.PH(pokerPlayer, sStatus, rCall, 4, rRaise);
+        //    }
+        //}
 
-        private void ThreeOfAKind(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random tk = new Random();
-            int tCall = tk.Next(3, 7);
-            int tRaise = tk.Next(4, 8);
-            if (pokerPlayer.Power <= 390 && pokerPlayer.Power >= 330)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
-            }
+        //private void ThreeOfAKind(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random tk = new Random();
+        //    int tCall = tk.Next(3, 7);
+        //    int tRaise = tk.Next(4, 8);
+        //    if (pokerPlayer.Power <= 390 && pokerPlayer.Power >= 330)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
+        //    }
 
-            if (pokerPlayer.Power <= 327 && pokerPlayer.Power >= 321)//10  8
-            {
-                this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
-            }
+        //    if (pokerPlayer.Power <= 327 && pokerPlayer.Power >= 321)//10  8
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
+        //    }
 
-            if (pokerPlayer.Power < 321 && pokerPlayer.Power >= 303)//7 2
-            {
-                this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
-            }
-        }
+        //    if (pokerPlayer.Power < 321 && pokerPlayer.Power >= 303)//7 2
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, tCall, tRaise);
+        //    }
+        //}
 
-        private void Straight(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random str = new Random();
-            int sCall = str.Next(3, 6);
-            int sRaise = str.Next(3, 8);
-            if (pokerPlayer.Power <= 480 && pokerPlayer.Power >= 410)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
-            }
+        //private void Straight(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random str = new Random();
+        //    int sCall = str.Next(3, 6);
+        //    int sRaise = str.Next(3, 8);
+        //    if (pokerPlayer.Power <= 480 && pokerPlayer.Power >= 410)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
+        //    }
 
-            if (pokerPlayer.Power <= 409 && pokerPlayer.Power >= 407)//10  8
-            {
-                this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
-            }
+        //    if (pokerPlayer.Power <= 409 && pokerPlayer.Power >= 407)//10  8
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
+        //    }
 
-            if (pokerPlayer.Power < 407 && pokerPlayer.Power >= 404)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
-            }
-        }
+        //    if (pokerPlayer.Power < 407 && pokerPlayer.Power >= 404)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, sCall, sRaise);
+        //    }
+        //}
 
-        private void Flush(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random fsh = new Random();
-            int fCall = fsh.Next(2, 6);
-            int fRaise = fsh.Next(3, 7);
-            this.Smooth(pokerPlayer, sStatus, name, fCall, fRaise);
-        }
+        //private void Flush(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random fsh = new Random();
+        //    int fCall = fsh.Next(2, 6);
+        //    int fRaise = fsh.Next(3, 7);
+        //    this.Smooth(pokerPlayer, sStatus, name, fCall, fRaise);
+        //}
 
-        private void FullHouse(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random flh = new Random();
-            int fhCall = flh.Next(1, 5);
-            int fhRaise = flh.Next(2, 6);
-            if (pokerPlayer.Power <= 626 && pokerPlayer.Power >= 620)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, fhCall, fhRaise);
-            }
+        //private void FullHouse(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random flh = new Random();
+        //    int fhCall = flh.Next(1, 5);
+        //    int fhRaise = flh.Next(2, 6);
+        //    if (pokerPlayer.Power <= 626 && pokerPlayer.Power >= 620)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, fhCall, fhRaise);
+        //    }
 
-            if (pokerPlayer.Power < 620 && pokerPlayer.Power >= 602)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, fhCall, fhRaise);
-            }
-        }
+        //    if (pokerPlayer.Power < 620 && pokerPlayer.Power >= 602)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, fhCall, fhRaise);
+        //    }
+        //}
 
-        private void FourOfAKind(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random fk = new Random();
-            int fkCall = fk.Next(1, 4);
-            int fkRaise = fk.Next(2, 5);
-            if (pokerPlayer.Power <= 752 && pokerPlayer.Power >= 704)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, fkCall, fkRaise);
-            }
-        }
+        //private void FourOfAKind(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random fk = new Random();
+        //    int fkCall = fk.Next(1, 4);
+        //    int fkRaise = fk.Next(2, 5);
+        //    if (pokerPlayer.Power <= 752 && pokerPlayer.Power >= 704)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, fkCall, fkRaise);
+        //    }
+        //}
 
-        private void StraightFlush(IPokerPlayer pokerPlayer, Label sStatus, int name)
-        {
-            Random sf = new Random();
-            int sfCall = sf.Next(1, 3);
-            int sfRaise = sf.Next(1, 3);
-            if (pokerPlayer.Power <= 913 && pokerPlayer.Power >= 804)
-            {
-                this.Smooth(pokerPlayer, sStatus, name, sfCall, sfRaise);
-            }
-        }
+        //private void StraightFlush(IPokerPlayer pokerPlayer, Label sStatus, int name)
+        //{
+        //    Random sf = new Random();
+        //    int sfCall = sf.Next(1, 3);
+        //    int sfRaise = sf.Next(1, 3);
+        //    if (pokerPlayer.Power <= 913 && pokerPlayer.Power >= 804)
+        //    {
+        //        this.Smooth(pokerPlayer, sStatus, name, sfCall, sfRaise);
+        //    }
+        //}
 
-        private void Fold(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            this.raising = false;
-            sStatus.Text = "Fold";
-            pokerPlayer.AbleToMakeTurn = false;
-            pokerPlayer.OutOfChips = true;
-        }
+        //private void Fold(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    this.raising = false;
+        //    sStatus.Text = "Fold";
+        //    pokerPlayer.AbleToMakeTurn = false;
+        //    pokerPlayer.OutOfChips = true;
+        //}
 
-        private void Check(IPokerPlayer pokerPlayer, Label cStatus)
-        {
-            cStatus.Text = "Check";
-            pokerPlayer.AbleToMakeTurn = false;
-            this.raising = false;
-        }
+        //private void Check(IPokerPlayer pokerPlayer, Label cStatus)
+        //{
+        //    cStatus.Text = "Check";
+        //    pokerPlayer.AbleToMakeTurn = false;
+        //    this.raising = false;
+        //}
 
-        private void Call(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            this.raising = false;
-            pokerPlayer.AbleToMakeTurn = false;
-            pokerPlayer.Chips -= this.neededChipsToCall;
-            sStatus.Text = "Call " + this.neededChipsToCall;
-            this.potStatus.Text = (int.Parse(this.potStatus.Text) + this.neededChipsToCall).ToString();
-        }
+        //private void Call(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    this.raising = false;
+        //    pokerPlayer.AbleToMakeTurn = false;
+        //    pokerPlayer.Chips -= this.neededChipsToCall;
+        //    sStatus.Text = "Call " + this.neededChipsToCall;
+        //    this.potStatus.Text = (int.Parse(this.potStatus.Text) + this.neededChipsToCall).ToString();
+        //}
 
-        private void Raised(IPokerPlayer pokerPlayer, Label sStatus)
-        {
-            pokerPlayer.Chips -= Convert.ToInt32(this.raise);
-            sStatus.Text = "Raise " + this.raise;
-            this.potStatus.Text = (int.Parse(this.potStatus.Text) + Convert.ToInt32(this.raise)).ToString();
-            this.neededChipsToCall = Convert.ToInt32(this.raise);
-            this.raising = true;
-            pokerPlayer.AbleToMakeTurn = false;
-        }
+        //private void Raised(IPokerPlayer pokerPlayer, Label sStatus)
+        //{
+        //    pokerPlayer.Chips -= Convert.ToInt32(this.raise);
+        //    sStatus.Text = "Raise " + this.raise;
+        //    this.potStatus.Text = (int.Parse(this.potStatus.Text) + Convert.ToInt32(this.raise)).ToString();
+        //    this.neededChipsToCall = Convert.ToInt32(this.raise);
+        //    this.raising = true;
+        //    pokerPlayer.AbleToMakeTurn = false;
+        //}
 
-        private static double RoundN(int sChips, int n)
-        {
-            double a = Math.Round((sChips / n) / 100d, 0) * 100;
-            return a;
-        }
+        //private static double RoundN(int sChips, int n)
+        //{
+        //    double a = Math.Round((sChips / n) / 100d, 0) * 100;
+        //    return a;
+        //}
 
-        private void HP(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1)
-        {
-            Random rand = new Random();
-            int rnd = rand.Next(1, 4);
-            if (this.neededChipsToCall <= 0)
-            {
-                this.Check(pokerPlayer, sStatus);
-            }
+        //private void HP(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1)
+        //{
+        //    Random rand = new Random();
+        //    int rnd = rand.Next(1, 4);
+        //    if (this.neededChipsToCall <= 0)
+        //    {
+        //        this.Check(pokerPlayer, sStatus);
+        //    }
 
-            if (this.neededChipsToCall > 0)
-            {
-                if (rnd == 1)
-                {
-                    if (this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n))
-                    {
-                        this.Call(pokerPlayer, sStatus);
-                    }
-                    else
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
-                }
+        //    if (this.neededChipsToCall > 0)
+        //    {
+        //        if (rnd == 1)
+        //        {
+        //            if (this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n))
+        //            {
+        //                this.Call(pokerPlayer, sStatus);
+        //            }
+        //            else
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
+        //        }
 
-                if (rnd == 2)
-                {
-                    if (this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
-                    {
-                        this.Call(pokerPlayer, sStatus);
-                    }
-                    else
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
-                }
-            }
+        //        if (rnd == 2)
+        //        {
+        //            if (this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
+        //            {
+        //                this.Call(pokerPlayer, sStatus);
+        //            }
+        //            else
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
+        //        }
+        //    }
 
-            if (rnd == 3)
-            {
-                if (this.raise == 0)
-                {
-                    this.raise = this.neededChipsToCall * 2;
-                    this.Raised(pokerPlayer, sStatus);
-                }
-                else
-                {
-                    if (this.raise <= RoundN(pokerPlayer.Chips, n))
-                    {
-                        this.raise = this.neededChipsToCall * 2;
-                        this.Raised(pokerPlayer, sStatus);
-                    }
-                    else
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
-                }
-            }
+        //    if (rnd == 3)
+        //    {
+        //        if (this.raise == 0)
+        //        {
+        //            this.raise = this.neededChipsToCall * 2;
+        //            this.Raised(pokerPlayer, sStatus);
+        //        }
+        //        else
+        //        {
+        //            if (this.raise <= RoundN(pokerPlayer.Chips, n))
+        //            {
+        //                this.raise = this.neededChipsToCall * 2;
+        //                this.Raised(pokerPlayer, sStatus);
+        //            }
+        //            else
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
+        //        }
+        //    }
 
-            if (pokerPlayer.Chips <= 0)
-            {
-                pokerPlayer.OutOfChips = true;
-            }
-        }
+        //    if (pokerPlayer.Chips <= 0)
+        //    {
+        //        pokerPlayer.OutOfChips = true;
+        //    }
+        //}
 
-        private void PH(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1, int r)
-        {
-            Random rand = new Random();
-            int rnd = rand.Next(1, 3);
-            if (this.rounds < 2)
-            {
-                if (this.neededChipsToCall <= 0)
-                {
-                    this.Check(pokerPlayer, sStatus);
-                }
+        //private void PH(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1, int r)
+        //{
+        //    Random rand = new Random();
+        //    int rnd = rand.Next(1, 3);
+        //    if (this.rounds < 2)
+        //    {
+        //        if (this.neededChipsToCall <= 0)
+        //        {
+        //            this.Check(pokerPlayer, sStatus);
+        //        }
 
-                if (this.neededChipsToCall > 0)
-                {
-                    if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n1))
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
+        //        if (this.neededChipsToCall > 0)
+        //        {
+        //            if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n1))
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
 
-                    if (this.raise > RoundN(pokerPlayer.Chips, n))
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
+        //            if (this.raise > RoundN(pokerPlayer.Chips, n))
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
 
-                    if (!pokerPlayer.OutOfChips)
-                    {
-                        if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n) && this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
-                        {
-                            this.Call(pokerPlayer, sStatus);
-                        }
+        //            if (!pokerPlayer.OutOfChips)
+        //            {
+        //                if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n) && this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
+        //                {
+        //                    this.Call(pokerPlayer, sStatus);
+        //                }
 
-                        if (this.raise <= RoundN(pokerPlayer.Chips, n) && this.raise >= (RoundN(pokerPlayer.Chips, n)) / 2)
-                        {
-                            this.Call(pokerPlayer, sStatus);
-                        }
+        //                if (this.raise <= RoundN(pokerPlayer.Chips, n) && this.raise >= (RoundN(pokerPlayer.Chips, n)) / 2)
+        //                {
+        //                    this.Call(pokerPlayer, sStatus);
+        //                }
 
-                        if (this.raise <= (RoundN(pokerPlayer.Chips, n)) / 2)
-                        {
-                            if (this.raise > 0)
-                            {
-                                this.raise = (int)RoundN(pokerPlayer.Chips, n);
-                                this.Raised(pokerPlayer, sStatus);
-                            }
-                            else
-                            {
-                                this.raise = this.neededChipsToCall * 2;
-                                this.Raised(pokerPlayer, sStatus);
-                            }
-                        }
+        //                if (this.raise <= (RoundN(pokerPlayer.Chips, n)) / 2)
+        //                {
+        //                    if (this.raise > 0)
+        //                    {
+        //                        this.raise = (int)RoundN(pokerPlayer.Chips, n);
+        //                        this.Raised(pokerPlayer, sStatus);
+        //                    }
+        //                    else
+        //                    {
+        //                        this.raise = this.neededChipsToCall * 2;
+        //                        this.Raised(pokerPlayer, sStatus);
+        //                    }
+        //                }
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
 
-            if (this.rounds >= 2)
-            {
-                if (this.neededChipsToCall > 0)
-                {
-                    if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n1 - rnd))
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
+        //    if (this.rounds >= 2)
+        //    {
+        //        if (this.neededChipsToCall > 0)
+        //        {
+        //            if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n1 - rnd))
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
 
-                    if (this.raise > RoundN(pokerPlayer.Chips, n - rnd))
-                    {
-                        this.Fold(pokerPlayer, sStatus);
-                    }
+        //            if (this.raise > RoundN(pokerPlayer.Chips, n - rnd))
+        //            {
+        //                this.Fold(pokerPlayer, sStatus);
+        //            }
 
-                    if (!pokerPlayer.OutOfChips)
-                    {
-                        if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n - rnd) && this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1 - rnd))
-                        {
-                            this.Call(pokerPlayer, sStatus);
-                        }
+        //            if (!pokerPlayer.OutOfChips)
+        //            {
+        //                if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n - rnd) && this.neededChipsToCall <= RoundN(pokerPlayer.Chips, n1 - rnd))
+        //                {
+        //                    this.Call(pokerPlayer, sStatus);
+        //                }
 
-                        if (this.raise <= RoundN(pokerPlayer.Chips, n - rnd) && this.raise >= (RoundN(pokerPlayer.Chips, n - rnd)) / 2)
-                        {
-                            this.Call(pokerPlayer, sStatus);
-                        }
+        //                if (this.raise <= RoundN(pokerPlayer.Chips, n - rnd) && this.raise >= (RoundN(pokerPlayer.Chips, n - rnd)) / 2)
+        //                {
+        //                    this.Call(pokerPlayer, sStatus);
+        //                }
 
-                        if (this.raise <= (RoundN(pokerPlayer.Chips, n - rnd)) / 2)
-                        {
-                            if (this.raise > 0)
-                            {
-                                this.raise = (int)RoundN(pokerPlayer.Chips, n - rnd);
-                                this.Raised(pokerPlayer, sStatus);
-                            }
-                            else
-                            {
-                                this.raise = this.neededChipsToCall * 2;
-                                this.Raised(pokerPlayer, sStatus);
-                            }
-                        }
-                    }
-                }
+        //                if (this.raise <= (RoundN(pokerPlayer.Chips, n - rnd)) / 2)
+        //                {
+        //                    if (this.raise > 0)
+        //                    {
+        //                        this.raise = (int)RoundN(pokerPlayer.Chips, n - rnd);
+        //                        this.Raised(pokerPlayer, sStatus);
+        //                    }
+        //                    else
+        //                    {
+        //                        this.raise = this.neededChipsToCall * 2;
+        //                        this.Raised(pokerPlayer, sStatus);
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                if (this.neededChipsToCall <= 0)
-                {
-                    this.raise = (int)RoundN(pokerPlayer.Chips, r - rnd);
-                    this.Raised(pokerPlayer, sStatus);
-                }
-            }
+        //        if (this.neededChipsToCall <= 0)
+        //        {
+        //            this.raise = (int)RoundN(pokerPlayer.Chips, r - rnd);
+        //            this.Raised(pokerPlayer, sStatus);
+        //        }
+        //    }
 
-            if (pokerPlayer.Chips <= 0)
-            {
-                pokerPlayer.OutOfChips = true;
-            }
-        }
+        //    if (pokerPlayer.Chips <= 0)
+        //    {
+        //        pokerPlayer.OutOfChips = true;
+        //    }
+        //}
 
-        void Smooth(IPokerPlayer pokerPlayer, Label botStatus, int name, int n, int r)
-        {
-            Random rand = new Random();
-            int rnd = rand.Next(1, 3);
-            if (this.neededChipsToCall <= 0)
-            {
-                this.Check(pokerPlayer, botStatus);
-            }
-            else
-            {
-                if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n))
-                {
-                    if (pokerPlayer.Chips > this.neededChipsToCall)
-                    {
-                        this.Call(pokerPlayer, botStatus);
-                    }
-                    else if (pokerPlayer.Chips <= this.neededChipsToCall)
-                    {
-                        this.raising = false;
-                        pokerPlayer.AbleToMakeTurn = false;
-                        pokerPlayer.Chips = 0;
-                        botStatus.Text = "Call " + pokerPlayer.Chips;
-                        this.potStatus.Text = (int.Parse(this.potStatus.Text) + pokerPlayer.Chips).ToString();
-                    }
-                }
-                else
-                {
-                    if (this.raise > 0)
-                    {
-                        if (pokerPlayer.Chips >= this.raise * 2)
-                        {
-                            this.raise *= 2;
-                            this.Raised(pokerPlayer, botStatus);
-                        }
-                        else
-                        {
-                            this.Call(pokerPlayer, botStatus);
-                        }
-                    }
-                    else
-                    {
-                        this.raise = this.neededChipsToCall * 2;
-                        this.Raised(pokerPlayer, botStatus);
-                    }
-                }
-            }
+        //void Smooth(IPokerPlayer pokerPlayer, Label botStatus, int name, int n, int r)
+        //{
+        //    Random rand = new Random();
+        //    int rnd = rand.Next(1, 3);
+        //    if (this.neededChipsToCall <= 0)
+        //    {
+        //        this.Check(pokerPlayer, botStatus);
+        //    }
+        //    else
+        //    {
+        //        if (this.neededChipsToCall >= RoundN(pokerPlayer.Chips, n))
+        //        {
+        //            if (pokerPlayer.Chips > this.neededChipsToCall)
+        //            {
+        //                this.Call(pokerPlayer, botStatus);
+        //            }
+        //            else if (pokerPlayer.Chips <= this.neededChipsToCall)
+        //            {
+        //                this.raising = false;
+        //                pokerPlayer.AbleToMakeTurn = false;
+        //                pokerPlayer.Chips = 0;
+        //                botStatus.Text = "Call " + pokerPlayer.Chips;
+        //                this.potStatus.Text = (int.Parse(this.potStatus.Text) + pokerPlayer.Chips).ToString();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (this.raise > 0)
+        //            {
+        //                if (pokerPlayer.Chips >= this.raise * 2)
+        //                {
+        //                    this.raise *= 2;
+        //                    this.Raised(pokerPlayer, botStatus);
+        //                }
+        //                else
+        //                {
+        //                    this.Call(pokerPlayer, botStatus);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                this.raise = this.neededChipsToCall * 2;
+        //                this.Raised(pokerPlayer, botStatus);
+        //            }
+        //        }
+        //    }
 
-            if (pokerPlayer.Chips <= 0)
-            {
-                pokerPlayer.OutOfChips = true;
-            }
-        }
+        //    if (pokerPlayer.Chips <= 0)
+        //    {
+        //        pokerPlayer.OutOfChips = true;
+        //    }
+        //}
 
         #region UI
         private async void TimerTick(object sender, object e)

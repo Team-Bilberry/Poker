@@ -70,6 +70,9 @@
       <DependentUpon>PokerTable.cs</DependentUpon>
     </Compile>
     <Compile Include="PokerMain.cs" />
+    <Compile Include="PokerUtilities\CardsCombinationMethods\CheckHandType.cs" />
+    <Compile Include="PokerUtilities\CardsCombinationMethods\HandTypes.cs" />
+    <Compile Include="PokerUtilities\CardsCombinationMethods\PlayerActions.cs" />
     <Compile Include="PokerUtilities\GlobalConstants.cs" />
     <Compile Include="ProgressBars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -219,9 +222,7 @@
     <Content Include="Resources\Cards\9_of_hearts.png" />
     <Content Include="Resources\Cards\9_of_spades.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PokerUtilities\CardsCombinationMethods\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
