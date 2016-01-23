@@ -746,28 +746,33 @@
                 #region Variables
                 bool done = false;
                 bool vf = false;
-                int[] Straight1 = new int[5];
+                int[] cardsOnBoard = new int[5];
                 int[] Straight = new int[7];
                 Straight[0] = this.reserve[card1];
                 Straight[1] = this.reserve[card2];
-                Straight1[0] = Straight[2] = this.reserve[12];
-                Straight1[1] = Straight[3] = this.reserve[13];
-                Straight1[2] = Straight[4] = this.reserve[14];
-                Straight1[3] = Straight[5] = this.reserve[15];
-                Straight1[4] = Straight[6] = this.reserve[16];
-                var a = Straight.Where(o => o % 4 == 0).ToArray();
-                var b = Straight.Where(o => o % 4 == 1).ToArray();
-                var c = Straight.Where(o => o % 4 == 2).ToArray();
-                var d = Straight.Where(o => o % 4 == 3).ToArray();
-                var st1 = a.Select(o => o / 4).Distinct().ToArray();
-                var st2 = b.Select(o => o / 4).Distinct().ToArray();
-                var st3 = c.Select(o => o / 4).Distinct().ToArray();
-                var st4 = d.Select(o => o / 4).Distinct().ToArray();
-                Array.Sort(Straight); Array.Sort(st1); Array.Sort(st2); Array.Sort(st3); Array.Sort(st4);
+                cardsOnBoard[0] = Straight[2] = this.reserve[12];
+                cardsOnBoard[1] = Straight[3] = this.reserve[13];
+                cardsOnBoard[2] = Straight[4] = this.reserve[14];
+                cardsOnBoard[3] = Straight[5] = this.reserve[15];
+                cardsOnBoard[4] = Straight[6] = this.reserve[16];
+                int[] getClubes = Straight.Where(o => o % 4 == 0).ToArray();
+                int[] getDimonds = Straight.Where(o => o % 4 == 1).ToArray();
+                int[] getHearts = Straight.Where(o => o % 4 == 2).ToArray();
+                int[] getSpades = Straight.Where(o => o % 4 == 3).ToArray();
+                int[] clubes = getClubes.Select(o => o / 4).Distinct().ToArray();
+                int[] diamonds = getDimonds.Select(o => o / 4).Distinct().ToArray();
+                int[] hearts = getHearts.Select(o => o / 4).Distinct().ToArray();
+                int[] spades = getSpades.Select(o => o / 4).Distinct().ToArray();
+                Array.Sort(Straight);
+                Array.Sort(clubes);
+                Array.Sort(diamonds);
+                Array.Sort(hearts);
+                Array.Sort(spades);
                 #endregion
                 for (int index = 0; index < 16; index++)
                 {
-                    if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) && this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
+                    if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) && 
+                        this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
                     {
                         ////Pair from Hand current = 1
                         //this.rPairFromHand(pokerPlayer, index);
@@ -800,13 +805,13 @@
 
                         this.checkHand.rStraight(ref pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rFlush(ref pokerPlayer, ref vf, Straight1, ref index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.rFlush(ref pokerPlayer, ref vf, cardsOnBoard, ref index, ref this.Win, ref this.sorted, ref this.reserve);
 
                         this.checkHand.rFullHouse(ref pokerPlayer, ref done, Straight, ref this.Win, ref this.sorted, ref this.type);
 
                         this.checkHand.rFourOfAKind(ref pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rStraightFlush(ref pokerPlayer, st1, st2, st3, st4, ref this.Win, ref this.sorted);
+                        this.checkHand.rStraightFlush(ref pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
 
                         this.checkHand.rHighCard(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
                     }
