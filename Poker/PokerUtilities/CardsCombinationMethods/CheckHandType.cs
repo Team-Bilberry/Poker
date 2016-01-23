@@ -11,7 +11,7 @@
         }
 
         public void rStraightFlush(
-            ref IPokerPlayer pokerPlayer, 
+            IPokerPlayer pokerPlayer, 
             int[] clubes, 
             int[] dimonds, 
             int[] hearts, 
@@ -106,7 +106,7 @@
             sorted = Win.OrderByDescending(op1 => op1.Current).ThenByDescending(op1 => op1.Power).First();
         }
 
-        public void rFourOfAKind(ref IPokerPlayer pokerPlayer, int[] Straight, ref List<Type> Win, ref Type sorted)
+        public void rFourOfAKind(IPokerPlayer pokerPlayer, int[] Straight, ref List<Type> Win, ref Type sorted)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -136,7 +136,7 @@
             }
         }
 
-        public void rFullHouse(ref IPokerPlayer pokerPlayer, ref bool done, int[] Straight, ref List<Type> Win, ref Type sorted, ref double type)
+        public void rFullHouse(IPokerPlayer pokerPlayer, ref bool done, int[] Straight, ref List<Type> Win, ref Type sorted, ref double type)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -192,7 +192,7 @@
             }
         }
 
-        public void rFlush(ref IPokerPlayer pokerPlayer, ref bool vf, int[] Straight1, ref int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
+        public void rFlush(IPokerPlayer pokerPlayer, ref bool vf, int[] Straight1, ref int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -695,7 +695,7 @@
             }
         }
 
-        public void rStraight(ref IPokerPlayer pokerPlayer, int[] Straight, int index, ref List<Type> Win, ref Type sorted)
+        public void rStraight(IPokerPlayer pokerPlayer, int[] Straight, int index, ref List<Type> Win, ref Type sorted)
         {
 
             if (pokerPlayer.Type >= -1)
@@ -732,7 +732,7 @@
             }
         }
 
-        public void rThreeOfAKind(ref IPokerPlayer pokerPlayer, int[] Straight, int index, ref List<Type> Win, ref Type sorted)
+        public void rThreeOfAKind(IPokerPlayer pokerPlayer, int[] Straight, int index, ref List<Type> Win, ref Type sorted)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -760,7 +760,7 @@
             }
         }
 
-        public void rTwoPair(ref IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
+        public void rTwoPair(IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -819,7 +819,7 @@
             }
         }
 
-        public void rPairTwoPair(ref IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
+        public void rPairTwoPair(IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -928,7 +928,7 @@
             }
         }
 
-        public void rPairFromHand(ref IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
+        public void rPairFromHand(IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
         {
             if (pokerPlayer.Type >= -1)
             {
@@ -1006,7 +1006,7 @@
             }
         }
 
-        public void rHighCard(ref IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
+        public void rHighCard(IPokerPlayer pokerPlayer, int index, ref List<Type> Win, ref Type sorted, ref int[] Reserve)
         {
             if (pokerPlayer.Type == -1)
             {

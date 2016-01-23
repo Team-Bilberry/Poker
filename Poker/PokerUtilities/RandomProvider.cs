@@ -18,5 +18,12 @@
 
             return randomValue;
         }
+
+        public int Next(int minValue, int maxValue)
+        {
+            int randomValue = this.randomGenerator.Next(minValue, maxValue);
+
+            return randomValue;
+        }
     }
 }

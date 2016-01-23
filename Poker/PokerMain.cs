@@ -22,7 +22,7 @@
             IRandomProvider randomProvider = new RandomProvider();
             var dealer = new Dealer(randomProvider);
             var checkHand = new CheckHandType();
-            var handTypes = new HandTypes();
+            var handTypes = new HandTypes(randomProvider);
             var pokerTable = new PokerTable(dealer, checkHand, handTypes);
 
             Application.Run(pokerTable);

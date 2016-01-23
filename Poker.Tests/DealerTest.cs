@@ -36,11 +36,11 @@
         [TestMethod]
         public void Shuffle_NonEmptyDack_ShouldReorder()
         {
-            string[] deck = {"Two", "Thre", "Four", "Five", "Six"};
+            string[] deck = {"Two", "Thre", "Four", "Five", "Six", "Two", "Thre", "Four", "Five", "Six" };
 
             this.dealer.ShuffleDeck(deck);
 
-            CollectionAssert.AreNotEqual(new[] { "Two", "Thre", "Four", "Five", "Six"}, deck, "Deck is not shuffled");
+            CollectionAssert.AreNotEqual(new[] { "Two", "Thre", "Four", "Five", "Six", "Two", "Thre", "Four", "Five", "Six" }, deck, "Deck is not shuffled");
         }
     }
 }

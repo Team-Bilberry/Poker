@@ -797,25 +797,25 @@
 
                         //this.rHighCard(pokerPlayer, index);
 
-                        this.checkHand.rPairFromHand(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+                        this.checkHand.rPairFromHand(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.rPairTwoPair(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+                        this.checkHand.rPairTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.rTwoPair(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.rTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
 
-                        this.checkHand.rThreeOfAKind(ref pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+                        this.checkHand.rThreeOfAKind(pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rStraight(ref pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+                        this.checkHand.rStraight(pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rFlush(ref pokerPlayer, ref vf, cardsOnBoard, ref index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.rFlush(pokerPlayer, ref vf, cardsOnBoard, ref index, ref this.Win, ref this.sorted, ref this.reserve);
 
-                        this.checkHand.rFullHouse(ref pokerPlayer, ref done, Straight, ref this.Win, ref this.sorted, ref this.type);
+                        this.checkHand.rFullHouse(pokerPlayer, ref done, Straight, ref this.Win, ref this.sorted, ref this.type);
 
-                        this.checkHand.rFourOfAKind(ref pokerPlayer, Straight, ref this.Win, ref this.sorted);
+                        this.checkHand.rFourOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rStraightFlush(ref pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
+                        this.checkHand.rStraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rHighCard(ref pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.rHighCard(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
                     }
                 }
             }
@@ -2635,70 +2635,70 @@
                 {
                     //this.HighCard(pokerPlayer, sStatus);
 
-                    this.handType.HighCard(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
+                    this.handType.HighCard(pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
                 }
 
                 if (pokerPlayer.Type == 0)
                 {
                     //this.PairTable(pokerPlayer, sStatus);
 
-                    this.handType.PairTable(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
+                    this.handType.PairTable(pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising);
                 }
 
                 if (pokerPlayer.Type == 1)
                 {
                     //this.PairHand(pokerPlayer, sStatus);
 
-                    this.handType.PairHand(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.PairHand(pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 2)
                 {
                     //this.TwoPair(pokerPlayer, sStatus);
 
-                    this.handType.TwoPair(ref pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.TwoPair(pokerPlayer, sStatus, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 3)
                 {
                     //this.ThreeOfAKind(pokerPlayer, sStatus, name);
 
-                    this.handType.ThreeOfAKind(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.ThreeOfAKind(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 4)
                 {
                     //this.Straight(pokerPlayer, sStatus, name);
 
-                    this.handType.Straight(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.Straight(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 5 || pokerPlayer.Type == 5.5)
                 {
                     //this.Flush(pokerPlayer, sStatus, name);
 
-                    this.handType.Flush(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.Flush(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 6)
                 {
                     //this.FullHouse(pokerPlayer, sStatus, name);
 
-                    this.handType.FullHouse(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.FullHouse(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 7)
                 {
                     //this.FourOfAKind(pokerPlayer, sStatus, name);
 
-                    this.handType.FourOfAKind(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.FourOfAKind(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
 
                 if (pokerPlayer.Type == 8 || pokerPlayer.Type == 9)
                 {
                     //this.StraightFlush(pokerPlayer, sStatus, name);
 
-                    this.handType.StraightFlush(ref pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
+                    this.handType.StraightFlush(pokerPlayer, sStatus, name, this.neededChipsToCall, this.potStatus, ref this.raise, ref this.raising, ref this.rounds);
                 }
             }
 
