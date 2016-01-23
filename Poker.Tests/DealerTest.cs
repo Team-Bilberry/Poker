@@ -4,6 +4,7 @@
     using Contracts;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Models;
+    using PokerUtilities;
 
     [TestClass]
     public class DealerTest
@@ -13,7 +14,7 @@
         [TestInitialize]
         public void DealerInit()
         {
-            this.dealer = new Dealer();
+            this.dealer = new Dealer(new RandomProvider());
         }
 
         [TestMethod]
