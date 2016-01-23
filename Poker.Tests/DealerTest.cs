@@ -14,7 +14,7 @@
         [TestInitialize]
         public void DealerInit()
         {
-            this.dealer = new Dealer(new RandomProvider());
+            this.dealer = new Dealer(new RandomGenerator());
         }
 
         [TestMethod]

@@ -16,8 +16,8 @@
     public partial class PokerTable : Form
     {
         #region Variables
-        private readonly CheckHandType checkHand;
-        private readonly HandTypes handType;
+        private readonly ICheckHandType checkHand;
+        private readonly IHandType handType;
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -86,7 +86,7 @@
         int turnCount = 0;
         #endregion
 
-        public PokerTable(IDealer dealer, CheckHandType checkHand, HandTypes handType)
+        public PokerTable(IDealer dealer, ICheckHandType checkHand, IHandType handType)
         {
             this.player = new PokerPlayer(new Panel());
             this.firstBot = new PokerPlayer(new Panel());

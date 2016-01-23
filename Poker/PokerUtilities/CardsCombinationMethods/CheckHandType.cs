@@ -4,20 +4,9 @@
     using System.Linq;
     using Contracts;
 
-    public class CheckHandType
+    public class CheckHandType : ICheckHandType
     {
-        public CheckHandType()
-        {
-        }
-
-        public void rStraightFlush(
-            IPokerPlayer pokerPlayer, 
-            int[] clubes, 
-            int[] dimonds, 
-            int[] hearts, 
-            int[] spades, 
-            ref List<Type> Win, 
-            ref Type sorted)
+        public void rStraightFlush(IPokerPlayer pokerPlayer, int[] clubes, int[] dimonds, int[] hearts, int[] spades, ref List<Type> Win, ref Type sorted)
         {
             if (pokerPlayer.Type >= -1)
             {

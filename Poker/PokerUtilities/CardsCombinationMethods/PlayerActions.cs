@@ -3,13 +3,9 @@
     using System;
     using System.Windows.Forms;
     using Contracts;
-
-    public class PlayerActions
+  
+    public class PlayerActions : IPlayerActions
     {
-        public PlayerActions()
-        {
-        }
-
         public void Fold(IPokerPlayer pokerPlayer, Label sStatus, ref bool rising)
         {
             rising = false;

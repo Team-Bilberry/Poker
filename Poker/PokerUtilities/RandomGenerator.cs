@@ -3,11 +3,11 @@
     using System;
     using Contracts;
 
-    public class RandomProvider : IRandomProvider
+    public class RandomGenerator : IRandomProvider
     {
         private readonly Random randomGenerator;
 
-        public RandomProvider()
+        public RandomGenerator()
         {
             this.randomGenerator = new Random();
         }

@@ -1,14 +1,12 @@
 ﻿namespace Poker.PokerUtilities.CardsCombinationMethods
 {
-    using System;
     using System.Windows.Forms;
     using Contracts;
-    using static PlayerActions;
 
-    public class HandTypes
+    public class HandTypes : IHandType
     {
         private readonly PlayerActions playerActions;
-        private IRandomProvider randomGenerator;
+        private readonly IRandomProvider randomGenerator;
 
         public HandTypes(IRandomProvider randomGenerator)
         {
@@ -157,7 +155,7 @@
             }
             else
             {
-                if (neededChipsToCall >= RoundN(pokerPlayer.Chips, n))
+                if (neededChipsToCall >= PlayerActions.RoundN(pokerPlayer.Chips, n))
                 {
                     if (pokerPlayer.Chips > neededChipsToCall)
                     {

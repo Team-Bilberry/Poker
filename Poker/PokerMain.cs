@@ -19,7 +19,7 @@
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            IRandomProvider randomProvider = new RandomProvider();
+            IRandomProvider randomProvider = new RandomGenerator();
             var dealer = new Dealer(randomProvider);
             var checkHand = new CheckHandType();
             var handTypes = new HandTypes(randomProvider);

@@ -1,20 +1,18 @@
 ﻿namespace Poker.Tests
 {
-    using System;
     using Contracts;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Models;
     using PokerUtilities;
 
     [TestClass]
-    public class RanomProviderTest
+    public class RanomGeneratorTest
     {
         private IRandomProvider random;
 
         [TestInitialize]
         public void RanomProviderInit()
         {
-            this.random = new RandomProvider();
+            this.random = new RandomGenerator();
         }
 
         [TestMethod]
