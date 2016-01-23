@@ -16,8 +16,8 @@
     public partial class PokerTable : Form
     {
         #region Variables
-        private CheckHandType checkHand = new CheckHandType();
-        private HandTypes handType = new HandTypes();
+        private readonly CheckHandType checkHand;
+        private readonly HandTypes handType;
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -86,7 +86,7 @@
         int turnCount = 0;
         #endregion
 
-        public PokerTable(IDealer dealer)
+        public PokerTable(IDealer dealer, CheckHandType checkHand, HandTypes handType)
         {
             this.player = new PokerPlayer(new Panel());
             this.firstBot = new PokerPlayer(new Panel());
@@ -96,6 +96,8 @@
             this.fifthBot = new PokerPlayer(new Panel());
 
             this.dealer = dealer;
+            this.checkHand = checkHand;
+            this.handType = handType;
 
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.OutOfChips); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             this.neededChipsToCall = this.bigBlind;
@@ -2244,48 +2246,50 @@
 
         void FixCall(Label status, IPokerPlayer pokerPlayer, int options)
         {
-            if (this.rounds != 4)
+            if (this.rounds == 4)
             {
-                if (options == 1)
+                return;
+            }
+
+            if (options == 1)
+            {
+                if (status.Text.Contains("Raise"))
                 {
-                    if (status.Text.Contains("Raise"))
-                    {
-                        var changeRaise = status.Text.Substring(6);
-                        pokerPlayer.Raise = int.Parse(changeRaise);
-                    }
-
-                    if (status.Text.Contains("Call"))
-                    {
-                        var changeCall = status.Text.Substring(5);
-                        pokerPlayer.Call = int.Parse(changeCall);
-                    }
-
-                    if (status.Text.Contains("Check"))
-                    {
-                        pokerPlayer.Raise = 0;
-                        pokerPlayer.Call = 0;
-                    }
+                    var changeRaise = status.Text.Substring(6);
+                    pokerPlayer.Raise = int.Parse(changeRaise);
                 }
 
-                if (options == 2)
+                if (status.Text.Contains("Call"))
                 {
-                    if (pokerPlayer.Raise != this.raise && pokerPlayer.Raise <= this.raise)
-                    {
-                        this.neededChipsToCall = this.raise - pokerPlayer.Raise;
-                    }
+                    var changeCall = status.Text.Substring(5);
+                    pokerPlayer.Call = int.Parse(changeCall);
+                }
 
-                    if (pokerPlayer.Call != this.neededChipsToCall || pokerPlayer.Call <= this.neededChipsToCall)
-                    {
-                        this.neededChipsToCall = this.neededChipsToCall - pokerPlayer.Call;
-                    }
+                if (status.Text.Contains("Check"))
+                {
+                    pokerPlayer.Raise = 0;
+                    pokerPlayer.Call = 0;
+                }
+            }
 
-                    // TODO: check when this is valid and change text in call label
-                    if (pokerPlayer.Raise == this.raise && this.raise > 0)
-                    {
-                        this.neededChipsToCall = 0;
-                        this.callButton.Enabled = false;
-                        this.callButton.Text = "Callisfuckedup";
-                    }
+            if (options == 2)
+            {
+                if (pokerPlayer.Raise != this.raise && pokerPlayer.Raise <= this.raise)
+                {
+                    this.neededChipsToCall = this.raise - pokerPlayer.Raise;
+                }
+
+                if (pokerPlayer.Call != this.neededChipsToCall || pokerPlayer.Call <= this.neededChipsToCall)
+                {
+                    this.neededChipsToCall = this.neededChipsToCall - pokerPlayer.Call;
+                }
+
+                // TODO: check when this is valid and change text in call label
+                if (pokerPlayer.Raise == this.raise && this.raise > 0)
+                {
+                    this.neededChipsToCall = 0;
+                    this.callButton.Enabled = false;
+                    this.callButton.Text = "Callisfuckedup";
                 }
             }
         }
@@ -2577,7 +2581,7 @@
             this.Win.Clear();
             this.sorted.Current = 0;
             this.sorted.Power = 0;
-            string fixedLast = "qwerty";
+            string fixedLast = string.Empty;
 
             if (!this.playerStatus.Text.Contains("Fold"))
             {

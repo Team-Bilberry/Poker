@@ -5,6 +5,7 @@
     using Contracts;
     using GUI;
     using Models;
+    using PokerUtilities.CardsCombinationMethods;
 
     public static class PokerMain
     {
@@ -17,9 +18,12 @@
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            IDealer dealer = new Dealer();
+            var dealer = new Dealer();
+            var checkHand = new CheckHandType();
+            var handTypes = new HandTypes();
+            var pokerTable = new PokerTable(dealer, checkHand, handTypes);
 
-            Application.Run(new PokerTable(dealer));
+            Application.Run(pokerTable);
         }
     }
 }

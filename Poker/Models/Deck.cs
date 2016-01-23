@@ -12,8 +12,8 @@
     {
         private const string CardsPath = @"..\..\Resources\Cards";
         private readonly IDictionary<int, ICard> deck;
-        private PictureBox[] holder;
-        private PokerTable table;
+        private readonly PictureBox[] holder;
+        private readonly PokerTable table;
 
         public Deck(PokerTable table)
         {
@@ -39,12 +39,12 @@
                     this.holder[number] = new PictureBox();
                     this.holder[number].Image = image;
 
-                    holder[number].SizeMode = PictureBoxSizeMode.StretchImage;
-                    holder[number].Height = 130;
-                    holder[number].Width = 80;
-                    // Add this in table
-                    this.table.Controls.Add(holder[number]);
-                    holder[number].Name = "pb" + number;
+                    this.holder[number].SizeMode = PictureBoxSizeMode.StretchImage;
+                    this.holder[number].Height = 130;
+                    this.holder[number].Width = 80;
+
+                    this.table.Controls.Add(this.holder[number]);
+                    this.holder[number].Name = "pb" + number;
                     number++;
                 }
             }
