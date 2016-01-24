@@ -7,7 +7,7 @@
     {
          Panel Panel { get; }
 
-         double Type { get; set; }
+         int Type { get; set; }
 
          double Power { get; set; }
 

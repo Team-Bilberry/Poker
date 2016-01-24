@@ -25,7 +25,7 @@
 
         public Panel Panel { get; }
 
-        public double Type { get; set; }
+        public int Type { get; set; }
 
         public double Power { get; set; }
 

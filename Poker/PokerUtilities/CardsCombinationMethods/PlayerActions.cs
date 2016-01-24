@@ -43,13 +43,14 @@
         public static double RoundN(int sChips, int n)
         {
             double a = Math.Round((sChips / n) / 100d, 0) * 100;
+
             return a;
         }
         // TODO: think of more proper names to these methods.
         public void HP(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1, int neededChipsToCall, TextBox potStatus, ref int raise, ref bool raising)
         {
             Random rand = new Random();
-            int rnd = rand.Next(1, 4);
+            int randomNumberFrom1to4 = rand.Next(1, 4);
             if (neededChipsToCall <= 0)
             {
                 Check(pokerPlayer, sStatus, ref raising);
@@ -57,7 +58,7 @@
 
             if (neededChipsToCall > 0)
             {
-                if (rnd == 1)
+                if (randomNumberFrom1to4 == 1)
                 {
                     if (neededChipsToCall <= RoundN(pokerPlayer.Chips, n))
                     {
@@ -69,7 +70,7 @@
                     }
                 }
 
-                if (rnd == 2)
+                if (randomNumberFrom1to4 == 2)
                 {
                     if (neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
                     {
@@ -82,7 +83,7 @@
                 }
             }
 
-            if (rnd == 3)
+            if (randomNumberFrom1to4 == 3)
             {
                 if (raise == 0)
                 {
