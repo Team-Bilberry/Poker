@@ -18,3 +18,7 @@ D:\Programirane\Poker\Poker\obj\Debug\Poker.GUI.AddChips.resources
 D:\Programirane\Poker\Poker\obj\Debug\Poker.GUI.PokerTable.resources
 D:\Programirane\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
 D:\Programirane\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
+C:\Users\zhecho15\Desktop\Fu\Poker\Poker\bin\Debug\Poker.exe.config
+C:\Users\zhecho15\Desktop\Fu\Poker\Poker\obj\Debug\Poker.exe
+C:\Users\zhecho15\Desktop\Fu\Poker\Poker\obj\Debug\Poker.pdb
+C:\Users\zhecho15\Desktop\Fu\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache

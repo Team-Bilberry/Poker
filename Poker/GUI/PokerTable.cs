@@ -745,35 +745,38 @@
 
             if (!pokerPlayer.OutOfChips || card1 == 0 && card2 == 1 && this.playerStatus.Text.Contains("Fold") == false)
             {
-                #region Variables
-                bool done = false;
-                bool vf = false;
-                int[] cardsOnBoard = new int[5];
+                #region Variables              
                 int[] Straight = new int[7];
+
                 Straight[0] = this.reserve[card1];
                 Straight[1] = this.reserve[card2];
-                cardsOnBoard[0] = Straight[2] = this.reserve[12];
-                cardsOnBoard[1] = Straight[3] = this.reserve[13];
-                cardsOnBoard[2] = Straight[4] = this.reserve[14];
-                cardsOnBoard[3] = Straight[5] = this.reserve[15];
-                cardsOnBoard[4] = Straight[6] = this.reserve[16];
+                Straight[2] = this.reserve[12];
+                Straight[3] = this.reserve[13];
+                Straight[4] = this.reserve[14];
+                Straight[5] = this.reserve[15];
+                Straight[6] = this.reserve[16];
+
                 int[] getClubes = Straight.Where(o => o % 4 == 0).ToArray();
                 int[] getDimonds = Straight.Where(o => o % 4 == 1).ToArray();
                 int[] getHearts = Straight.Where(o => o % 4 == 2).ToArray();
                 int[] getSpades = Straight.Where(o => o % 4 == 3).ToArray();
+
                 int[] clubes = getClubes.Select(o => o / 4).Distinct().ToArray();
                 int[] diamonds = getDimonds.Select(o => o / 4).Distinct().ToArray();
                 int[] hearts = getHearts.Select(o => o / 4).Distinct().ToArray();
                 int[] spades = getSpades.Select(o => o / 4).Distinct().ToArray();
+
+                #endregion
+
                 Array.Sort(Straight);
                 Array.Sort(clubes);
                 Array.Sort(diamonds);
                 Array.Sort(hearts);
                 Array.Sort(spades);
-                #endregion
+
                 for (int index = 0; index < 16; index++)
                 {
-                    if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) && 
+                    if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) &&
                         this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
                     {
                         ////Pair from Hand current = 1
@@ -797,25 +800,25 @@
 
                         //this.rHighCard(pokerPlayer, index);
 
-                        this.checkHand.rPairFromHand(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+                        this.checkHand.PairFromHand(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.rPairTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+                        this.checkHand.PairTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.rTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.TwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
 
-                        this.checkHand.rThreeOfAKind(pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+                        this.checkHand.ThreeOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rStraight(pokerPlayer, Straight, index, ref this.Win, ref this.sorted);
+                        this.checkHand.Straight(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rFlush(pokerPlayer, ref vf, cardsOnBoard, ref index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.Flush(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rFullHouse(pokerPlayer, ref done, Straight, ref this.Win, ref this.sorted, ref this.type);
+                        this.checkHand.FullHouse(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rFourOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+                        this.checkHand.FourOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rStraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
+                        this.checkHand.StraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
 
-                        this.checkHand.rHighCard(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+                        this.checkHand.HighCard(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
                     }
                 }
             }
