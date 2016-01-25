@@ -1,6 +1,0 @@
-﻿namespace Poker
-{
-    class ProgressBars
-    {
-    }
-}

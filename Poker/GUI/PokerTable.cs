@@ -10,14 +10,16 @@
     using Contracts;
     using Models;
     using PokerUtilities;
-    using PokerUtilities.CardsCombinationMethods;
     using Type = Poker.Type;
+    using static PokerUtilities.CardsCombinationMethods.RulesMethod;
+    using static PokerUtilities.ResetMethods;
 
     public partial class PokerTable : Form
     {
         #region Variables
-        private readonly ICheckHandType checkHand;
-        private readonly IHandType handType;
+        private IDealer dealer;
+        private ICheckHandType checkHand;
+        private IHandType handType;
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -26,17 +28,16 @@
         private readonly IPokerPlayer fourthBot;
         private readonly IPokerPlayer fifthBot;
 
-        private readonly IDealer dealer;
 
         private int neededChipsToCall;
         private int botsWithoutChips = 5;
-        private double type;
         private int rounds = 0;
         private int raise = 0;
         private int playersLeft = 6;
         private int winners = 0;
+        private int raisedTurn = 1;
 
-        private bool intsadded;
+        private bool isAllIn;
         private bool changed;
 
         //private int height;
@@ -51,12 +52,11 @@
 
 
         //int last = 123;
-        private int raisedTurn = 1;
 
         List<bool?> eliminatedPlayers = new List<bool?>();
         List<Type> Win = new List<Type>();
         List<string> CheckWinners = new List<string>();
-        List<int> ints = new List<int>();
+        List<int> allInChips = new List<int>();
         private bool restart = false;
         private bool raising = false;
 
@@ -95,9 +95,9 @@
             this.fourthBot = new PokerPlayer(new Panel());
             this.fifthBot = new PokerPlayer(new Panel());
 
-            this.dealer = dealer;
-            this.checkHand = checkHand;
-            this.handType = handType;
+            this.Dealer = dealer;
+            this.CheckHand = checkHand;
+            this.HandType = handType;
 
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.OutOfChips); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             this.neededChipsToCall = this.bigBlind;
@@ -135,6 +135,90 @@
 
             this.player.OutOfChips = false;
             this.player.AbleToMakeTurn = true;
+        }
+
+        public IPokerPlayer Player
+        {
+            get
+            {
+                return this.player;
+            } 
+        }
+
+        public IPokerPlayer FirstBot
+        {
+            get
+            {
+                return this.firstBot;
+            } 
+        }
+
+        public IPokerPlayer SecondBot
+        {
+            get
+            {
+                return this.secondBot;
+            }
+        }
+
+        public IPokerPlayer ThirdBot
+        {
+            get
+            {
+                return this.thirdBot;
+            }
+        }
+
+        public IPokerPlayer FourthBot
+        {
+            get
+            {
+                return this.fourthBot;
+            }
+        }
+
+        public IPokerPlayer FifthBot
+        {
+            get
+            {
+                return this.fifthBot;
+            }
+        }
+
+        public IDealer Dealer
+        {
+            get
+            {
+                return this.dealer;
+            }
+            set
+            {
+                this.dealer = value;
+            }
+        }
+
+        public ICheckHandType CheckHand
+        {
+            get
+            {
+                return this.checkHand;
+            }
+            set
+            {
+                this.checkHand = value;
+            }
+        }
+
+        public IHandType HandType
+        {
+            get
+            {
+                return this.handType;
+            }
+            set
+            {
+                this.handType = value;
+            }
         }
 
         private async Task Shuffle()
@@ -574,7 +658,7 @@
                         this.FixCall(this.botOneStatus, this.firstBot, 1);
                         this.FixCall(this.botOneStatus, this.firstBot, 2);
 
-                        this.Rules(2, 3, "Bot 1", this.firstBot);
+                        Rules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         MessageBox.Show("Bot 1's Turn");
 
                         this.AI(2, 3, this.botOneStatus, 0, this.firstBot);
@@ -605,7 +689,7 @@
                     {
                         this.FixCall(this.botTwoStatus, this.secondBot, 1);
                         this.FixCall(this.botTwoStatus, this.secondBot, 2);
-                        this.Rules(4, 5, "Bot 2", this.secondBot);
+                        Rules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         MessageBox.Show("Bot 2's Turn");
                         this.AI(4, 5, this.botTwoStatus, 1, this.secondBot);
                         this.turnCount++;
@@ -635,7 +719,7 @@
                         this.FixCall(this.botThreeStatus, this.thirdBot, 1);
                         this.FixCall(this.botThreeStatus, this.thirdBot, 2);
 
-                        this.Rules(6, 7, "Bot 3", this.thirdBot);
+                        Rules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         MessageBox.Show("Bot 3's Turn");
                         this.AI(6, 7, this.botThreeStatus, 2, this.thirdBot);
                         this.turnCount++;
@@ -664,7 +748,7 @@
                     {
                         this.FixCall(this.botFourStatus, this.fourthBot, 1);
                         this.FixCall(this.botFourStatus, this.fourthBot, 2);
-                        this.Rules(8, 9, "Bot 4", this.fourthBot);
+                        Rules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         MessageBox.Show("Bot 4's Turn");
                         this.AI(8, 9, this.botFourStatus, 3, this.fourthBot);
                         this.turnCount++;
@@ -693,7 +777,7 @@
                     {
                         this.FixCall(this.botFiveStatus, this.fifthBot, 1);
                         this.FixCall(this.botFiveStatus, this.fifthBot, 2);
-                        this.Rules(10, 11, "Bot 5", this.fifthBot);
+                        Rules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         MessageBox.Show("Bot 5's Turn");
                         this.AI(10, 11, this.botFiveStatus, 4, this.fifthBot);
                         this.turnCount++;
@@ -737,92 +821,92 @@
             }
         }
         // TODO: extract the method below in PokerUtilities
-        void Rules(int card1, int card2, string currentText, IPokerPlayer pokerPlayer)
-        {
-            if (card1 == 0 && card2 == 1)
-            {
-            }
+        //void Rules(int card1, int card2, string currentText, IPokerPlayer pokerPlayer)
+        //{
+        //    if (card1 == 0 && card2 == 1)
+        //    {
+        //    }
 
-            if (!pokerPlayer.OutOfChips || card1 == 0 && card2 == 1 && this.playerStatus.Text.Contains("Fold") == false)
-            {
-                #region Variables              
-                int[] Straight = new int[7];
+        //    if (!pokerPlayer.OutOfChips || card1 == 0 && card2 == 1 && this.playerStatus.Text.Contains("Fold") == false)
+        //    {
+        //        #region Variables              
+        //        int[] Straight = new int[7];
 
-                Straight[0] = this.reserve[card1];
-                Straight[1] = this.reserve[card2];
-                Straight[2] = this.reserve[12];
-                Straight[3] = this.reserve[13];
-                Straight[4] = this.reserve[14];
-                Straight[5] = this.reserve[15];
-                Straight[6] = this.reserve[16];
+        //        Straight[0] = this.reserve[card1];
+        //        Straight[1] = this.reserve[card2];
+        //        Straight[2] = this.reserve[12];
+        //        Straight[3] = this.reserve[13];
+        //        Straight[4] = this.reserve[14];
+        //        Straight[5] = this.reserve[15];
+        //        Straight[6] = this.reserve[16];
 
-                int[] getClubes = Straight.Where(o => o % 4 == 0).ToArray();
-                int[] getDimonds = Straight.Where(o => o % 4 == 1).ToArray();
-                int[] getHearts = Straight.Where(o => o % 4 == 2).ToArray();
-                int[] getSpades = Straight.Where(o => o % 4 == 3).ToArray();
+        //        int[] getClubes = Straight.Where(o => o % 4 == 0).ToArray();
+        //        int[] getDimonds = Straight.Where(o => o % 4 == 1).ToArray();
+        //        int[] getHearts = Straight.Where(o => o % 4 == 2).ToArray();
+        //        int[] getSpades = Straight.Where(o => o % 4 == 3).ToArray();
 
-                int[] clubes = getClubes.Select(o => o / 4).Distinct().ToArray();
-                int[] diamonds = getDimonds.Select(o => o / 4).Distinct().ToArray();
-                int[] hearts = getHearts.Select(o => o / 4).Distinct().ToArray();
-                int[] spades = getSpades.Select(o => o / 4).Distinct().ToArray();
+        //        int[] clubes = getClubes.Select(o => o / 4).Distinct().ToArray();
+        //        int[] diamonds = getDimonds.Select(o => o / 4).Distinct().ToArray();
+        //        int[] hearts = getHearts.Select(o => o / 4).Distinct().ToArray();
+        //        int[] spades = getSpades.Select(o => o / 4).Distinct().ToArray();
 
-                #endregion
+        //        #endregion
 
-                Array.Sort(Straight);
-                Array.Sort(clubes);
-                Array.Sort(diamonds);
-                Array.Sort(hearts);
-                Array.Sort(spades);
+        //        Array.Sort(Straight);
+        //        Array.Sort(clubes);
+        //        Array.Sort(diamonds);
+        //        Array.Sort(hearts);
+        //        Array.Sort(spades);
 
-                for (int index = 0; index < 16; index++)
-                {
-                    if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) &&
-                        this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
-                    {
-                        ////Pair from Hand current = 1
-                        //this.rPairFromHand(pokerPlayer, index);
+        //        for (int index = 0; index < 16; index++)
+        //        {
+        //            if (this.reserve[index] == int.Parse(this.cardPicture[card1].Tag.ToString()) &&
+        //                this.reserve[index + 1] == int.Parse(this.cardPicture[card2].Tag.ToString()))
+        //            {
+        //                ////Pair from Hand current = 1
+        //                //this.rPairFromHand(pokerPlayer, index);
 
-                        //this.rPairTwoPair(pokerPlayer, index);
+        //                //this.rPairTwoPair(pokerPlayer, index);
 
-                        //this.rTwoPair(pokerPlayer, index);
+        //                //this.rTwoPair(pokerPlayer, index);
 
-                        //this.rThreeOfAKind(pokerPlayer, Straight, index);
+        //                //this.rThreeOfAKind(pokerPlayer, Straight, index);
 
-                        //this.RStraight(pokerPlayer, Straight, index);
+        //                //this.RStraight(pokerPlayer, Straight, index);
 
-                        //this.RFlush(pokerPlayer, ref vf, Straight1, index);
+        //                //this.RFlush(pokerPlayer, ref vf, Straight1, index);
 
-                        //this.rFullHouse(pokerPlayer, ref done, Straight);
+        //                //this.rFullHouse(pokerPlayer, ref done, Straight);
 
-                        //this.rFourOfAKind(pokerPlayer, Straight);
+        //                //this.rFourOfAKind(pokerPlayer, Straight);
 
-                        //this.rStraightFlush(pokerPlayer, st1, st2, st3, st4);
+        //                //this.rStraightFlush(pokerPlayer, st1, st2, st3, st4);
 
-                        //this.rHighCard(pokerPlayer, index);
+        //                //this.rHighCard(pokerPlayer, index);
 
-                        this.checkHand.PairFromHand(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+        //                this.checkHand.PairFromHand(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.PairTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
+        //                this.checkHand.PairTwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref reserve);
 
-                        this.checkHand.TwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+        //                this.checkHand.TwoPair(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
 
-                        this.checkHand.ThreeOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+        //                this.checkHand.ThreeOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.Straight(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+        //                this.checkHand.Straight(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.Flush(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+        //                this.checkHand.Flush(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.FullHouse(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+        //                this.checkHand.FullHouse(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.FourOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
+        //                this.checkHand.FourOfAKind(pokerPlayer, Straight, ref this.Win, ref this.sorted);
 
-                        this.checkHand.StraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
+        //                this.checkHand.StraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref this.Win, ref this.sorted);
 
-                        this.checkHand.HighCard(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
-                    }
-                }
-            }
-        }
+        //                this.checkHand.HighCard(pokerPlayer, index, ref this.Win, ref this.sorted, ref this.reserve);
+        //            }
+        //        }
+        //    }
+        //}
 
         //private void rStraightFlush(IPokerPlayer pokerPlayer, int[] st1, int[] st2, int[] st3, int[] st4)
         //{
@@ -1897,6 +1981,7 @@
                     }
                 }
             }
+
             if (player == lastly)//lastfixed
             {
                 if (this.winners > 1)
@@ -1906,7 +1991,6 @@
                         this.player.Chips += int.Parse(this.potStatus.Text) / this.winners;
                         this.playerChips.Text = this.player.Chips.ToString();
                         //player.Panel.Visible = true;
-
                     }
 
                     if (this.CheckWinners.Contains("Bot 1"))
@@ -1946,6 +2030,7 @@
 
                     //await Finish(1);
                 }
+
                 if (this.winners == 1)
                 {
                     if (this.CheckWinners.Contains("Player"))
@@ -2173,13 +2258,11 @@
 
                 this.winners = 0;
 
-                this.type = 0;
-
                 ResetPower();
 
                 ResetType();
 
-                this.ints.Clear();
+                this.allInChips.Clear();
                 this.CheckWinners.Clear();
                 this.eliminatedPlayers.Clear();
                 this.Win.Clear();
@@ -2304,77 +2387,77 @@
         async Task AllIn()
         {
             #region All in
-            if (this.player.Chips <= 0 && !this.intsadded)
+            if (this.player.Chips <= 0 && !this.isAllIn)
             {
                 if (this.playerStatus.Text.Contains("Raise"))
                 {
-                    this.ints.Add(this.player.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.player.Chips);
+                    this.isAllIn = true;
                 }
 
                 if (this.playerStatus.Text.Contains("Call"))
                 {
-                    this.ints.Add(this.player.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.player.Chips);
+                    this.isAllIn = true;
                 }
             }
 
-            this.intsadded = false;
+            this.isAllIn = false;
             if (this.firstBot.Chips <= 0 && !this.firstBot.OutOfChips)
             {
-                if (!this.intsadded)
+                if (!this.isAllIn)
                 {
-                    this.ints.Add(this.firstBot.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.firstBot.Chips);
+                    this.isAllIn = true;
                 }
 
-                this.intsadded = false;
+                this.isAllIn = false;
             }
             if (this.secondBot.Chips <= 0 && !this.secondBot.OutOfChips)
             {
-                if (!this.intsadded)
+                if (!this.isAllIn)
                 {
-                    this.ints.Add(this.secondBot.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.secondBot.Chips);
+                    this.isAllIn = true;
                 }
 
-                this.intsadded = false;
+                this.isAllIn = false;
             }
             if (this.thirdBot.Chips <= 0 && !this.thirdBot.OutOfChips)
             {
-                if (!this.intsadded)
+                if (!this.isAllIn)
                 {
-                    this.ints.Add(this.thirdBot.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.thirdBot.Chips);
+                    this.isAllIn = true;
                 }
 
-                this.intsadded = false;
+                this.isAllIn = false;
             }
             if (this.fourthBot.Chips <= 0 && !this.fourthBot.OutOfChips)
             {
-                if (!this.intsadded)
+                if (!this.isAllIn)
                 {
-                    this.ints.Add(this.fourthBot.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.fourthBot.Chips);
+                    this.isAllIn = true;
                 }
 
-                this.intsadded = false;
+                this.isAllIn = false;
             }
             if (this.fifthBot.Chips <= 0 && !this.fifthBot.OutOfChips)
             {
-                if (!this.intsadded)
+                if (!this.isAllIn)
                 {
-                    this.ints.Add(this.fifthBot.Chips);
-                    this.intsadded = true;
+                    this.allInChips.Add(this.fifthBot.Chips);
+                    this.isAllIn = true;
                 }
             }
-            if (this.ints.ToArray().Length == this.playersLeft)
+            if (this.allInChips.ToArray().Length == this.playersLeft)
             {
                 await this.Finish(2);
             }
             else
             {
-                this.ints.Clear();
+                this.allInChips.Clear();
             }
             #endregion
 
@@ -2416,7 +2499,7 @@
                 await this.Finish(1);
             }
 
-            this.intsadded = false;
+            this.isAllIn = false;
             #endregion
 
             #region FiveOrLessLeft
@@ -2488,7 +2571,6 @@
             this.neededChipsToCall = this.bigBlind;
             this.raise = 0;
             this.botsWithoutChips = 5;
-            this.type = 0;
             this.rounds = 0;
 
             ResetPower();
@@ -2534,7 +2616,7 @@
 
             this.eliminatedPlayers.Clear();
             this.CheckWinners.Clear();
-            this.ints.Clear();
+            this.allInChips.Clear();
             this.Win.Clear();
 
             this.sorted.Current = 0;
@@ -2567,37 +2649,37 @@
             if (!this.playerStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Player";
-                this.Rules(0, 1, "Player", this.player);
+                Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botOneStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 1";
-                this.Rules(2, 3, "Bot 1", this.firstBot);
+                Rules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botTwoStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 2";
-                this.Rules(4, 5, "Bot 2", this.secondBot);
+                Rules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botThreeStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 3";
-                this.Rules(6, 7, "Bot 3", this.thirdBot);
+                Rules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFourStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 4";
-                this.Rules(8, 9, "Bot 4", this.fourthBot);
+                Rules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFiveStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 5";
-                this.Rules(10, 11, "Bot 5", this.fifthBot);
+                Rules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             this.Winner(this.player.Type, this.player.Power, "Player", this.player.Chips, fixedLast);
@@ -3232,7 +3314,7 @@
 
         private async void bCall_Click(object sender, EventArgs e)
         {
-            this.Rules(0, 1, "Player", this.player);
+            Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
 
             if (this.player.Chips >= this.neededChipsToCall)
             {
@@ -3268,7 +3350,7 @@
 
         private async void RaiseClick(object sender, EventArgs e)
         {
-            this.Rules(0, 1, "Player", this.player);
+            Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
 
             int parsedValue;
             bool isValidNumber = int.TryParse(this.raiseAmountField.Text, out parsedValue);

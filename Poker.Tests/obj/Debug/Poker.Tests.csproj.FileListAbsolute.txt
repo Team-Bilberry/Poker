@@ -6,3 +6,12 @@ D:\Programirane\Poker\Poker.Tests\obj\Debug\Poker.Tests.dll
 D:\Programirane\Poker\Poker.Tests\obj\Debug\Poker.Tests.pdb
 D:\Programirane\Poker\Poker.Tests\bin\Debug\Poker.exe
 D:\Programirane\Poker\Poker.Tests\bin\Debug\Poker.pdb
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Poker.Tests.dll
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Poker.Tests.pdb
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Poker.exe
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Poker.pdb
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\obj\Debug\Poker.Tests.csprojResolveAssemblyReference.cache
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\obj\Debug\Poker.Tests.dll
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker.Tests\obj\Debug\Poker.Tests.pdb

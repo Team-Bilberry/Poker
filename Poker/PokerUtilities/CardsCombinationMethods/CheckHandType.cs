@@ -149,6 +149,7 @@
                 }
             }
         }
+
         private static void CheckForFlush(IPokerPlayer pokerPlayer, List<Type> Win, int[] colour)
         {
             if (colour.Length >= 5)
@@ -164,6 +165,7 @@
                 Win.Add(new Type() { Power = pokerPlayer.Power, Current = 5 });
             }
         }
+
         public void Flush(
             IPokerPlayer pokerPlayer,
             int[] Straight1,
@@ -184,8 +186,6 @@
                 CheckForFlush(pokerPlayer, Win, hearts);
 
                 CheckForFlush(pokerPlayer, Win, spades);
-
-
             }
         }
 

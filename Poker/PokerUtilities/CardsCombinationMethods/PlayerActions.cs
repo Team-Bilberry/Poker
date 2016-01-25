@@ -50,7 +50,7 @@
         public void HP(IPokerPlayer pokerPlayer, Label sStatus, int n, int n1, int neededChipsToCall, TextBox potStatus, ref int raise, ref bool raising)
         {
             Random rand = new Random();
-            int randomNumberFrom1to4 = rand.Next(1, 4);
+            int randomNumberFrom1To4 = rand.Next(1, 4);
             if (neededChipsToCall <= 0)
             {
                 Check(pokerPlayer, sStatus, ref raising);
@@ -58,7 +58,7 @@
 
             if (neededChipsToCall > 0)
             {
-                if (randomNumberFrom1to4 == 1)
+                if (randomNumberFrom1To4 == 1)
                 {
                     if (neededChipsToCall <= RoundN(pokerPlayer.Chips, n))
                     {
@@ -70,7 +70,7 @@
                     }
                 }
 
-                if (randomNumberFrom1to4 == 2)
+                if (randomNumberFrom1To4 == 2)
                 {
                     if (neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
                     {
@@ -83,7 +83,7 @@
                 }
             }
 
-            if (randomNumberFrom1to4 == 3)
+            if (randomNumberFrom1To4 == 3)
             {
                 if (raise == 0)
                 {

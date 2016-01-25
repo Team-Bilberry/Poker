@@ -48,6 +48,7 @@
     <Compile Include="Contracts\IHandType.cs" />
     <Compile Include="Contracts\IPlayerActions.cs" />
     <Compile Include="Contracts\IRandomProvider.cs" />
+    <Compile Include="Core\Engine.cs" />
     <Compile Include="GUI\AddChips.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,9 +78,10 @@
     <Compile Include="PokerUtilities\CardsCombinationMethods\CheckHandType.cs" />
     <Compile Include="PokerUtilities\CardsCombinationMethods\HandTypes.cs" />
     <Compile Include="PokerUtilities\CardsCombinationMethods\PlayerActions.cs" />
+    <Compile Include="PokerUtilities\CardsCombinationMethods\RulesMethod.cs" />
     <Compile Include="PokerUtilities\GlobalConstants.cs" />
     <Compile Include="PokerUtilities\RandomGenerator.cs" />
-    <Compile Include="ProgressBars.cs" />
+    <Compile Include="PokerUtilities\ResetMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoundStage.cs" />
     <Compile Include="Type.cs" />
