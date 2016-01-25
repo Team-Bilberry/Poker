@@ -3,19 +3,16 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection.Emit;
     using System.Windows.Forms;
     using Contracts;
-    using GUI;
-    using Models;
     using Label = System.Windows.Forms.Label;
     using Type = Poker.Type;
 
-    public static class RulesMethod
+    public class RulesMethod
     {
-        private static readonly CheckHandType checkHand = new CheckHandType();
+        private readonly CheckHandType checkHand = new CheckHandType();
         // TODO: if someone knows how to extract the method and retain a simpler signature, be my guest :D
-        public static void Rules(
+        public void TexasHoldEmRules(
             int card1, 
             int card2, 
             string currentText, 
