@@ -3,7 +3,7 @@
     using System;
     using Contracts;
 
-    public class RandomGenerator : IRandomProvider
+    public class RandomGenerator : IRandomGenerator
     {
         private readonly Random randomGenerator;
 

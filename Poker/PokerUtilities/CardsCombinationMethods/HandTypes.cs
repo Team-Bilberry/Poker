@@ -6,9 +6,9 @@
     public class HandTypes : IHandType
     {
         private readonly PlayerActions playerActions;
-        private readonly IRandomProvider randomGenerator;
+        private readonly IRandomGenerator randomGenerator;
 
-        public HandTypes(IRandomProvider randomGenerator)
+        public HandTypes(IRandomGenerator randomGenerator)
         {
             this.randomGenerator = randomGenerator;
             this.playerActions = new PlayerActions();

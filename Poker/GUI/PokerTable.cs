@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using System.Windows.Forms;
     using Contracts;
+    using Enums;
     using Models;
     using PokerUtilities;
     using Type = Poker.Type;
@@ -20,6 +21,7 @@
         private IDealer dealer;
         private ICheckHandType checkHand;
         private IHandType handType;
+        private IWriter messageBoxWriter;
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -86,7 +88,7 @@
         int turnCount = 0;
         #endregion
 
-        public PokerTable(IDealer dealer, ICheckHandType checkHand, IHandType handType)
+        public PokerTable(IDealer dealer, ICheckHandType checkHand, IHandType handType, IWriter messageBoxWriter)
         {
             this.player = new PokerPlayer(new Panel());
             this.firstBot = new PokerPlayer(new Panel());
@@ -98,6 +100,7 @@
             this.Dealer = dealer;
             this.CheckHand = checkHand;
             this.HandType = handType;
+            this.messageBoxWriter = messageBoxWriter;
 
             //bools.Add(PlayerFoldTurn); bools.Add(bot1.OutOfChips); bools.Add(bot2.FoldedTurn); bools.Add(bot3.FoldedTurn); bools.Add(bot4.FoldedTurn); bools.Add(bot5.FoldedTurn);
             this.neededChipsToCall = this.bigBlind;
@@ -569,7 +572,8 @@
 
             if (this.botsWithoutChips == 5)
             {
-                DialogResult dialogResult = MessageBox.Show("Would You Like To Play Again ?", "You Won , Congratulations ! ", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = this.messageBoxWriter.PrintYesNo("Would You Like To Play Again ?", "You Won , Congratulations ! ", MessageBoxButtons.YesNo);
+                // MessageBox.Show("Would You Like To Play Again ?", "You Won , Congratulations ! ", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     Application.Restart();
@@ -659,7 +663,9 @@
                         this.FixCall(this.botOneStatus, this.firstBot, 2);
 
                         Rules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
-                        MessageBox.Show("Bot 1's Turn");
+                       
+                       // MessageBox.Show("Bot 1's Turn");
+                        this.messageBoxWriter.Print("Bot 1's Turn");
 
                         this.AI(2, 3, this.botOneStatus, 0, this.firstBot);
 
@@ -690,7 +696,8 @@
                         this.FixCall(this.botTwoStatus, this.secondBot, 1);
                         this.FixCall(this.botTwoStatus, this.secondBot, 2);
                         Rules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
-                        MessageBox.Show("Bot 2's Turn");
+                        //MessageBox.Show("Bot 2's Turn");
+                        this.messageBoxWriter.Print("Bot 2's Turn");
                         this.AI(4, 5, this.botTwoStatus, 1, this.secondBot);
                         this.turnCount++;
                         this.secondBot.AbleToMakeTurn = false;
@@ -720,7 +727,8 @@
                         this.FixCall(this.botThreeStatus, this.thirdBot, 2);
 
                         Rules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
-                        MessageBox.Show("Bot 3's Turn");
+                        // MessageBox.Show("Bot 3's Turn");
+                        this.messageBoxWriter.Print("Bot 3's Turn");
                         this.AI(6, 7, this.botThreeStatus, 2, this.thirdBot);
                         this.turnCount++;
                         this.thirdBot.AbleToMakeTurn = false;
@@ -749,7 +757,8 @@
                         this.FixCall(this.botFourStatus, this.fourthBot, 1);
                         this.FixCall(this.botFourStatus, this.fourthBot, 2);
                         Rules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
-                        MessageBox.Show("Bot 4's Turn");
+                        //MessageBox.Show("Bot 4's Turn");
+                        this.messageBoxWriter.Print("Bot 4's Turn");
                         this.AI(8, 9, this.botFourStatus, 3, this.fourthBot);
                         this.turnCount++;
                         this.fourthBot.AbleToMakeTurn = false;
@@ -778,7 +787,8 @@
                         this.FixCall(this.botFiveStatus, this.fifthBot, 1);
                         this.FixCall(this.botFiveStatus, this.fifthBot, 2);
                         Rules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
-                        MessageBox.Show("Bot 5's Turn");
+                       // MessageBox.Show("Bot 5's Turn");
+                        this.messageBoxWriter.Print("Bot 5's Turn");
                         this.AI(10, 11, this.botFiveStatus, 4, this.fifthBot);
                         this.turnCount++;
                         this.fifthBot.AbleToMakeTurn = false;
@@ -1932,52 +1942,62 @@
                     this.CheckWinners.Add(player);
                     if (current == -1)
                     {
-                        MessageBox.Show(player + " High Card ");
+                       // MessageBox.Show(player + " High Card ");
+                        this.messageBoxWriter.Print(player + " High Card ");
                     }
 
                     if (current == 1 || current == 0)
                     {
-                        MessageBox.Show(player + " Pair ");
+                       // MessageBox.Show(player + " Pair ");
+                        this.messageBoxWriter.Print(player + " Pair ");
                     }
 
                     if (current == 2)
                     {
-                        MessageBox.Show(player + " Two Pair ");
+                        //MessageBox.Show(player + " Two Pair ");
+                        this.messageBoxWriter.Print(player + " Two Pair ");
                     }
 
                     if (current == 3)
                     {
-                        MessageBox.Show(player + " Three of a Kind ");
+                        //MessageBox.Show(player + " Three of a Kind ");
+                        this.messageBoxWriter.Print(player + " Three of a Kind ");
                     }
 
                     if (current == 4)
                     {
-                        MessageBox.Show(player + " Straight ");
+                        //MessageBox.Show(player + " Straight ");
+                        this.messageBoxWriter.Print(player + " Straight ");
                     }
 
                     if (current == 5)
                     {
-                        MessageBox.Show(player + " Flush ");
+                       // MessageBox.Show(player + " Flush ");
+                        this.messageBoxWriter.Print(player + " Flush ");
                     }
 
                     if (current == 6)
                     {
-                        MessageBox.Show(player + " Full House ");
+                        //MessageBox.Show(player + " Full House ");
+                        this.messageBoxWriter.Print(player + " Full House ");
                     }
 
                     if (current == 7)
                     {
-                        MessageBox.Show(player + " Four of a Kind ");
+                        //MessageBox.Show(player + " Four of a Kind ");
+                        this.messageBoxWriter.Print(player + " Four of a Kind ");
                     }
 
                     if (current == 8)
                     {
-                        MessageBox.Show(player + " Straight Flush ");
+                        //MessageBox.Show(player + " Straight Flush ");
+                        this.messageBoxWriter.Print(player + " Straight Flush ");
                     }
 
                     if (current == 9)
                     {
-                        MessageBox.Show(player + " Royal Flush ! ");
+                       // MessageBox.Show(player + " Royal Flush ! ");
+                        this.messageBoxWriter.Print(player + " Royal Flush ! ");
                     }
                 }
             }
@@ -2516,7 +2536,8 @@
             this.playerChips.Text = this.player.Chips.ToString();
             this.player.Panel.Visible = true;
             string msg = playerName + " Wins";
-            MessageBox.Show(msg);
+           // MessageBox.Show(msg);
+            this.messageBoxWriter.Print(msg);
         }
 
         async Task Finish(int n)
@@ -3361,7 +3382,8 @@
                     if (this.raise * 2 > parsedValue)
                     {
                         this.raiseAmountField.Text = (this.raise * 2).ToString();
-                        MessageBox.Show("You must raise atleast twice as the current raise !");
+                        //MessageBox.Show("You must raise atleast twice as the current raise !");
+                        this.messageBoxWriter.Print("You must raise atleast twice as the current raise !");
                         return;
                     }
 
@@ -3391,7 +3413,8 @@
             }
             else
             {
-                MessageBox.Show("This is a number only field");
+               // MessageBox.Show("This is a number only field");
+                this.messageBoxWriter.Print("This is a number only field");
                 return;
             }
 
@@ -3419,7 +3442,8 @@
             }
             else
             {
-                MessageBox.Show("Chips should be positive round number!");
+                //MessageBox.Show("Chips should be positive round number!");
+                this.messageBoxWriter.Print("Chips should be positive round number!");
             }
         }
 
@@ -3454,33 +3478,38 @@
 
             if (this.smallBlindField.Text.Contains(",") || this.smallBlindField.Text.Contains("."))
             {
-                MessageBox.Show("The Small Blind can be only round number !");
+                //MessageBox.Show("The Small Blind can be only round number !");
+                this.messageBoxWriter.Print("The Small Blind can be only round number !");
                 this.smallBlindField.Text = this.smallBlind.ToString();
                 return;
             }
 
             if (!isParsed)
             {
-                MessageBox.Show("This is a number only field");
+                //MessageBox.Show("This is a number only field");
+                this.messageBoxWriter.Print("This is a number only field");
                 this.smallBlindField.Text = this.smallBlind.ToString();
                 return;
             }
 
             if (parsedValue > GlobalConstants.MaxSmallBlind)
             {
-                MessageBox.Show("The maximum of the Small Blind is " + GlobalConstants.MaxSmallBlind);
+                //MessageBox.Show("The maximum of the Small Blind is " + GlobalConstants.MaxSmallBlind);
+                this.messageBoxWriter.Print("The maximum of the Small Blind is " + GlobalConstants.MaxSmallBlind);
                 this.smallBlindField.Text = this.smallBlind.ToString();
             }
 
             if (parsedValue < GlobalConstants.MinSmallBlind)
             {
-                MessageBox.Show("The minimum of the Small Blind is " + GlobalConstants.MinSmallBlind);
+                //MessageBox.Show("The minimum of the Small Blind is " + GlobalConstants.MinSmallBlind);
+                this.messageBoxWriter.Print("The minimum of the Small Blind is " + GlobalConstants.MinSmallBlind);
             }
 
             if (parsedValue >= GlobalConstants.MinSmallBlind && parsedValue <= GlobalConstants.MaxSmallBlind)
             {
                 this.smallBlind = parsedValue;
-                MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
+                //MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
+                this.messageBoxWriter.Print("The changes have been saved ! They will become available the next hand you play.");
             }
         }
 
@@ -3492,32 +3521,37 @@
 
             if (this.bigBlindField.Text.Contains(",") || this.bigBlindField.Text.Contains("."))
             {
-                MessageBox.Show("The Big Blind can be only round number!");
+                //MessageBox.Show("The Big Blind can be only round number!");
+                this.messageBoxWriter.Print("The Big Blind can be only round number!");
                 this.bigBlindField.Text = this.bigBlind.ToString();
                 return;
             }
 
             if (!isParsed)
             {
-                MessageBox.Show("This is a number only field");
+               // MessageBox.Show("This is a number only field");
+                this.messageBoxWriter.Print("This is a number only field");
                 this.bigBlindField.Text = this.bigBlind.ToString();
                 return;
             }
 
             if (parsedValue > GlobalConstants.MaxBigBlind)
             {
-                MessageBox.Show("The maximum of the Big Blind is " + GlobalConstants.MaxBigBlind);
+               // MessageBox.Show("The maximum of the Big Blind is " + GlobalConstants.MaxBigBlind);
+                this.messageBoxWriter.Print("The maximum of the Big Blind is " + GlobalConstants.MaxBigBlind);
                 this.bigBlindField.Text = this.bigBlind.ToString();
             }
             else if (parsedValue < GlobalConstants.MinBigBlind)
             {
-                MessageBox.Show("The minimum of the Big Blind is " + GlobalConstants.MinBigBlind);
+                //MessageBox.Show("The minimum of the Big Blind is " + GlobalConstants.MinBigBlind);
+                this.messageBoxWriter.Print("The minimum of the Big Blind is " + GlobalConstants.MinBigBlind);
             }
 
             if (parsedValue >= GlobalConstants.MinBigBlind && parsedValue <= GlobalConstants.MinBigBlind)
             {
                 this.bigBlind = parsedValue;
-                MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
+               // MessageBox.Show("The changes have been saved ! They will become available the next hand you play.");
+                this.messageBoxWriter.Print("The changes have been saved ! They will become available the next hand you play.");
             }
         }
 
