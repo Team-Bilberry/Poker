@@ -7,7 +7,7 @@
     [TestClass]
     public class RanomGeneratorTest
     {
-        private IRandomProvider random;
+        private IRandomGenerator random;
 
         [TestInitialize]
         public void RanomProviderInit()

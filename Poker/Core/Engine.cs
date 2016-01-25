@@ -13,11 +13,12 @@
     // TODO: Can't move the logic methods, because the fields in PokerTable.Designer.cs are private.
     public class Engine
     {
-        private static IRandomProvider randomProvider = new RandomGenerator();
-        private static IDealer dealer = new Dealer(randomProvider);
+        private static IRandomGenerator randomGenerator = new RandomGenerator();
+        private static IDealer dealer = new Dealer(randomGenerator);
         private static CheckHandType checkHand = new CheckHandType();
-        private static HandTypes handTypes = new HandTypes(randomProvider);
-        private static PokerTable pokerTable = new PokerTable(dealer, checkHand, handTypes);
+        private static HandTypes handTypes = new HandTypes(randomGenerator);
+        private static IWriter messageBoxWriter = new MessageBoxWriter();
+        private static PokerTable pokerTable = new PokerTable(dealer, checkHand, handTypes, messageBoxWriter);
 
         private int neededChipsToCall;
         private int botsWithoutChips = 5;

@@ -19,11 +19,12 @@
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            IRandomProvider randomProvider = new RandomGenerator();
-            var dealer = new Dealer(randomProvider);
+            IRandomGenerator randomGenerator = new RandomGenerator();
+            var dealer = new Dealer(randomGenerator);
             var checkHand = new CheckHandType();
-            var handTypes = new HandTypes(randomProvider);
-            var pokerTable = new PokerTable(dealer, checkHand, handTypes);
+            var handTypes = new HandTypes(randomGenerator);
+            IWriter messageBoxWriter = new MessageBoxWriter();
+            var pokerTable = new PokerTable(dealer, checkHand, handTypes, messageBoxWriter);
 
             Application.Run(pokerTable);
         }

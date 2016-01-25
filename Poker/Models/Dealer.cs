@@ -5,11 +5,11 @@
 
     public class Dealer : IDealer
     {
-        private readonly IRandomProvider randomProvider;
+        private readonly IRandomGenerator randomGenerator;
 
-        public Dealer(IRandomProvider randomProvider)
+        public Dealer(IRandomGenerator randomGenerator)
         {
-            this.randomProvider = randomProvider;
+            this.randomGenerator = randomGenerator;
         }
 
         public string[] ShuffleDeck(string[] deck)
@@ -21,7 +21,7 @@
 
             for (int currentIndex = deck.Length; currentIndex > 0; currentIndex--)
             {
-                int swapCardIndex = this.randomProvider.Next(currentIndex);
+                int swapCardIndex = this.randomGenerator.Next(currentIndex);
                 string tempCard = deck[swapCardIndex];
                 deck[swapCardIndex] = deck[currentIndex - 1];
                 deck[currentIndex - 1] = tempCard;
