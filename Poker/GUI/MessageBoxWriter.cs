@@ -16,5 +16,12 @@
 
             return result;
         }
+
+        public DialogResult PrintYesNoQuestion(string message, string title, MessageBoxButtons buttons, MessageBoxIcon question)
+        {
+            var result = MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            return result;
+        }
     }
 }

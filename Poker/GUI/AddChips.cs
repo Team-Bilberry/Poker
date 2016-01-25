@@ -2,17 +2,20 @@
 {
     using System;
     using System.Windows.Forms;
+    using Contracts;
 
     public partial class AddChips : Form
     {
         private const int MaxChipsToAdd = 100000000;
         private int addedChips;
+        private readonly IWriter writer;
 
-        public AddChips()
+        public AddChips(IWriter writer)
         {
             this.InitializeComponent();
             this.ControlBox = false;
             this.outOfChipsLabel.BorderStyle = BorderStyle.FixedSingle;
+            this.writer = writer;
         }
 
         public int AddedChips
@@ -41,14 +44,14 @@
             if (parsedValue < 0 || MaxChipsToAdd < parsedValue)
             {
                 string message = $"The chips you can add should be in range {0}..{MaxChipsToAdd}";
-                MessageBox.Show(message);
+                this.writer.Print(message);
                 return;
             }
 
             if (!isValidNumber)
             {
                 const string message = "This is a number only field";
-                MessageBox.Show(message);
+                this.writer.Print(message);
             }
             else
             {
@@ -61,7 +64,7 @@
         {
             const string message = "Are you sure?";
             const string title = "Quit";
-            var result = MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = this.writer.PrintYesNoQuestion(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             switch (result)
             {
