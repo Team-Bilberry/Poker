@@ -19,7 +19,7 @@
         private IDealer dealer;
         private ICheckHandType checkHand;
         private IHandType handType;
-        private RulesMethod rules;
+        private RulesMethod rules = new RulesMethod();
 
         private readonly IPokerPlayer player;
         private readonly IPokerPlayer firstBot;
@@ -27,7 +27,6 @@
         private readonly IPokerPlayer thirdBot;
         private readonly IPokerPlayer fourthBot;
         private readonly IPokerPlayer fifthBot;
-
 
         private int neededChipsToCall;
         private int botsWithoutChips = 5;
