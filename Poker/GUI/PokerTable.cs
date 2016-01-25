@@ -11,6 +11,7 @@
     using Enums;
     using Models;
     using PokerUtilities;
+    using PokerUtilities.CardsCombinationMethods;
     using Type = Poker.Type;
     using static PokerUtilities.CardsCombinationMethods.RulesMethod;
     using static PokerUtilities.ResetMethods;
@@ -21,6 +22,7 @@
         private IDealer dealer;
         private ICheckHandType checkHand;
         private IHandType handType;
+        private RulesMethod rules = new RulesMethod();
         private IWriter messageBoxWriter;
 
         private readonly IPokerPlayer player;
@@ -607,7 +609,7 @@
                         this.FixCall(this.botOneStatus, this.firstBot, 1);
                         this.FixCall(this.botOneStatus, this.firstBot, 2);
 
-                        Rules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                        rules.TexasHoldEmRules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                        
                        // MessageBox.Show("Bot 1's Turn");
                         this.messageBoxWriter.Print("Bot 1's Turn");
@@ -640,7 +642,7 @@
                     {
                         this.FixCall(this.botTwoStatus, this.secondBot, 1);
                         this.FixCall(this.botTwoStatus, this.secondBot, 2);
-                        Rules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                        rules.TexasHoldEmRules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         //MessageBox.Show("Bot 2's Turn");
                         this.messageBoxWriter.Print("Bot 2's Turn");
                         this.AI(4, 5, this.botTwoStatus, 1, this.secondBot);
@@ -671,7 +673,7 @@
                         this.FixCall(this.botThreeStatus, this.thirdBot, 1);
                         this.FixCall(this.botThreeStatus, this.thirdBot, 2);
 
-                        Rules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                        rules.TexasHoldEmRules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         // MessageBox.Show("Bot 3's Turn");
                         this.messageBoxWriter.Print("Bot 3's Turn");
                         this.AI(6, 7, this.botThreeStatus, 2, this.thirdBot);
@@ -701,7 +703,7 @@
                     {
                         this.FixCall(this.botFourStatus, this.fourthBot, 1);
                         this.FixCall(this.botFourStatus, this.fourthBot, 2);
-                        Rules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                        rules.TexasHoldEmRules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         //MessageBox.Show("Bot 4's Turn");
                         this.messageBoxWriter.Print("Bot 4's Turn");
                         this.AI(8, 9, this.botFourStatus, 3, this.fourthBot);
@@ -731,7 +733,7 @@
                     {
                         this.FixCall(this.botFiveStatus, this.fifthBot, 1);
                         this.FixCall(this.botFiveStatus, this.fifthBot, 2);
-                        Rules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                        rules.TexasHoldEmRules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                        // MessageBox.Show("Bot 5's Turn");
                         this.messageBoxWriter.Print("Bot 5's Turn");
                         this.AI(10, 11, this.botFiveStatus, 4, this.fifthBot);
@@ -1454,37 +1456,37 @@
             if (!this.playerStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Player";
-                Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botOneStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 1";
-                Rules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botTwoStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 2";
-                Rules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botThreeStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 3";
-                Rules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFourStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 4";
-                Rules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFiveStatus.Text.Contains("Fold"))
             {
                 fixedLast = "Bot 5";
-                Rules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+                rules.TexasHoldEmRules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             this.Winner(this.player.Type, this.player.Power, "Player", this.player.Chips, fixedLast);
@@ -1715,7 +1717,7 @@
 
         private async void bCall_Click(object sender, EventArgs e)
         {
-            Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+            rules.TexasHoldEmRules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
 
             if (this.player.Chips >= this.neededChipsToCall)
             {
@@ -1751,7 +1753,7 @@
 
         private async void RaiseClick(object sender, EventArgs e)
         {
-            Rules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
+            rules.TexasHoldEmRules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
 
             int parsedValue;
             bool isValidNumber = int.TryParse(this.raiseAmountField.Text, out parsedValue);
