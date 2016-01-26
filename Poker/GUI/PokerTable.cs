@@ -219,7 +219,6 @@
             int horizontal = 580;
             int vertical = 480;
 
-            //this.ShuffleCards();
             this.ImgLocation = this.dealer.ShuffleDeck(this.ImgLocation);
 
             // TODO: move it to proper place.
@@ -243,7 +242,8 @@
 
                 await Task.Delay(150);
 
-                #region Throwing Cards
+                #region Throwing Cards 
+                 
                 if (currentCardIndex < 2)
                 {
                     this.cardPicture[currentCardIndex].Tag = this.reserve[currentCardIndex];
@@ -256,7 +256,7 @@
                     var playerPanelLocation = new Point(this.cardPicture[0].Left - 10, this.cardPicture[0].Top - 10);
                     this.player.InitializePanel(playerPanelLocation);
                 }
-
+                // TODO: extract in methods. The code from here to 520th line is repeated
                 if (this.firstBot.Chips > 0)
                 {
                     this.botsWithoutChips--;
@@ -558,7 +558,7 @@
             #region Rotating
             if (!this.player.OutOfChips && this.player.AbleToMakeTurn)
             {
-                this.FixCall(this.playerStatus, this.player, 1);
+                this.FixCall(this.playerStatus, this.player);
                 this.messageBoxWriter.Print("Player's Turn");
                 this.pbTimer.Visible = true;
                 this.pbTimer.Value = 1000;
@@ -569,7 +569,6 @@
                 this.callButton.Enabled = true;
                 this.foldButton.Enabled = true;
                 this.turnCount++;
-                this.FixCall(this.playerStatus, this.player, 2);
             }
 
             if (this.player.OutOfChips || !this.player.AbleToMakeTurn)
@@ -592,8 +591,6 @@
                 this.pbTimer.Visible = false;
                 this.raiseButton.Enabled = false;
                 this.callButton.Enabled = false;
-                this.raiseButton.Enabled = false;
-                this.raiseButton.Enabled = false;
                 this.foldButton.Enabled = false;
                 this.timer.Stop();
                 this.firstBot.AbleToMakeTurn = true;
@@ -602,13 +599,12 @@
                 {
                     if (this.firstBot.AbleToMakeTurn)
                     {
-                        this.FixCall(this.botOneStatus, this.firstBot, 1);
-                        this.FixCall(this.botOneStatus, this.firstBot, 2);
+                        this.FixCall(this.botOneStatus, this.firstBot);
 
                         rules.TexasHoldEmRules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                        
                         this.messageBoxWriter.Print("Bot 1's Turn");
-
+                    
                         this.AI(2, 3, this.botOneStatus, 0, this.firstBot);
 
                         this.turnCount++;
@@ -635,8 +631,7 @@
                 {
                     if (this.secondBot.AbleToMakeTurn)
                     {
-                        this.FixCall(this.botTwoStatus, this.secondBot, 1);
-                        this.FixCall(this.botTwoStatus, this.secondBot, 2);
+                        this.FixCall(this.botTwoStatus, this.secondBot);
                         rules.TexasHoldEmRules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         this.messageBoxWriter.Print("Bot 2's Turn");
                         this.AI(4, 5, this.botTwoStatus, 1, this.secondBot);
@@ -664,8 +659,7 @@
                 {
                     if (this.thirdBot.AbleToMakeTurn)
                     {
-                        this.FixCall(this.botThreeStatus, this.thirdBot, 1);
-                        this.FixCall(this.botThreeStatus, this.thirdBot, 2);
+                        this.FixCall(this.botThreeStatus, this.thirdBot);
 
                         rules.TexasHoldEmRules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         this.messageBoxWriter.Print("Bot 3's Turn");
@@ -694,8 +688,7 @@
                 {
                     if (this.fourthBot.AbleToMakeTurn)
                     {
-                        this.FixCall(this.botFourStatus, this.fourthBot, 1);
-                        this.FixCall(this.botFourStatus, this.fourthBot, 2);
+                        this.FixCall(this.botFourStatus, this.fourthBot);
                         rules.TexasHoldEmRules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         this.messageBoxWriter.Print("Bot 4's Turn");
                         this.AI(8, 9, this.botFourStatus, 3, this.fourthBot);
@@ -723,8 +716,7 @@
                 {
                     if (this.fifthBot.AbleToMakeTurn)
                     {
-                        this.FixCall(this.botFiveStatus, this.fifthBot, 1);
-                        this.FixCall(this.botFiveStatus, this.fifthBot, 2);
+                        this.FixCall(this.botFiveStatus, this.fifthBot);
                         rules.TexasHoldEmRules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
                         this.messageBoxWriter.Print("Bot 5's Turn");
                         this.AI(10, 11, this.botFiveStatus, 4, this.fifthBot);
@@ -769,8 +761,12 @@
             }
         }
 
-        void Winner(int current, double Power, string player, int chips)//redundant chips and lastly?
+        void Winner(int current, double Power, string player, int chips, string lastly)//redundant chips and lastly?
         {
+            if (lastly == "")
+            {
+                lastly = "Bot 5";
+            }
             for (int j = 0; j <= 16; j++)
             {
                 if (this.cardPicture[j].Visible)
@@ -837,46 +833,47 @@
                 }
             }
 
-           
-            if (this.winners > 1)
+            if (player == lastly)//lastfixed
             {
-                if (this.CheckWinners.Contains("Player"))
+                if (this.winners > 1)
                 {
-                    this.player.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.playerChips.Text = this.player.Chips.ToString();
-                }
+                    if (this.CheckWinners.Contains("Player"))
+                    {
+                        this.player.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.playerChips.Text = this.player.Chips.ToString();
+                    }
 
-                if (this.CheckWinners.Contains("Bot 1"))
-                {
-                    this.firstBot.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.botOneChips.Text = this.firstBot.Chips.ToString();
-                }
+                    if (this.CheckWinners.Contains("Bot 1"))
+                    {
+                        this.firstBot.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.botOneChips.Text = this.firstBot.Chips.ToString();
+                    }
 
-                if (this.CheckWinners.Contains("Bot 2"))
-                {
-                    this.secondBot.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.botTwoChips.Text = this.secondBot.Chips.ToString();
-                }
+                    if (this.CheckWinners.Contains("Bot 2"))
+                    {
+                        this.secondBot.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.botTwoChips.Text = this.secondBot.Chips.ToString();
+                    }
 
-                if (this.CheckWinners.Contains("Bot 3"))
-                {
-                    this.thirdBot.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.botThreeChips.Text = this.thirdBot.Chips.ToString();
-                }
+                    if (this.CheckWinners.Contains("Bot 3"))
+                    {
+                        this.thirdBot.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.botThreeChips.Text = this.thirdBot.Chips.ToString();
+                    }
 
-                if (this.CheckWinners.Contains("Bot 4"))
-                {
-                    this.fourthBot.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.botFourChips.Text = this.fourthBot.Chips.ToString();
-                }
+                    if (this.CheckWinners.Contains("Bot 4"))
+                    {
+                        this.fourthBot.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.botFourChips.Text = this.fourthBot.Chips.ToString();
+                    }
 
-                if (this.CheckWinners.Contains("Bot 5"))
-                {
-                    this.fifthBot.Chips += int.Parse(this.potStatus.Text) / this.winners;
-                    this.botFiveChips.Text = this.fifthBot.Chips.ToString();
+                    if (this.CheckWinners.Contains("Bot 5"))
+                    {
+                        this.fifthBot.Chips += int.Parse(this.potStatus.Text)/this.winners;
+                        this.botFiveChips.Text = this.fifthBot.Chips.ToString();
+                    }
                 }
-
-                    //await Finish(1);
+                //await Finish(1);
 
 
                 if (this.winners == 1)
@@ -1036,11 +1033,11 @@
                     }
                 }
 
-                MakePlayersNonVisible();
+                ResetMethods.MakePlayersNonVisible();
 
-                ResetCall();
+                ResetMethods.ResetCall();
 
-                ResetRaise();
+                ResetMethods.ResetRaise();
 
                 this.neededChipsToCall = this.bigBlind;
 
@@ -1051,9 +1048,9 @@
 
                 this.winners = 0;
 
-                ResetPower();
+                ResetMethods.ResetPower();
 
-                ResetType();
+                ResetMethods.ResetType();
 
                 this.allInChips.Clear();
                 this.CheckWinners.Clear();
@@ -1127,54 +1124,51 @@
             this.fifthBot.Call = 0;
         }
 
-        void FixCall(Label status, IPokerPlayer pokerPlayer, int options)
+        void FixCall(Label status, IPokerPlayer pokerPlayer)
         {
             if (this.rounds == 4)
             {
                 return;
             }
 
-            if (options == 1)
+            //set Call and Raise 
+            if (status.Text.Contains("Raise"))
             {
-                if (status.Text.Contains("Raise"))
-                {
-                    var changeRaise = status.Text.Substring(6);
-                    pokerPlayer.Raise = int.Parse(changeRaise);
-                }
-
-                if (status.Text.Contains("Call"))
-                {
-                    var changeCall = status.Text.Substring(5);
-                    pokerPlayer.Call = int.Parse(changeCall);
-                }
-
-                if (status.Text.Contains("Check"))
-                {
-                    pokerPlayer.Raise = 0;
-                    pokerPlayer.Call = 0;
-                }
+                var changeRaise = status.Text.Substring(6);
+                pokerPlayer.Raise = int.Parse(changeRaise);
             }
 
-            if (options == 2)
+            if (status.Text.Contains("Call"))
             {
-                if (pokerPlayer.Raise != this.raise && pokerPlayer.Raise <= this.raise)
-                {
-                    this.neededChipsToCall = this.raise - pokerPlayer.Raise;
-                }
-
-                if (pokerPlayer.Call != this.neededChipsToCall || pokerPlayer.Call <= this.neededChipsToCall)
-                {
-                    this.neededChipsToCall = this.neededChipsToCall - pokerPlayer.Call;
-                }
-
-                // TODO: check when this is valid and change text in call label
-                if (pokerPlayer.Raise == this.raise && this.raise > 0)
-                {
-                    this.neededChipsToCall = 0;
-                    this.callButton.Enabled = false;
-                    this.callButton.Text = "Callisfuckedup";
-                }
+                var changeCall = status.Text.Substring(5);
+                pokerPlayer.Call = int.Parse(changeCall);
             }
+
+            if (status.Text.Contains("Check"))
+            {
+                pokerPlayer.Raise = 0;
+                pokerPlayer.Call = 0;
+            }
+        
+
+            if (pokerPlayer.Raise < this.raise)
+            {
+                this.neededChipsToCall = this.raise - pokerPlayer.Raise;
+            }
+
+            if (pokerPlayer.Call != this.neededChipsToCall || pokerPlayer.Call <= this.neededChipsToCall)
+            {
+                this.neededChipsToCall = this.neededChipsToCall - pokerPlayer.Call;
+            }
+
+            // TODO: check when this is valid and change text in call label
+            if (pokerPlayer.Raise == this.raise && this.raise > 0)
+            {
+                this.neededChipsToCall = 0;
+                this.callButton.Enabled = false;
+                this.callButton.Text = "Callisfuckedup";
+            }
+        
         }
 
         async Task AllIn()
@@ -1432,43 +1426,55 @@
             this.Win.Clear();
             this.sorted.Current = 0;
             this.sorted.Power = 0;
+            string fixedLast = "";
 
             if (!this.playerStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Player";
                 rules.TexasHoldEmRules(0, 1, "Player", this.player, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botOneStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Bot 1";
+
                 rules.TexasHoldEmRules(2, 3, "Bot 1", this.firstBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botTwoStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Bot 1";
+
                 rules.TexasHoldEmRules(4, 5, "Bot 2", this.secondBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botThreeStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Bot 1";
+
                 rules.TexasHoldEmRules(6, 7, "Bot 3", this.thirdBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFourStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Bot 1";
+
                 rules.TexasHoldEmRules(8, 9, "Bot 4", this.fourthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
             if (!this.botFiveStatus.Text.Contains("Fold"))
             {
+                fixedLast = "Bot 1";
+
                 rules.TexasHoldEmRules(10, 11, "Bot 5", this.fifthBot, ref playerStatus, ref this.cardPicture, ref this.Win, ref this.sorted, ref this.reserve);
             }
 
-            this.Winner(this.player.Type, this.player.Power, "Player", this.player.Chips);
-            this.Winner(this.firstBot.Type, this.firstBot.Power, "Bot 1", this.firstBot.Chips);
-            this.Winner(this.secondBot.Type, this.secondBot.Power, "Bot 2", this.secondBot.Chips);
-            this.Winner(this.thirdBot.Type, this.thirdBot.Power, "Bot 3", this.thirdBot.Chips);
-            this.Winner(this.fourthBot.Type, this.fourthBot.Power, "Bot 4", this.fourthBot.Chips);
-            this.Winner(this.fifthBot.Type, this.fifthBot.Power, "Bot 5", this.fifthBot.Chips);
+            this.Winner(this.player.Type, this.player.Power, "Player", this.player.Chips, fixedLast);
+            this.Winner(this.firstBot.Type, this.firstBot.Power, "Bot 1", this.firstBot.Chips, fixedLast);
+            this.Winner(this.secondBot.Type, this.secondBot.Power, "Bot 2", this.secondBot.Chips, fixedLast);
+            this.Winner(this.thirdBot.Type, this.thirdBot.Power, "Bot 3", this.thirdBot.Chips, fixedLast);
+            this.Winner(this.fourthBot.Type, this.fourthBot.Power, "Bot 4", this.fourthBot.Chips, fixedLast);
+            this.Winner(this.fifthBot.Type, this.fifthBot.Power, "Bot 5", this.fifthBot.Chips, fixedLast);
         }
 
         void AI(int c1, int c2, Label sStatus, int name, IPokerPlayer pokerPlayer)
@@ -1773,6 +1779,7 @@
             }
 
             this.player.AbleToMakeTurn = false;
+
             await this.Turns();
         }
 
