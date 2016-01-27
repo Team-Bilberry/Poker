@@ -74,11 +74,11 @@
                 {
                     if (neededChipsToCall <= RoundN(pokerPlayer.Chips, n1))
                     {
-                        Call(pokerPlayer, sStatus, ref raising, ref neededChipsToCall, potStatus);
+                        this.Call(pokerPlayer, sStatus, ref raising, ref neededChipsToCall, potStatus);
                     }
                     else
                     {
-                        Fold(pokerPlayer, sStatus, ref raising);
+                        this.Fold(pokerPlayer, sStatus, ref raising);
                     }
                 }
             }
