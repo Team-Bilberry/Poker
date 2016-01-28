@@ -14,6 +14,6 @@
         Ten,
         Jack,
         Queen,
-        King,
+        King
     }
 }

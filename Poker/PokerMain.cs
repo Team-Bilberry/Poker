@@ -1,12 +1,12 @@
 ﻿namespace Poker
 {
-    using System;
-    using System.Windows.Forms;
     using Contracts;
     using GUI;
     using Models;
     using PokerUtilities;
     using PokerUtilities.CardsCombinationMethods;
+    using System;
+    using System.Windows.Forms;
 
     public static class PokerMain
     {

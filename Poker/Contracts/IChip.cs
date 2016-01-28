@@ -2,6 +2,9 @@
 {
     public interface IChip
     {
-        int Amount { get; set; }
+        int Amount
+        {
+            get; set;
+        }
     }
 }

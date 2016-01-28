@@ -1,12 +1,12 @@
 ﻿namespace Poker.Models
 {
+    using Contracts;
+    using Enums;
+    using GUI;
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Windows.Forms;
-    using Contracts;
-    using Enums;
-    using GUI;
 
     public class Deck : ICardCollection
     {
@@ -23,7 +23,10 @@
             this.InitializeDeck();
         }
 
-        public IEnumerable<ICard> Cards { get; }
+        public IEnumerable<ICard> Cards
+        {
+            get;
+        }
 
         private IEnumerable<PictureBox> InitializeDeck()
         {

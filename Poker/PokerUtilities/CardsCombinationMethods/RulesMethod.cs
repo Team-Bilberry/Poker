@@ -1,25 +1,25 @@
 ﻿namespace Poker.PokerUtilities.CardsCombinationMethods
 {
+    using Contracts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Forms;
-    using Contracts;
-    using Label = System.Windows.Forms.Label;
     using Type = Poker.Type;
 
     public class RulesMethod
     {
         private readonly CheckHandType checkHand = new CheckHandType();
+
         // TODO: if someone knows how to extract the method and retain a simpler signature, be my guest :D
         public void TexasHoldEmRules(
-            int card1, 
-            int card2, 
-            string currentText, 
-            IPokerPlayer pokerPlayer, 
-            ref Label playerStatus, 
-            ref PictureBox[] cardPicture, 
-            ref List<Type> Win, 
+            int card1,
+            int card2,
+            string currentText,
+            IPokerPlayer pokerPlayer,
+            ref Label playerStatus,
+            ref PictureBox[] cardPicture,
+            ref List<Type> Win,
             ref Type sorted,
             ref int[] reserve)
         {
@@ -29,7 +29,8 @@
 
             if (!pokerPlayer.OutOfChips || card1 == 0 && card2 == 1 && playerStatus.Text.Contains("Fold") == false)
             {
-                #region Variables              
+                #region Variables
+
                 int[] Straight = new int[7];
 
                 Straight[0] = reserve[card1];
@@ -50,7 +51,7 @@
                 int[] hearts = getHearts.Select(o => o / 4).Distinct().ToArray();
                 int[] spades = getSpades.Select(o => o / 4).Distinct().ToArray();
 
-                #endregion
+                #endregion Variables
 
                 Array.Sort(Straight);
                 Array.Sort(clubes);
@@ -63,46 +64,25 @@
                     if (reserve[index] == int.Parse(cardPicture[card1].Tag.ToString()) &&
                         reserve[index + 1] == int.Parse(cardPicture[card2].Tag.ToString()))
                     {
-                        ////Pair from Hand current = 1
-                        //this.rPairFromHand(pokerPlayer, index);
+                        this.checkHand.PairFromHand(pokerPlayer, index, ref Win, ref sorted, ref reserve);
 
-                        //this.rPairTwoPair(pokerPlayer, index);
+                        this.checkHand.PairTwoPair(pokerPlayer, index, ref Win, ref sorted, ref reserve);
 
-                        //this.rTwoPair(pokerPlayer, index);
+                        this.checkHand.TwoPair(pokerPlayer, index, ref Win, ref sorted, ref reserve);
 
-                        //this.rThreeOfAKind(pokerPlayer, Straight, index);
+                        this.checkHand.ThreeOfAKind(pokerPlayer, Straight, ref Win, ref sorted);
 
-                        //this.RStraight(pokerPlayer, Straight, index);
+                        this.checkHand.Straight(pokerPlayer, Straight, ref Win, ref sorted);
 
-                        //this.RFlush(pokerPlayer, ref vf, Straight1, index);
+                        this.checkHand.Flush(pokerPlayer, Straight, ref Win, ref sorted);
 
-                        //this.rFullHouse(pokerPlayer, ref done, Straight);
+                        this.checkHand.FullHouse(pokerPlayer, Straight, ref Win, ref sorted);
 
-                        //this.rFourOfAKind(pokerPlayer, Straight);
+                        this.checkHand.FourOfAKind(pokerPlayer, Straight, ref Win, ref sorted);
 
-                        //this.rStraightFlush(pokerPlayer, st1, st2, st3, st4);
+                        this.checkHand.StraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref Win, ref sorted);
 
-                        //this.rHighCard(pokerPlayer, index);
-
-                        checkHand.PairFromHand(pokerPlayer, index, ref Win, ref sorted, ref reserve);
-
-                        checkHand.PairTwoPair(pokerPlayer, index, ref Win, ref sorted, ref reserve);
-
-                        checkHand.TwoPair(pokerPlayer, index, ref Win, ref sorted, ref reserve);
-
-                        checkHand.ThreeOfAKind(pokerPlayer, Straight, ref Win, ref sorted);
-
-                        checkHand.Straight(pokerPlayer, Straight, ref Win, ref sorted);
-
-                        checkHand.Flush(pokerPlayer, Straight, ref Win, ref sorted);
-
-                        checkHand.FullHouse(pokerPlayer, Straight, ref Win, ref sorted);
-
-                        checkHand.FourOfAKind(pokerPlayer, Straight, ref Win, ref sorted);
-
-                        checkHand.StraightFlush(pokerPlayer, clubes, diamonds, hearts, spades, ref Win, ref sorted);
-
-                        checkHand.HighCard(pokerPlayer, index, ref Win, ref sorted, ref reserve);
+                        this.checkHand.HighCard(pokerPlayer, index, ref Win, ref sorted, ref reserve);
                     }
                 }
             }

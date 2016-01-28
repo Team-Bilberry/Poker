@@ -11,7 +11,6 @@
         private ProgressBar pbTimer;
         private TextBox playerChips;
         private Button addChipsToAllButton;
-        //isn't it better bot's chips to be Labels 
         private TextBox addChipsToAllAmount;
         private TextBox botFiveChips;
         private TextBox botFourChips;
@@ -32,6 +31,7 @@
         private Label botTwoStatus;
         private Label potLabel;
         private TextBox raiseAmountField;
+        
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -392,4 +392,3 @@
         #endregion
     }
 }
-

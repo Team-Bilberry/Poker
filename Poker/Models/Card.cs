@@ -1,12 +1,12 @@
 ﻿namespace Poker.Models
 {
-    using System.Drawing;
     using Contracts;
     using Enums;
+    using System.Drawing;
 
     public class Card : ICard
     {
-        private static Image cardBack = new Bitmap(@"..\..\Resources\Assets\Back\Back.png");
+        private static readonly Image cardBack = new Bitmap(@"..\..\Resources\Assets\Back\Back.png");
 
         public Card(Rank rank, Suit suit, Image cardFront)
         {
@@ -15,11 +15,20 @@
             this.CardFront = cardFront;
         }
 
-        public Rank Rank { get; }
+        public Rank Rank
+        {
+            get;
+        }
 
-        public Suit Suit { get; }
+        public Suit Suit
+        {
+            get;
+        }
 
-        public Image CardFront { get; }
+        public Image CardFront
+        {
+            get;
+        }
 
         public Image CardBack => cardBack;
     }

@@ -1,7 +1,7 @@
 ﻿namespace Poker.Models
 {
-    using System;
     using Contracts;
+    using System;
 
     public class Dealer : IDealer
     {
@@ -32,7 +32,7 @@
 
         public void DealCards(ICardCollection deck)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

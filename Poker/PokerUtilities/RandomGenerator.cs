@@ -1,7 +1,7 @@
 ﻿namespace Poker.PokerUtilities
 {
-    using System;
     using Contracts;
+    using System;
 
     public class RandomGenerator : IRandomGenerator
     {

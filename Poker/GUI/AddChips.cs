@@ -1,14 +1,14 @@
 ﻿namespace Poker.GUI
 {
+    using Contracts;
     using System;
     using System.Windows.Forms;
-    using Contracts;
 
     public partial class AddChips : Form
     {
         private const int MaxChipsToAdd = 100000000;
-        private int addedChips;
         private readonly IWriter writer;
+        private int addedChips;
 
         public AddChips(IWriter writer)
         {
@@ -70,6 +70,7 @@
             {
                 case DialogResult.No:
                     break;
+
                 case DialogResult.Yes:
                     Application.Exit();
                     break;

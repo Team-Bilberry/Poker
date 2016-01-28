@@ -2,8 +2,14 @@
 {
     public class Type
     {
-        public double Power { get; set; }
+        public double Power
+        {
+            get; set;
+        }
 
-        public double Current { get; set; }
+        public double Current
+        {
+            get; set;
+        }
     }
 }

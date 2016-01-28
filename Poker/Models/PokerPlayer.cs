@@ -1,8 +1,8 @@
 ﻿namespace Poker.Models
 {
+    using Contracts;
     using System.Drawing;
     using System.Windows.Forms;
-    using Contracts;
 
     public class PokerPlayer : IPokerPlayer
     {
@@ -23,23 +23,50 @@
             this.Folded = false;
         }
 
-        public Panel Panel { get; }
+        public Panel Panel
+        {
+            get;
+        }
 
-        public int Type { get; set; }
+        public int Type
+        {
+            get; set;
+        }
 
-        public double Power { get; set; }
+        public double Power
+        {
+            get; set;
+        }
 
-        public int Chips { get; set; }
+        public int Chips
+        {
+            get; set;
+        }
 
-        public int Call { get; set; }
+        public int Call
+        {
+            get; set;
+        }
 
-        public int Raise { get; set; }
+        public int Raise
+        {
+            get; set;
+        }
 
-        public bool AbleToMakeTurn { get; set; }
+        public bool AbleToMakeTurn
+        {
+            get; set;
+        }
 
-        public bool OutOfChips { get; set; }
+        public bool OutOfChips
+        {
+            get; set;
+        }
 
-        public bool Folded { get; set; }
+        public bool Folded
+        {
+            get; set;
+        }
 
         public void InitializePanel(Point location)
         {

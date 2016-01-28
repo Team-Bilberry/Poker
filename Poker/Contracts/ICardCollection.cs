@@ -4,6 +4,9 @@
 
     public interface ICardCollection
     {
-        IEnumerable<ICard> Cards { get; } 
+        IEnumerable<ICard> Cards
+        {
+            get;
+        }
     }
 }

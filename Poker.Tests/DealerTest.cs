@@ -1,10 +1,10 @@
 ﻿namespace Poker.Tests
 {
-    using System;
     using Contracts;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Models;
     using PokerUtilities;
+    using System;
 
     [TestClass]
     public class DealerTest
@@ -36,7 +36,7 @@
         [TestMethod]
         public void Shuffle_NonEmptyDack_ShouldReorder()
         {
-            string[] deck = {"Two", "Thre", "Four", "Five", "Six", "Two", "Thre", "Four", "Five", "Six" };
+            string[] deck = { "Two", "Thre", "Four", "Five", "Six", "Two", "Thre", "Four", "Five", "Six" };
 
             this.dealer.ShuffleDeck(deck);
 

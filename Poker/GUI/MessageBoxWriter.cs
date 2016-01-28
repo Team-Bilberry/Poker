@@ -1,7 +1,7 @@
 ﻿namespace Poker.GUI
 {
-    using System.Windows.Forms;
     using Contracts;
+    using System.Windows.Forms;
 
     public class MessageBoxWriter : IWriter
     {
@@ -17,7 +17,8 @@
             return result;
         }
 
-        public DialogResult PrintYesNoQuestion(string message, string title, MessageBoxButtons buttons, MessageBoxIcon question)
+        public DialogResult PrintYesNoQuestion(string message, string title, MessageBoxButtons buttons,
+            MessageBoxIcon question)
         {
             var result = MessageBox.Show(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 

@@ -9,8 +9,6 @@ C:\Users\zhecho15\Desktop\Kpk25\Poker\Poker\obj\Debug\Poker.csproj.GenerateResou
 C:\Users\zhecho15\Desktop\Kpk25\Poker\Poker\obj\Debug\Poker.exe
 C:\Users\zhecho15\Desktop\Kpk25\Poker\Poker\obj\Debug\Poker.pdb
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.exe.config
-C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.exe
-C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.pdb
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.exe
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\bin\Debug\Poker.pdb
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.csprojResolveAssemblyReference.cache
@@ -18,3 +16,5 @@ C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.GUI.AddChi
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.GUI.PokerTable.resources
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.Properties.Resources.resources
 C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.csproj.GenerateResource.Cache
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.exe
+C:\Users\Dochko\Documents\GitHub\Bilberry\Poker\Poker\obj\Debug\Poker.pdb

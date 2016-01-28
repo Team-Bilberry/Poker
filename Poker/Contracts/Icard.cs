@@ -1,16 +1,28 @@
 ﻿namespace Poker.Contracts
 {
-    using System.Drawing;
     using Enums;
+    using System.Drawing;
 
     public interface ICard
     {
-        Rank Rank { get; }
+        Rank Rank
+        {
+            get;
+        }
 
-        Suit Suit { get; }
+        Suit Suit
+        {
+            get;
+        }
 
-        Image CardFront { get; }
+        Image CardFront
+        {
+            get;
+        }
 
-        Image CardBack { get; }
+        Image CardBack
+        {
+            get;
+        }
     }
 }

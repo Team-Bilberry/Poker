@@ -5,24 +5,51 @@
 
     public interface IPokerPlayer
     {
-         Panel Panel { get; }
+        Panel Panel
+        {
+            get;
+        }
 
-         int Type { get; set; }
+        int Type
+        {
+            get; set;
+        }
 
-         double Power { get; set; }
+        double Power
+        {
+            get; set;
+        }
 
-         int Chips { get; set; }
+        int Chips
+        {
+            get; set;
+        }
 
-         int Call { get; set; }
+        int Call
+        {
+            get; set;
+        }
 
-         int Raise { get; set; }
+        int Raise
+        {
+            get; set;
+        }
 
-         bool AbleToMakeTurn { get; set; }
+        bool AbleToMakeTurn
+        {
+            get; set;
+        }
 
-         bool OutOfChips { get; set; }
+        bool OutOfChips
+        {
+            get; set;
+        }
 
-         bool Folded { get; set; }
+        bool Folded
+        {
+            get; set;
+        }
 
-         void InitializePanel(Point location);
+        void InitializePanel(Point location);
     }
 }
